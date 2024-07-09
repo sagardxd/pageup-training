@@ -2,6 +2,11 @@ body{
     font-family: Arial, Geneva, Helvetica, sans-serif;
 }
 
+.main{
+    display: flex;
+    flex-direction: column;
+}
+
 .nav{
     display: flex;
     justify-content: space-between;
@@ -107,6 +112,23 @@ button {
     width: 600px;
 }
 
+// ecosystem
+
+.ecosystem-maindiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.ecosystem-image{
+    width:630px;
+    height: 630px;
+}
+
 .points {
     display: flex;
     gap: 10px;
@@ -172,15 +194,81 @@ button {
     align-items: center;
 }
 
-.index-education-heading{
+.index-education-mainheading{
     font-size: 30px;
     padding-bottom: 10px;
 }
 
-.index-education-div{
-    max-width: 300px;
+.index-eduation-heading {
+    max-width: 600px;
     display: flex;
     flex-direction: column;
-    
+    color : gray;
+    padding-top: 20px;
+    padding-bottom: 10px;
 }
 
+.branding-2 {
+    padding-top: 80px;   
+     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 80px;
+}
+
+.footer-img{
+    width: 150px;
+    height: 22px;
+}
+
+footer{
+    background-color: #F8F8F8;
+}
+
+.main-footer{
+    display: flex;
+    direction: row;
+    padding-right:  200px;
+    padding-left:  200px;
+    gap:100px;
+    padding-top: 40px;
+}
+
+.footer-point{
+    padding-bottom: 7px;   
+    color: gray
+}
+
+.footer-heading{
+    font-weight: bold;
+    padding-bottom: 15px;   
+}
+
+
+.footer-address{
+    font-weight: 100;
+    font-size: 12px;
+    padding: 50px;
+    color: gray;
+    margin:0;
+}
+
+.footer-last-section{
+    display:flex;
+    direction: row;
+    gap:10px;
+    justify-content: center;
+    align-items: center
+}
+
+.footer-last-section > p {
+    color: gray;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.image-align-right{
+    width:18px;
+    height: 15px;
+}
