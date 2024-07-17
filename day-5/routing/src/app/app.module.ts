@@ -11,6 +11,11 @@ import { ContactComponent } from './components/contact/contact.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ChildComponent } from './components/child/child.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ProductComponent } from './product/product.component';
+import { SearchComponent } from './search/search.component';
+import { PathViewComponent } from './path-view/path-view.component';
+import { ProductViewComponent } from './product-view/product-view.component';
+import { ProductEditComponent } from './product-edit/product-edit.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +26,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ContactComponent,
  OutBoundComponent,
  DashboardComponent,
- ChildComponent
+ ChildComponent,
+ ProductComponent,
+ SearchComponent,
+ PathViewComponent,
+ ProductViewComponent,
+ ProductEditComponent
   ],
   imports: [
     BrowserModule,
