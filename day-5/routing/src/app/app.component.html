@@ -1,1 +1,45 @@
-<app-navbar></app-navbar>
+<!-- <app-navbar></app-navbar> -->
+
+
+<!-- <label for="">Input for parent:</label>
+<input type="text" [(ngModel)]="currentItem">
+
+<app-child [item] = "currentItem" (newItemEvent)="addItem($event)"  ></app-child>
+
+<ul class="">    
+    <li *ngFor="let item of items">
+        {{item}}
+    </li>
+</ul> -->
+
+
+<h1 class="text-3xl font-semibold flex justify-center">Form</h1>
+
+<div class="flex justify-center p-10 bg-slate-100">
+    <form [formGroup]="loginForm" (ngSubmit)="loginUser()" class="flex flex-col max-w-[200px] justify-center gap-8  ">
+
+        <div>
+            <input type="text" placeholder="name" formControlName="name">
+            <span *ngIf="name && name.invalid && name.dirty" class="text-red-500">This field is not valid</span>
+        </div>
+        <div><input type="email" placeholder="email" formControlName="email">
+            <span *ngIf="email && email.invalid && email.touched" class="text-red-500">Email type not valid</span>
+        </div>
+        <div><input type="password" placeholder="password" formControlName="password">
+            <span *ngIf="password && password.invalid && password.touched" class="text-red-500">Min 6 character
+                required</span>
+        </div>
+        <button class="bg-green-400 rounded-lg ml-5 mr-5" [disabled]="loginForm.invalid">Login</button>
+
+    </form>
+</div>
+
+
+<!-- 
+{{obj | json }}
+<br>
+{{"hey" | uppercase}}
+<br>
+{{56 | currency: 'USD'}}
+<br>
+{{0.5 | percent}} -->
