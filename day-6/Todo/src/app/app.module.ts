@@ -11,6 +11,8 @@ import { TodoitemComponent } from './components/todoitem/todoitem.component';
 import { EnumtonamePipe } from './pipes/enumtoname.pipe';
 import { GendertodesignationPipe } from './pipes/gendertodesignation.pipe';
 import { TodoService } from './services/todo-service.service';
+import { HighlightDirective } from './custom-directive/highlight.directive';
+
 
 @NgModule({
   declarations: [
@@ -21,12 +23,14 @@ import { TodoService } from './services/todo-service.service';
     TodoitemComponent,
     EnumtonamePipe,
     GendertodesignationPipe,
+    HighlightDirective,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+
   ],
   providers: [TodoService ],
   bootstrap: [AppComponent]
