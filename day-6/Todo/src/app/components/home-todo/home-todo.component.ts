@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Gender } from '../../models/todo.model';
 import { TodoService } from '../../services/todo-service.service';
@@ -8,10 +8,17 @@ import { TodoService } from '../../services/todo-service.service';
   templateUrl: './home-todo.component.html',
   styleUrl: './home-todo.component.scss'
 })
-export class HomeTodoComponent {
+export class HomeTodoComponent implements OnInit {
   public gender = Gender;
 
   constructor(private todoService: TodoService) {}
+
+  ngOnInit(): void {
+    this.todoForm.valueChanges.subscribe(data => {
+      console.log(data);
+    })
+    
+  }
 
   public todoForm = new FormGroup({
     title: new FormControl(''),
