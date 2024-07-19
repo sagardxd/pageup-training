@@ -1,0 +1,11 @@
+
+<h3 class="m-2">Click on a todo to get it details!</h3>
+<ul >
+    <div class="ml-5">
+        <li *ngFor="let item of todoArray">
+            Title: <a class="underline" [routerLink]="['/list/details', item.id]"> {{item.title}}</a>
+        </li>
+    </div>
+</ul> 
+
+<router-outlet></router-outlet>

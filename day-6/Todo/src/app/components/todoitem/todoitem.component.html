@@ -1,0 +1,13 @@
+<div *ngIf="todo" class="ml-5 mt-5">
+    <!-- <p>{{todo.id}}</p> -->
+    <p> Title: {{todo.title}}</p>
+    <p> Description: {{todo.description}}</p>
+    <p> Created By: {{todo.createdBy | gendertodesignation: todo.gender}}</p>
+    <p> Created At: {{todo.createdAt | date : 'fullDate'}}</p>
+    <p> Completed At: {{todo.completedAt | date : 'fullDate'}}</p>
+    <p> Gender: {{todo.gender | enumtoname: genderEnum}}</p>
+</div>  
+
+<div *ngIf="!todo" class="ml-5">
+    Todo not found
+</div>

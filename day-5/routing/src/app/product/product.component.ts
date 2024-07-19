@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrl: './product.component.scss'
+  styleUrls: ['./product.component.scss']
 })
 export class ProductComponent {
   paramQuery1 = '';
@@ -15,5 +15,9 @@ export class ProductComponent {
       this.paramQuery1 = data['id'];
       this.paramQuery2 = data['id2'];
     })
+    console.log(this.activatedRoute.snapshot.paramMap.get('id'));
   }
+  
 }
+
+

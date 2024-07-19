@@ -1,0 +1,20 @@
+<h1 class="text-3xl font-semibold m-2">Todo</h1>
+
+<div class="m-2">
+  <form [formGroup]="todoForm" (ngSubmit)="todoSubmit()" c>
+
+    <input class="custom-input" type="text" placeholder="title" formControlName="title">
+    <input class="custom-input" type="text" placeholder="description" formControlName="description">
+    <input class="custom-input" type="text" placeholder="createdBy" formControlName="createdBy">
+    <input class="custom-input" type="date" placeholder="createdAt" formControlName="createdAt">
+    <select class="custom-input"   formControlName="gender">
+      <option  [value]="gender.male" >Male </option>
+      <option [value]="gender.female" >Female</option>
+    </select> 
+    <button class="custom-input"  >Submit</button>
+  </form>
+</div>  
+
+<app-todolist></app-todolist>
+
+<router-outlet />

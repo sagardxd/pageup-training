@@ -5,11 +5,7 @@ import { Todo } from './todo.model';
   providedIn: 'root'
 })
 export class TodoService {
-  private todos: Todo[] = [];
-
-  constructor() {
-    // Initialize todos if needed
-  }
+  public todos: Todo[] = [];
 
   add(todo: Todo): void {
     this.todos.push(todo);

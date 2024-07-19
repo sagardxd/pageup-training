@@ -1,0 +1,14 @@
+
+<button class="border-black border-solid mt-6 m-2 bg-slate-300 rounded-md p-2" (click)="selectAll()">SelectAll</button>
+<button class="border-black border-solid mt-6 m-2 bg-slate-300 rounded-md p-2" (click)="deleteCurr()">Delete</button>
+
+<ul>
+    <li *ngFor="let todo of todoArray;" class="p-2">
+        <div class="flex gap-5 m-2" *ngIf="!todo.completed">
+            <input type="checkbox" class="border-x-neutral-950" [(ngModel)]="todo.checked">
+            <p>Title: {{todo.title}}</p>
+            <button class="bg-orange-300 rounded-md p-2" (click)="markAsComplete(todo.id)">MarkasComplete</button>
+            <button class="bg-red-400 rounded-md p-2" (click)="deleteitem(todo.id)">Delete</button>
+        </div>
+    </li>   
+</ul>

@@ -19,15 +19,17 @@ const routes: Routes = [
   { path: 'product/:id/:id2', component: ProductComponent },
   { path: 'search', component: SearchComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] },
-  { path: '**', component: OutBoundComponent },
   {
     path: 'child',
-    children: [{ path: 'view', component: ProductViewComponent },
-    { path: 'edit', component: ProductEditComponent },
+    component: ProductComponent,
+    children: [
+      { path: 'view', component: ProductViewComponent },
+      { path: 'edit', component: ProductEditComponent },
     ]
   },
   { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule) }
 
+  , { path: '**', component: OutBoundComponent },
 ];
 
 @NgModule({
