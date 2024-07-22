@@ -1,0 +1,140 @@
+<div class="w-7/12 bg-white ml-20 flex max-h-[1500px]   flex-col gap-5" id="invoiceDiv">
+
+
+    <div class="mx-16 my-6">
+        <form [formGroup]="invoiceForm" class="">
+            <!-- Sender Section -->
+            <div class="flex justify-between">
+                <div formGroupName="Sender" class="flex flex-col gap-1">
+                    <div>
+                        <input formControlName="senderCompanyName" placeholder="Your Company" class="size-10 w-[350px]
+           placeholder:font-semibold placeholder:text-2xl py-10 text-2xl px-1" appHoverHighlight />
+                    </div>
+                    <div>
+                        <input formControlName="senderName" appHoverHighlight  placeholder="Your Name" class="w-[350px]  placeholder:text-lg
+          p-1 text-lg" />
+                    </div>
+                    <div>
+                        <input formControlName="senderAddress" appHoverHighlight  placeholder="Company's Address" class="w-[350px]  placeholder:text-lg
+            p-1 text-lg" />
+                    </div>
+                    <div>
+                        <input formControlName="senderState" appHoverHighlight  placeholder="City, State Zip" class="w-[350px]  placeholder:text-lg
+            p-1 text-lg" />
+                    </div>
+
+                    <div>
+                        <input formControlName="senderCountry" appHoverHighlight  placeholder="Country" class="w-[350px]  placeholder:text-lg
+          p-1 text-lg" />
+                    </div>
+                </div>
+
+                <div class="text-5xl py-6 pr-4">INVOICE</div>
+            </div>
+
+            <div class="flex justify-between">
+                <!-- Client Section -->
+                <div formGroupName="Client" class=" flex flex-col gap-1 mt-10">
+
+                    <div>
+                        <input formControlName="clientName" appHoverHighlight  placeholder="Bill To:" class="size-7 w-[350px]
+                    placeholder:font-semibold placeholder:text-2xl py-6 text-2xl px-1" />
+                    </div>
+                    <div>
+                        <input formControlName="clientCompanyName" appHoverHighlight  placeholder="Your Client's Company" class="w-[350px]  placeholder:text-lg
+              p-1 text-lg" />
+                    </div>
+                    <div>
+                        <input formControlName="clientAddress" appHoverHighlight  placeholder="Client's Address" class="w-[350px]  placeholder:text-lg
+              p-1 text-lg" />
+                    </div>
+                    <div>
+                        <input formControlName="clientState" appHoverHighlight  placeholder="City, State Zip" class="w-[350px]  placeholder:text-lg
+                p-1 text-lg" />
+                    </div>
+                    <div>
+                        <input formControlName="clientCountry" appHoverHighlight  placeholder="Country" class="w-[350px]  placeholder:text-lg
+              p-1 text-lg" />
+                    </div>
+                </div>
+
+                <!-- Invoice Details Section -->
+                <div formGroupName="InvoiceDetails" class=" flex gap-1 mt-[100px] pr-20">
+
+                    <div class="flex flex-col">
+                        <div class="text-lg p-1">
+                            Invoice#
+                        </div>
+                        <div class="text-lg p-1">
+                            Invoice Date
+                        </div>
+                        <div class="text-lg p-1">
+                            Due Date
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <input formControlName="invoiceNumber" appHoverHighlight  class=" text-lg p-1" />
+                        <input formControlName="invoiceDate" appHoverHighlight  class=" text-lg p-1" />
+                        <input formControlName="invoiceDueDate" appHoverHighlight  class=" text-lg p-1" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-5">
+                <div class="h-[2px] w-full flex justify-center items-center  mt-10 bg-slate-200 rounded-lg"></div>
+
+                <div class="text-lg ">Dear Sir/Madam,</div>
+                <div class="text-lg">Please see the invoice items</div>
+            </div>
+
+
+            <!-- Invoice Rows Section -->
+            <div formArrayName="invoiceRows" class="table-container">
+                <table class="table-auto w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">#</th>
+                            <th class="px-4 py-2">Item(s)</th>
+                            <th class="px-4 py-2">Price</th>
+                            <th class="px-4 py-2">Quantity</th>
+                            <th class="px-4 py-2">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of invoiceRows.controls; let i = index" [formGroupName]="i">
+                            <td class="border px-4 py-2">
+                                <h3>{{ i + 1 }}</h3>
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input formControlName="item" appHoverHighlight  placeholder="Enter line items details" class=" w-[500px]" />
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input formControlName="quantity" appHoverHighlight  placeholder="0.00" class=" w-[60px]" />
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input formControlName="price"  appHoverHighlight placeholder="0.00" class=" w-[60px]" />
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input formControlName="amount" appHoverHighlight  placeholder="0.00" class=" w-[60px]" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+        <div class="flex pt-10">
+            <button class=" bg-blue-600 p-2 text-white rounded-md" (click)="addNewRow()">Add row</button>
+            <!-- <button class=" bg-blue-600 p-2 text-white rounded-md" (click)="getFormValue()">Value</button> -->
+
+        </div>
+
+        <app-sub-total></app-sub-total>
+        
+    </div>
+
+
+    
+
+</div>

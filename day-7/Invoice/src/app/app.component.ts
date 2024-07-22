@@ -1,44 +1,30 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import html2canvas from 'html2canvas';
+import { saveAs } from 'file-saver';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Invoice';
 
-  index: number = 1;
-
-
-  constructor() { }
-
-  invoiceRowForm = new FormArray([
-    new FormGroup({
-      itemId: new FormControl(this.index++),
-      item: new FormControl(''),
-      quantity: new FormControl(),
-      price: new FormControl(),
-      amount: new FormControl()
-    })
-  ])
-
-  private getArray() {
-    return this.invoiceRowForm;
+  ngOnInit(): void {
   }
 
-  public addNewRow() {
-    const newItem = new FormGroup({
-      itemId: new FormControl(this.index++),
-      item: new FormControl(''),
-      quantity: new FormControl(),
-      price: new FormControl(),
-      amount: new FormControl()
-    });
-
-    this.invoiceRowForm.push(newItem);
+  downloadInvoice() {
+    const invoiceElement = document.getElementById('invoiceDiv');
+    if (invoiceElement) {
+      html2canvas(invoiceElement).then(canvas => {
+        canvas.toBlob(blob => {
+          if (blob) {
+            saveAs(blob, 'invoice.png');
+          }
+        });
+      });
+    }
   }
-
 
 }
