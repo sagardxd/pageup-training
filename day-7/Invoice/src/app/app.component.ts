@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  downloadInvoice() {
+  public downloadInvoice(): void{
     const invoiceElement = document.getElementById('invoiceDiv');
     if (invoiceElement) {
       html2canvas(invoiceElement).then(canvas => {

@@ -92,13 +92,13 @@
             <!-- Invoice Rows Section -->
             <div formArrayName="invoiceRows" class="table-container">
                 <table class="table-auto w-full">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-2">#</th>
-                            <th class="px-4 py-2">Item(s)</th>
-                            <th class="px-4 py-2">Price</th>
-                            <th class="px-4 py-2">Quantity</th>
-                            <th class="px-4 py-2">Amount</th>
+                    <thead class="border">
+                        <tr>    
+                            <th class="px-4 py-2 border">#</th>
+                            <th class="px-4 py-2 border">Item(s)</th>
+                            <th class="px-4 py-2 border">Price</th>
+                            <th class="px-4 py-2 border">Quantity</th>
+                            <th class="px-4 py-2 border">Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -124,8 +124,10 @@
             </div>
         </form>
 
-        <div class="flex pt-10">
+        <div class="flex pt-10 gap-3">
             <button class=" bg-blue-600 p-2 text-white rounded-md" (click)="addNewRow()">Add row</button>
+            <button class=" bg-blue-600 p-2 text-white rounded-md" (click)="removeRow()">Remove row</button>
+            
             <!-- <button class=" bg-blue-600 p-2 text-white rounded-md" (click)="getFormValue()">Value</button> -->
 
         </div>

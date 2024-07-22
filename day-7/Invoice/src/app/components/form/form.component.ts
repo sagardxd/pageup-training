@@ -9,14 +9,9 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 })
 export class FormComponent {
 
+  public index: number = 1;
   
-  index: number = 1;
-
-
-
-  constructor() { }
-
-  invoiceForm = new FormGroup({
+  public invoiceForm = new FormGroup({
 
     invoiceRows: new FormArray([
       new FormGroup({
@@ -52,11 +47,11 @@ export class FormComponent {
 
   })
 
-  get invoiceRows(): FormArray {
+  public get invoiceRows(): FormArray {
     return this.invoiceForm.get('invoiceRows') as FormArray;
   }
 
-  addNewRow() {
+  public addNewRow() {
     const newItem = new FormGroup({
       itemId: new FormControl(this.index++),
       item: new FormControl(''),
@@ -68,7 +63,13 @@ export class FormComponent {
     this.invoiceRows.push(newItem);
   }
 
-  getFormValue() {
+ public removeRow() {
+    if (this.invoiceRows.length > 1) {
+    this.invoiceRows.removeAt(this.invoiceRows.length - 1);
+    }
+ } 
+
+  public getFormValue() {
     console.log(this.invoiceForm.value);
   }
 
