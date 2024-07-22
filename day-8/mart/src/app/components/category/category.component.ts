@@ -9,7 +9,6 @@ import { CategoryService } from '../../services/category.service';
 export class CategoryComponent implements OnInit{
 
   public categorylist: any = [];
-  @Input() editing = false;
     
   constructor(private catergoryService: CategoryService) { }
 

@@ -14,7 +14,7 @@ export class CategoryEditComponent {
   categoryId:number = 3;
   subCategoryId = 103;  
   subCategoryData: any = [];
-  paramId: string = '';
+  paramId: string = ''; 
   isEdit = false;
   category:any  = {};
   categoryArray: any = [];
