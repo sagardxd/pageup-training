@@ -1,0 +1,35 @@
+<div>
+    <div>
+        <h2>Category</h2>
+        <button routerLink="/edit/0">Add Category</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <div *ngFor="let item of categorylist">
+            <tbody>
+                <tr>
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.created_at}}</td>
+                    <td>
+                        <button [routerLink]="['/edit', item.id]">Edit</button>
+                        <button (click)="deleteCategory(item.id)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+
+            <div *ngFor="let subItem of item.subCategory">
+                <div>SubItem: {{subItem.name }}</div>
+            </div>
+
+        </div>
+    </table>
+</div>
