@@ -29,4 +29,8 @@ export class ProductService {
   public deleteProduct(id: string) {
     return this.httpClient.delete(`http://localhost:3000/products/${id}`);
   }
+
+  public searchProduct(searchParam: string): Observable<Product[]> {
+    return this.httpClient.get<Product[]>(`http://localhost:3000/products?brandname=${searchParam}`);
+  }
 }

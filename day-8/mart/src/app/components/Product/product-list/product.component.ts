@@ -10,10 +10,15 @@ import { Product } from '../../../models/product';
 export class ProductComponent implements OnInit {
 
   public productList: Product[] = [];
+  public searchParam: string = '';
   constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
     this.getProducts();
+  }
+
+  changeInSearch(event: { target: { value: string; } }) {
+    this.searchParam = event.target.value;
   }
 
   public getProducts(){
@@ -29,6 +34,21 @@ export class ProductComponent implements OnInit {
       console.log("deleted");
       this.getProducts();
     })
+  }
+}
+
+  public onChange(event: any) {
+    this.searchParam = event.target.value;
+    this.searchProduct();
+  }
+
+  public searchProduct() {
+    if (this.searchParam == '') {
+      this.getProducts();
+    } else{
+      this.productService.searchProduct(this.searchParam).subscribe(data => {
+        this.productList = data;  
+    });
   }
 }
 

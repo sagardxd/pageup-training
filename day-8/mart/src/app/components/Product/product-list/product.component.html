@@ -1,38 +1,37 @@
 <div class="p-4">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-bold">Product List</h2>
-      <button 
-        routerLink="/product/create"
-        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-        Add Product
-      </button>
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Product List</h2>
+
+    <div>
+      <input type="text" class="border p-2"  (input)="onChange($event)" placeholder="search product">
     </div>
-  
-    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
-      <!-- Header Row -->
-      <div class="flex bg-gray-200 border-b">
-        <div class="w-1/4 py-2 px-4 font-semibold">#</div>
-        <div class="w-1/2 py-2 px-4 font-semibold">Brand Name</div>
-        <div class="w-1/4 py-2 px-4 font-semibold">Actions</div>
-      </div>
-  
-      <!-- Body Rows -->
-      <div *ngFor="let item of productList" class="flex border-b hover:bg-gray-100">
-        <div class="w-1/4 py-2 px-4">{{item.id}}</div> 
-        <div class="w-1/2 py-2 px-4">{{item.brandname}}</div>
-        <div class="w-1/4 py-2 px-4 flex gap-3">
-          <button 
-            [routerLink]="['/productedit', item.id]"
-            class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-700">
-            Edit
-          </button>
-          <button 
-          (click)="deleteProduct(item.id)"
-          class="bg-red-500 text-white px-2 py-1 rounded hover:bg-yellow-700">
+
+    <button routerLink="/product/create" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Add Product
+    </button>
+  </div>
+
+  <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+    <!-- Header Row -->
+    <div class="flex bg-gray-200 border-b">
+      <div class="w-1/4 py-2 px-4 font-semibold">#</div>
+      <div class="w-1/2 py-2 px-4 font-semibold">Product Name</div>
+      <div class="w-1/4 py-2 px-4 font-semibold">Actions</div>
+    </div>
+
+    <!-- Body Rows -->
+    <div *ngFor="let item of productList" class="flex border-b hover:bg-gray-100">
+      <div class="w-1/4 py-2 px-4">{{item.id}}</div>
+      <div class="w-1/2 py-2 px-4">{{item.brandname}}</div>
+      <div class="w-1/4 py-2 px-4 flex gap-3">
+        <button [routerLink]="['/productedit', item.id]"
+          class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-700">
+          Edit
+        </button>
+        <button (click)="deleteProduct(item.id)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-yellow-700">
           Delete
         </button>
-        </div>
       </div>
     </div>
   </div>
-  
+</div>
