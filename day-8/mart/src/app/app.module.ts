@@ -3,12 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CategoryComponent } from './components/category/category.component';
-import { CategoryEditComponent } from './components/category-edit/category-edit.component';
+import { CategoryComponent } from './components/Category/category-list/category.component';
+import { CategoryEditComponent } from './components/Category/category-edit/category-edit.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ProductComponent } from './components/product/product.component';
-import { ProductEditComponent } from './components/product-edit/product-edit.component';
+import { ProductComponent } from './components/Product/product-list/product.component';
+import { ProductEditComponent } from './components/Product/product-edit/product-edit.component';
 
 @NgModule({
   declarations: [

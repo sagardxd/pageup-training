@@ -1,197 +1,180 @@
 {
   "category": [
     {
-      "name": "laptop",
+      "name": "Stationary",
       "subCategory": [
         {
-          "name": "asdf"
+          "name": "Pen"
         },
         {
-          "name": "asdf"
+          "name": "Notebook"
         }
       ],
-      "id": "1"
+      "id": "37750"
     },
     {
-      "name": "mobileasdfads",
+      "id": "92422",
+      "name": "Electronics",
+      "createdAt": "2024-07-23T09:35:58.838Z",
       "subCategory": [
         {
-          "name": "a"
+          "id": 103,
+          "name": "Washing machine",
+          "createdAt": "2024-07-23T09:35:58.835Z"
+        },
+        {
+          "id": 104,
+          "name": "Television",
+          "createdAt": "2024-07-23T09:35:58.835Z"
+        },
+        {
+          "id": 105,
+          "name": "Refridgeratior",
+          "createdAt": "2024-07-23T09:35:58.835Z"
         }
-      ],
-      "id": "2"
+      ]
     },
     {
-      "id": "30551",
+      "id": "87515",
       "name": "asdf",
-      "createdAt": "2024-07-22T12:28:12.215Z",
+      "createdAt": "2024-07-23T10:26:42.937Z",
       "subCategory": [
         {
           "id": 103,
-          "name": "asdf",
-          "createdAt": "2024-07-22T12:28:12.214Z"
+          "name": "afd",
+          "createdAt": "2024-07-23T10:26:40.570Z"
         },
         {
           "id": 104,
-          "name": "sdf",
-          "createdAt": "2024-07-22T12:28:12.214Z"
+          "name": "afd",
+          "createdAt": "2024-07-23T10:26:42.937Z"
         }
       ]
     },
     {
-      "id": "7626",
-      "name": "clothes",
-      "createdAt": "2024-07-22T13:54:59.554Z",
+      "name": "asdf",
       "subCategory": [
         {
-          "id": 103,
-          "name": "topwear",
-          "createdAt": "2024-07-22T13:54:59.553Z"
+          "name": "asdff"
         },
         {
-          "id": 104,
-          "name": "botomwear",
-          "createdAt": "2024-07-22T13:54:59.553Z"
+          "name": "asdf"
+        }
+      ],
+      "id": "88413"
+    },
+    {
+      "id": "51965",
+      "name": "asdf",
+      "createdAt": "2024-07-23T17:23:56.588Z",
+      "subCategory": []
+    },
+    {
+      "id": "99108",
+      "name": "adfs",
+      "createdAt": "2024-07-23T17:30:23.264Z",
+      "subCategory": []
+    },
+    {
+      "id": "73924",
+      "name": "adsf",
+      "createdAt": "2024-07-23T17:31:34.871Z",
+      "subCategory": []
+    },
+    {
+      "id": "97731",
+      "name": "asdf",
+      "createdAt": "2024-07-23T17:31:54.110Z",
+      "subCategory": []
+    },
+    {
+      "id": "45711",
+      "name": "adf",
+      "createdAt": "2024-07-23T17:32:24.158Z",
+      "subCategory": []
+    },
+    {
+      "id": "90545",
+      "name": "asdff",
+      "createdAt": "2024-07-23T18:12:33.865Z",
+      "subCategory": [
+        {
+          "name": "afd",
+          "createdAt": "2024-07-23T18:12:27.765Z"
+        },
+        {
+          "name": "afd",
+          "createdAt": "2024-07-23T18:12:33.865Z"
         }
       ]
+    },
+    {
+      "id": "90129",
+      "name": "asdfff",
+      "createdAt": "2024-07-23T18:14:08.774Z",
+      "subCategory": []
     }
   ],
   "products": [
     {
-      "brandname": "dellii",
-      "cid": "1",
-      "sellingPrice": "1000",
+      "brandname": "dell",
+      "cid": "37750",
+      "sellingPrice": "100",
       "actualPrice": "1000",
-      "discount": "20%",
       "mediaLink": [
-        ""
+        "dh"
       ],
       "id": "1"
     },
     {
-      "id": "2",
-      "cid": "2",
-      "brandname": "xiaomi",
-      "sellingPrice": "1000",
-      "actualPrice": "1000",
-      "discount": "20%",
-      "mediaUrl": [
-        "https://www.apple.com",
-        "https://www.china.com"
-      ]
-    },
-    {
-      "id": "ce63",
-      "brandname": "samsung",
-      "cid": "1",
-      "sellingPrice": "100",
-      "actualPrice": "10",
-      "discount": "10",
+      "brandname": "Asus",
+      "cid": "92422",
+      "sellingPrice": 15000,
+      "actualPrice": 32000,
       "mediaLink": [
-        "google.com",
-        "asdf.com"
-      ]
-    },
-    {
-      "id": "fca7",
-      "brandname": "samsung",
-      "cid": "1",
-      "sellingPrice": "100",
-      "actualPrice": "10",
-      "discount": "10",
-      "mediaLink": [
-        "google.comadd"
-      ]
-    },
-    {
-      "id": "dfba",
-      "brandname": "xiaomii",
-      "cid": "2",
-      "sellingPrice": "1000",
-      "actualPrice": "1000",
-      "discount": "20%",
-      "mediaLink": [
-        ""
-      ]
-    },
-    {
-      "id": "e0cd",
-      "brandname": "xiaomidf",
-      "cid": "2",
-      "sellingPrice": "1000",
-      "actualPrice": "1000",
-      "discount": "20%",
-      "mediaLink": [
-        ""
-      ]
-    },
-    {
-      "id": "2820",
-      "brandname": "delli",
-      "cid": "1",
-      "sellingPrice": "1000",
-      "actualPrice": "1000",
-      "discount": "20%",
-      "mediaLink": [
-        ""
-      ]
-    },
-    {
-      "id": "aad7",
-      "brandname": "delli",
-      "cid": "1",
-      "sellingPrice": "1000",
-      "actualPrice": "1000",
-      "discount": "20%",
-      "mediaLink": [
-        ""
-      ]
-    },
-    {
-      "id": "64c7",
-      "brandname": "dellfds",
-      "cid": "1",
-      "sellingPrice": "1000",
-      "actualPrice": "1000",
-      "discount": "20%",
-      "mediaLink": [
-        "sdf"
-      ]
-    },
-    {
-      "id": "cbd2",
-      "brandname": "dellff",
-      "cid": "1",
-      "sellingPrice": "1000",
-      "actualPrice": "1000",
-      "discount": "20%",
-      "mediaLink": [
-        ""
-      ]
-    },
-    {
-      "brandname": "aaaaaaaaa",
-      "cid": "30551",
-      "sellingPrice": "200000",
-      "actualPrice": "",
-      "discount": "",
-      "mediaLink": [
-        ""
+        "asdasdasd"
       ],
-      "id": "96f5"
+      "id": "2aca"
     },
     {
-      "id": "7fad",
-      "brandname": "apple",
-      "cid": "2",
-      "sellingPrice": "15555",
-      "actualPrice": "12",
-      "discount": "12",
+      "id": "712e",
+      "brandname": "adfs",
+      "cid": "92422",
+      "sellingPrice": 10,
+      "actualPrice": 100,
       "mediaLink": [
-        "asdfadsf",
-        "asdfasdf",
-        "asdfafd"
-      ]
+        "oogle.com"
+      ],
+      "discount": 90
+    },
+    {
+      "id": "286c",
+      "brandname": "asfd",
+      "cid": "37750",
+      "sellingPrice": 10,
+      "actualPrice": 100,
+      "mediaLink": [
+        "asdf"
+      ],
+      "discount": 90
+    },
+    {
+      "id": "5653",
+      "brandname": "delli",
+      "cid": "37750",
+      "sellingPrice": 12,
+      "actualPrice": 1000,
+      "mediaLink": [],
+      "discount": 98.8
+    },
+    {
+      "id": "e605",
+      "brandname": "micromax",
+      "cid": "92422",
+      "sellingPrice": 100,
+      "actualPrice": 100,
+      "mediaLink": [],
+      "discount": 0
     }
   ]
 }

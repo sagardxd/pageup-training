@@ -1,0 +1,35 @@
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../../../services/product.service';
+import { Product } from '../../../models/product';
+
+@Component({
+  selector: 'app-product',
+  templateUrl: './product.component.html',
+  styleUrl: './product.component.scss'
+})
+export class ProductComponent implements OnInit {
+
+  public productList: Product[] = [];
+  constructor(private productService: ProductService) { }
+
+  ngOnInit(): void {
+    this.getProducts();
+  }
+
+  public getProducts(){
+    this.productService.getProducts().subscribe(data =>{
+      this.productList = data;
+    });
+  }
+
+  public deleteProduct(id: string){
+    let text = 'Are you sure you want to delete this product?';
+    if (confirm(text)) {
+    this.productService.deleteProduct(id).subscribe(data => {
+      console.log("deleted");
+      this.getProducts()
+    })
+  }
+}
+
+}
