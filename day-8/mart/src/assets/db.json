@@ -70,28 +70,19 @@
       "subCategory": []
     },
     {
-      "id": "99108",
-      "name": "adfs",
-      "createdAt": "2024-07-23T17:30:23.264Z",
-      "subCategory": []
-    },
-    {
       "id": "73924",
       "name": "adsf",
       "createdAt": "2024-07-23T17:31:34.871Z",
       "subCategory": []
     },
     {
-      "id": "97731",
       "name": "asdf",
-      "createdAt": "2024-07-23T17:31:54.110Z",
-      "subCategory": []
-    },
-    {
-      "id": "45711",
-      "name": "adf",
-      "createdAt": "2024-07-23T17:32:24.158Z",
-      "subCategory": []
+      "subCategory": [
+        {
+          "name": "asdf"
+        }
+      ],
+      "id": "97731"
     },
     {
       "id": "90545",
@@ -113,6 +104,21 @@
       "name": "asdfff",
       "createdAt": "2024-07-23T18:14:08.774Z",
       "subCategory": []
+    },
+    {
+      "id": "88835",
+      "name": "asdfddd",
+      "createdAt": "2024-07-24T05:35:19.321Z",
+      "subCategory": [
+        {
+          "name": "asfd",
+          "createdAt": "2024-07-24T05:35:14.459Z"
+        },
+        {
+          "name": "asfd",
+          "createdAt": "2024-07-24T05:35:19.321Z"
+        }
+      ]
     }
   ],
   "products": [
@@ -129,7 +135,7 @@
     {
       "brandname": "Asus",
       "cid": "92422",
-      "sellingPrice": 15000,
+      "sellingPrice": "1500",
       "actualPrice": 32000,
       "mediaLink": [
         "asdasdasd"
@@ -159,15 +165,6 @@
       "discount": 90
     },
     {
-      "id": "5653",
-      "brandname": "delli",
-      "cid": "37750",
-      "sellingPrice": 12,
-      "actualPrice": 1000,
-      "mediaLink": [],
-      "discount": 98.8
-    },
-    {
       "id": "e605",
       "brandname": "micromax",
       "cid": "92422",
@@ -175,6 +172,17 @@
       "actualPrice": 100,
       "mediaLink": [],
       "discount": 0
+    },
+    {
+      "id": "d05d",
+      "brandname": "asdf",
+      "cid": "37750",
+      "sellingPrice": 10,
+      "actualPrice": 100,
+      "mediaLink": [
+        "a.com"
+      ],
+      "discount": 90
     }
   ]
 }

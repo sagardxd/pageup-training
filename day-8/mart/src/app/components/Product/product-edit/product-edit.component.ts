@@ -53,7 +53,6 @@ export class ProductEditComponent {
     this.productForm.valueChanges.subscribe(() => {
       this.calculateDiscount();
     });
-
   }
 
   private discountNonNegative(): ValidatorFn {
@@ -67,7 +66,6 @@ export class ProductEditComponent {
 
         return discount < 0 ? { discountNegative: true } : null;
       }
-
       return null;
     };
   }
@@ -120,7 +118,6 @@ export class ProductEditComponent {
       return;
     }
 
-
     this.productService.addProduct(dataToSend).subscribe(data => {
       this.productForm.reset();
       alert('Product Added Successfully');
@@ -149,7 +146,4 @@ export class ProductEditComponent {
   public removeLink(index: number) {
     this.productForm.controls.mediaLink.removeAt(index);
   }
-
-
-
 }

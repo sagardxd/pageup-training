@@ -28,7 +28,6 @@ export class CategoryEditComponent {
     private router: Router
   ) { }
 
-
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(paramMap => {
       this.paramId = (paramMap.get('id')) ?? '';
@@ -89,8 +88,7 @@ export class CategoryEditComponent {
           return;
         }
       }
-
-
+      
       const newCategoryData = {
         id: String(Math.floor(Math.random() * 100000) + 1),
         name: this.categoryForm.controls.name!.value,

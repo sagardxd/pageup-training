@@ -27,7 +27,7 @@ export class ProductComponent implements OnInit {
     if (confirm(text)) {
     this.productService.deleteProduct(id).subscribe(data => {
       console.log("deleted");
-      this.getProducts()
+      this.getProducts();
     })
   }
 }
