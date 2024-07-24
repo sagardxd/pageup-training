@@ -11,6 +11,8 @@ export class ProductComponent implements OnInit {
 
   public productList: Product[] = [];
   public searchParam: string = '';
+  private productToDelete: string | null = null;
+  public showDeletePopup: boolean = false;
   constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
@@ -28,14 +30,11 @@ export class ProductComponent implements OnInit {
   }
 
   public deleteProduct(id: string){
-    let text = 'Are you sure you want to delete this product?';
-    if (confirm(text)) {
-    this.productService.deleteProduct(id).subscribe(data => {
-      console.log("deleted");
-      this.getProducts();
-    })
-  }
+    this.showDeletePopup = true;
+    this.productToDelete = id;
+
 }
+  
 
   public onChange(event: any) {
     this.searchParam = event.target.value;
@@ -51,5 +50,21 @@ export class ProductComponent implements OnInit {
     });
   }
 }
+
+  public confirmDelete(){
+   if(this.productToDelete != null){
+    this.productService.deleteProduct(this.productToDelete).subscribe(data => {
+      console.log("deleted");
+      this.showDeletePopup = false;
+      this.productToDelete = null;
+      this.getProducts();
+    })
+   }
+
+  }
+
+  public cancelDelete(){
+    this.showDeletePopup = false;
+  }
 
 }

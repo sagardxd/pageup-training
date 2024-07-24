@@ -11,6 +11,8 @@ export class CategoryComponent implements OnInit{
 
   public categorylist: Category[] = [];
   public searchParam: string = '';
+  public showDeletePopup: boolean = false;
+  public productToDelete: string | null = null;
     
   constructor(private catergoryService: CategoryService) { }
 
@@ -25,17 +27,12 @@ export class CategoryComponent implements OnInit{
   }
 
   public deleteCategory(id: string){
-    let text = 'Are you sure you want to delete this category?';
-    if (confirm(text)) {
-    this.catergoryService.deleteCategory(id).subscribe(data => {
-      console.log("deleted");
-      this.getCategories()
-    })
-  }
+    this.showDeletePopup = true;
+    this.productToDelete = id;
 }
 
-  public onChange(event: any) {
-    this.searchParam = event.target.value;
+  public onChange(event: Event) {
+    this.searchParam = (event.target as HTMLInputElement).value;
     this.searchCategory();
   }
 
@@ -49,4 +46,18 @@ export class CategoryComponent implements OnInit{
   }
 }
 
+    public confirmDelete(){
+      if(this.productToDelete != null) {
+        this.catergoryService.deleteCategory(this.productToDelete).subscribe(data => {
+          this.getCategories();
+          this.productToDelete = null;
+          this.showDeletePopup = false
+        })
+      }
+    }
+
+    public cancelDelete(){
+      this.showDeletePopup = false
+    }
+    
 }

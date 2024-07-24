@@ -25,16 +25,18 @@
       </table>
     </div>
   </form>
+
   <button (click)="addSubCategory()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2">
     Add Sub Category
   </button>
+
   <div *ngIf="!isEdit" class="mt-4">
     <button *ngIf="categoryForm.valid" (click)="addCategory()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">
       Save
     </button>
   </div>
 </div>
-
+  
 <div *ngIf="isEdit">
   <button *ngIf="categoryForm.valid" (click)="updateData()" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700">
     Update

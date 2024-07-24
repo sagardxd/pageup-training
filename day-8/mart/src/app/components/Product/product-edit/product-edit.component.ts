@@ -55,16 +55,14 @@ export class ProductEditComponent {
     });
   }
 
-  private discountNonNegative(): ValidatorFn {
+  private sellingPriceMoreThanActualPrice(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const group = control as FormGroup;
       const sellingPrice = group.controls['sellingPrice'].value;
       const actualPrice = group.controls['actualPrice'].value;
 
-      if (sellingPrice != null && actualPrice != null && actualPrice > 0) {
-        const discount = ((actualPrice - sellingPrice) / actualPrice) * 100;
-
-        return discount < 0 ? { discountNegative: true } : null;
+      if (sellingPrice != null && actualPrice != null && sellingPrice > actualPrice) {
+        return { sellingPriceMoreThanActualPrice: true };
       }
       return null;
     };
@@ -78,7 +76,7 @@ export class ProductEditComponent {
     actualPrice: new FormControl(null),
     discount: new FormControl({ value: null, disabled: true }),
     mediaLink: new FormArray([new FormControl('', [Validators.required])]),
-  }, { validators: this.discountNonNegative() });
+  }, { validators: this.sellingPriceMoreThanActualPrice() });
 
 
 
@@ -146,4 +144,5 @@ export class ProductEditComponent {
   public removeLink(index: number) {
     this.productForm.controls.mediaLink.removeAt(index);
   }
+
 }

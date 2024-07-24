@@ -33,12 +33,6 @@
           "createdAt": "2024-07-23T09:35:58.835Z"
         }
       ]
-    },
-    {
-      "id": "51965",
-      "name": "asdf",
-      "createdAt": "2024-07-23T17:23:56.588Z",
-      "subCategory": []
     }
   ],
   "products": [
@@ -74,17 +68,6 @@
       "discount": 90
     },
     {
-      "id": "286c",
-      "brandname": "asfd",
-      "cid": "37750",
-      "sellingPrice": 10,
-      "actualPrice": 100,
-      "mediaLink": [
-        "asdf"
-      ],
-      "discount": 90
-    },
-    {
       "id": "e605",
       "brandname": "micromax",
       "cid": "92422",
@@ -92,17 +75,6 @@
       "actualPrice": 100,
       "mediaLink": [],
       "discount": 0
-    },
-    {
-      "id": "d05d",
-      "brandname": "asdf",
-      "cid": "37750",
-      "sellingPrice": 10,
-      "actualPrice": 100,
-      "mediaLink": [
-        "a.com"
-      ],
-      "discount": 90
     }
   ]
 }
