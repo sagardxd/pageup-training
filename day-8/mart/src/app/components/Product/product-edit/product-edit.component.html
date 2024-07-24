@@ -4,7 +4,7 @@
       <div [formGroup]="productForm" class="space-y-4">
         <input 
           type="text" 
-          formControlName="brandname" 
+          formControlName="productname" 
           placeholder="Product Name" 
           class="border rounded p-2 w-[200px]"
         >
@@ -13,6 +13,13 @@
           class="border rounded p-2 w-[200px]"
         >
           <option *ngFor="let item of categoryArray" [value]="item.id">{{item.name}}</option>
+        </select>
+
+        <select 
+          formControlName="brandid" 
+          class="border rounded p-2 w-[200px]"
+        >
+          <option *ngFor="let item of brandArray" [value]="item.id">{{item.name}}</option>
         </select>
         <input 
         type="text" 

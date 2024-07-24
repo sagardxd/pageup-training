@@ -1,0 +1,15 @@
+<div [formGroup]="brandForm">
+    <input formControlName="name" placeholder="Brand name" class="border rounded p-2 w-[200px]">
+</div>
+
+<div *ngIf="!isEdit">
+    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2 mt-2"
+    (click)="addBrand()"
+    >Save</button>
+</div>
+
+<div *ngIf="isEdit">
+    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2 mt-2"
+    (click)="updateBrand()" 
+    >Update</button>
+</div>

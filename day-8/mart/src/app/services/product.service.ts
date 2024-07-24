@@ -31,6 +31,6 @@ export class ProductService {
   }
 
   public searchProduct(searchParam: string): Observable<Product[]> {
-    return this.httpClient.get<Product[]>(`http://localhost:3000/products?brandname=${searchParam}`);
+    return this.httpClient.get<Product[]>(`http://localhost:3000/products?productname=${searchParam}`);
   }
 }

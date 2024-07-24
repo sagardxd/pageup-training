@@ -37,19 +37,21 @@
   ],
   "products": [
     {
-      "brandname": "dell",
+      "productname": "Pencil",
       "cid": "37750",
-      "sellingPrice": "100",
-      "actualPrice": "1000",
+      "brandid": "291",
+      "sellingPrice": 100,
+      "actualPrice": 1000,
       "mediaLink": [
         "dh"
       ],
       "id": "1"
     },
     {
-      "brandname": "Asus",
+      "productname": "Tuf Dash",
       "cid": "92422",
-      "sellingPrice": "1500",
+      "brandid": "376",
+      "sellingPrice": 1500,
       "actualPrice": 32000,
       "mediaLink": [
         "asdasdasd"
@@ -57,24 +59,32 @@
       "id": "2aca"
     },
     {
-      "id": "712e",
-      "brandname": "adfs",
+      "productname": "f15",
       "cid": "92422",
-      "sellingPrice": 10,
-      "actualPrice": 100,
+      "brandid": "215",
+      "sellingPrice": 100,
+      "actualPrice": 1000,
       "mediaLink": [
-        "oogle.com"
+        "asus.com"
       ],
-      "discount": 90
+      "id": "1583"
+    }
+  ],
+  "brands": [
+    {
+      "id": "215",
+      "name": "Acer",
+      "createdAt": "2024-07-24T09:58:44.794Z"
     },
     {
-      "id": "e605",
-      "brandname": "micromax",
-      "cid": "92422",
-      "sellingPrice": 100,
-      "actualPrice": 100,
-      "mediaLink": [],
-      "discount": 0
+      "id": "376",
+      "name": "Asus",
+      "createdAt": "2024-07-24T10:17:34.610Z"
+    },
+    {
+      "id": "291",
+      "name": "Apsra",
+      "createdAt": "2024-07-24T10:19:25.374Z"
     }
   ]
 }

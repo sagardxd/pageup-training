@@ -5,6 +5,8 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, V
 import { CategoryService } from '../../../services/category.service';
 import { Product, ProductForm } from '../../../models/product';
 import { Category } from '../../../models/category';
+import { BrandService } from '../../../services/brand.service';
+import { Brand } from '../../../models/brand';
 
 @Component({
   selector: 'app-product-edit',
@@ -15,10 +17,12 @@ export class ProductEditComponent {
 
   public paramId: string = '';
   public categoryArray: Category[] = [];
+  public brandArray: Brand[] = [];
   public currProduct: Product = {
     id: '',
-    brandname: '',
+    productname: '',
     cid: '',
+    brandid   : '',
     sellingPrice: 0,
     actualPrice: 0,
     discount: 0,
@@ -29,7 +33,7 @@ export class ProductEditComponent {
   private productArray: Product[] = [];
 
   constructor(private productService: ProductService, private activatedRoute: ActivatedRoute,
-    private categoryService: CategoryService, private router: Router) {}
+    private categoryService: CategoryService, private router: Router, private brandService: BrandService) {}
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(paramMap => {
@@ -39,6 +43,10 @@ export class ProductEditComponent {
     this.categoryService.getCategories().subscribe(data => {
       this.categoryArray = data;
       console.log(this.categoryArray)
+    });
+
+    this.brandService.getBrands().subscribe(data => {
+      this.brandArray = data;
     });
 
     this.productService.getProducts().subscribe(data => {
@@ -70,8 +78,9 @@ export class ProductEditComponent {
 
 
   public productForm: FormGroup<ProductForm> = new FormGroup<ProductForm>({
-    brandname: new FormControl(null, [Validators.required]),
+    productname: new FormControl(null, [Validators.required]),
     cid: new FormControl(null, [Validators.required]),
+    brandid : new FormControl(null, [Validators.required]),
     sellingPrice: new FormControl(null, [Validators.required, Validators.min(0)]),
     actualPrice: new FormControl(null),
     discount: new FormControl({ value: null, disabled: true }),
@@ -110,7 +119,7 @@ export class ProductEditComponent {
     }
 
     // checking if the product exsists
-    const productExists = this.productArray.find(product => product.brandname === formValue.brandname);
+    const productExists = this.productArray.find(product => product.productname === formValue.productname);
     if (productExists) {
       alert('Product already exists');
       return;

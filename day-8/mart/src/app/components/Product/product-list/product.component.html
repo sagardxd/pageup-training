@@ -22,7 +22,7 @@
     <!-- Body Rows -->
     <div *ngFor="let item of productList" class="flex border-b hover:bg-gray-100">
       <div class="w-1/4 py-2 px-4">{{item.id}}</div>
-      <div class="w-1/2 py-2 px-4">{{item.brandname}}</div>
+      <div class="w-1/2 py-2 px-4">{{item.productname}}</div>
       <div class="w-1/4 py-2 px-4 flex gap-3">
         <button [routerLink]="['/productedit', item.id]"
           class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-700">

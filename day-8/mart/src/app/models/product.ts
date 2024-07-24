@@ -1,8 +1,9 @@
 import {  FormArray, FormControl } from "@angular/forms";
 
 export interface ProductForm {
-    brandname: FormControl<string | null>;
+   productname: FormControl<string | null>;
     cid: FormControl<string | null>;
+    brandid: FormControl<string | null>;
     sellingPrice: FormControl<number | null>;
     actualPrice: FormControl<number | null>;
     discount: FormControl<number | null>;
@@ -11,8 +12,9 @@ export interface ProductForm {
   
  export interface Product {
     id: string;
-    brandname: string;
+    productname: string;
     cid: string;
+    brandid: string;
     sellingPrice: number;
     actualPrice: number;
     discount: number;
