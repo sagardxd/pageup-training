@@ -10,6 +10,7 @@ import { Category } from '../../../models/category';
 export class CategoryComponent implements OnInit{
 
   public categorylist: Category[] = [];
+  public searchParam: string = '';
     
   constructor(private catergoryService: CategoryService) { }
 
@@ -32,4 +33,20 @@ export class CategoryComponent implements OnInit{
     })
   }
 }
+
+  public onChange(event: any) {
+    this.searchParam = event.target.value;
+    this.searchCategory();
+  }
+
+  public searchCategory() {
+    if (this.searchParam == '') {
+      this.getCategories();
+    } else{
+      this.catergoryService.searchCategory(this.searchParam).subscribe(data => {
+        this.categorylist = data;  
+    });
+  }
+}
+
 }

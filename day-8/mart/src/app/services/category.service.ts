@@ -30,4 +30,8 @@ export class CategoryService {
     return this.httpClient.delete(`http://localhost:3000/category/${id}`);
    }
 
+   public searchCategory(searchParam: string): Observable<Category[]> {
+    return this.httpClient.get<Category[]>(`http://localhost:3000/category?name=${searchParam}`);
+   }
+
 }
