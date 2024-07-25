@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Brand, BrandForm } from '../../../models/brand';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BrandService } from '../../../services/brand/brand.service';
-import { createFind } from 'rxjs/internal/operators/find';
 
 @Component({
   selector: 'app-brand-edit',
   templateUrl: './brand-edit.component.html',
   styleUrl: './brand-edit.component.scss'
 })
-export class BrandEditComponent {
+export class BrandEditComponent implements OnInit {
 
   private paramId = '';
   public brands: Brand[] = [];

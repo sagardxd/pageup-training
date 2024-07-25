@@ -31,7 +31,7 @@ export class CategoryService {
    }
 
    public searchCategory(searchParam: string): Observable<Category[]> {
-    return this.httpClient.get<Category[]>(`http://localhost:3000/category?name_like=${searchParam}`);
+    return this.httpClient.get<Category[]>(`http://localhost:3000/category?name=${searchParam}`);
    }
 
 }
