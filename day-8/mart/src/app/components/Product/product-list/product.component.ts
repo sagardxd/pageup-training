@@ -78,6 +78,7 @@ export class ProductComponent implements OnInit {
   public addToCart(id: string): void {
     const item = {
       productId: id,
+      quantity: 1
     };
     if (this.cartItems.find(x => x.productId == id)) {
       alert('Item already in cart');

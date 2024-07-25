@@ -10,8 +10,8 @@ import { BrandService } from '../../../services/brand/brand.service';
 export class BrandListComponent implements OnInit {
 
   public brands: Brand[] = [];
-  public searchValue: string = '';
-  public showDeletePopup: boolean = false;
+  public searchValue = '';
+  public showDeletePopup= false;
   public brandToDelete: string | null = null;
 
   constructor(private brandService: BrandService) { }
@@ -20,20 +20,20 @@ export class BrandListComponent implements OnInit {
     this.getBrands();
   }
 
-  private getBrands() {
+  private getBrands():void {
     this.brandService.getBrands().subscribe((brands) => {
       this.brands = brands;
     });
   }
 
-  public deleteBrand(id: string) {
+  public deleteBrand(id: string):void {
     this.showDeletePopup = true;
     this.brandToDelete = id;
   }
 
-  public confirmDelete() {
+  public confirmDelete():void {
     if (this.brandToDelete != null) {
-      this.brandService.deleteBrand(this.brandToDelete).subscribe(data => {
+      this.brandService.deleteBrand(this.brandToDelete).subscribe(() => {
         this.getBrands();
         this.brandToDelete = null;
         this.showDeletePopup = false;
@@ -41,16 +41,16 @@ export class BrandListComponent implements OnInit {
     }
   }
 
-  public cancelDelete() {
-    this.showDeletePopup = false
+  public cancelDelete():void {
+    this.showDeletePopup = false;
   }
 
-  public onChange(event: Event) {
+  public onChange(event: Event):void {
     this.searchValue = (event.target as HTMLInputElement).value;
     this.searchBrand();
   }
 
-  public searchBrand() {
+  public searchBrand():void {
     if (this.searchValue == '') {
       this.getBrands();
     } else{

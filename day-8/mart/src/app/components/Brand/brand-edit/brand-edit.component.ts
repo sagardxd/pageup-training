@@ -12,9 +12,9 @@ import { createFind } from 'rxjs/internal/operators/find';
 })
 export class BrandEditComponent {
 
-  private paramId: string = '';
+  private paramId = '';
   public brands: Brand[] = [];
-  public isEdit: boolean = false;
+  public isEdit = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router, private brandService: BrandService) { }
@@ -36,7 +36,7 @@ export class BrandEditComponent {
   // brand form of a single formcontrol
   brandForm = new FormGroup<BrandForm>({
     name : new FormControl(null, [Validators.required])
-  })
+  });
 
  //getting the branc by id
  public getBrandbyId(id: string): void {
@@ -73,7 +73,7 @@ public updateBrand(): void {
     id: this.paramId,
     name: this.brandForm.value.name ?? '',
     createdAt: new Date()
-  }
+  };
   this.brandService.updateBrand(this.paramId, data).subscribe(() => {
     this.router.navigate(['/brand']);
     alert('Brand updated successfully');

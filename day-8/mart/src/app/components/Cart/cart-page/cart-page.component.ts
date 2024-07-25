@@ -10,6 +10,8 @@ import { ProductService } from '../../../services/product/product.service';
 })
 export class CartPageComponent implements OnInit {
 
+  public showRemovePopup = false;
+  private productToRemove : string | null = null;
   public cartItems: CartItemWithProduct[] = [];
   public cartData: CartItem[] = [];
   public callProductId = false;
@@ -25,7 +27,7 @@ export class CartPageComponent implements OnInit {
   }
 
   public getCartItems(): void {
-   
+
     this.cartService.getCartItems().subscribe((data) => {
       this.cartData = data;
       this.getProductItems();
@@ -41,9 +43,18 @@ export class CartPageComponent implements OnInit {
           ...cartItem,
           product
         });
+        this.calculateTotalAmount();
       });
     });
 
+
+  }
+
+  private calculateTotalAmount(): void {
+    this.totalAmount = 0;
+    for (let i = 0; i < this.cartItems.length; i++) {
+      this.totalAmount += this.cartItems[i].product.sellingPrice * this.cartItems[i].quantity;
+    }
   }
 
   public increaseQuantity(id: string, productId: string, quantity: number): void {
@@ -67,13 +78,30 @@ export class CartPageComponent implements OnInit {
       this.cartService.quantityUpdate(id, data).subscribe(() => {
         this.getCartItems();
       });
+    }else{
+        this.showRemovePopup = true;
+        this.productToRemove = id;
     }
   }
 
+  public confirmRemoveProduct(): void {
+    if(this.productToRemove != null){
+      this.removeItemFromCart(this.productToRemove);
+      this.showRemovePopup = false;
+      this.productToRemove = null;
+    }
+  }
+
+  public cancelRemoveProduct():void {
+    this.showRemovePopup = false;
+  }
+
   public removeItemFromCart(id: string): void {
+    // console.log('i deleted it')
     this.cartService.deleteCartItem(id).subscribe(() => {
       this.getCartItems();
       this.cartService.notifyCartItemAdded();
+      alert('Item removed from cart');
     });
 
   }

@@ -22,7 +22,7 @@ export class CartService {
     return this.httpClient.get<CartItem[]>('http://localhost:3000/cart');
   }
 
-  public addCartItem(createBody: {productId: string}): Observable<CartItem> {
+  public addCartItem(createBody: {productId: string, quantity: number}): Observable<CartItem> {
     return this.httpClient.post<CartItem>('http://localhost:3000/cart', createBody);
   } 
 
