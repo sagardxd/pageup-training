@@ -1,22 +1,21 @@
 <div class="p-4">
-    <div class="flex justify-between items-center mb-4">
+  <div class="flex justify-between items-center mb-4">
+    <div>
       <div>
-        <button 
-          routerLink="/category"
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2">
+        <button routerLink="/category" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2">
           Category
         </button>
-        <button 
-          routerLink="/product"
-          class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 mr-2">
-          Product
-        </button>
-        <button 
-          routerLink="/brand"
-          class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">
+        <button routerLink="/brand" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 mr-2">
           Brand
+        </button>
+        <button routerLink="/product" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 mr-2">
+          Product
         </button>
       </div>
     </div>
-    
+    <div>
+      <a routerLink="/cart">Cart</a> {{cartItemCount}}
+    </div>
+  </div>
+
 </div>

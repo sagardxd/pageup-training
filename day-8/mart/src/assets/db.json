@@ -33,6 +33,12 @@
           "createdAt": "2024-07-23T09:35:58.835Z"
         }
       ]
+    },
+    {
+      "id": "25939",
+      "name": "Cars",
+      "createdAt": "2024-07-24T10:42:59.676Z",
+      "subCategory": []
     }
   ],
   "products": [
@@ -68,6 +74,17 @@
         "asus.com"
       ],
       "id": "1583"
+    },
+    {
+      "productname": "Van",
+      "cid": "25939",
+      "brandid": "757",
+      "sellingPrice": 10,
+      "actualPrice": 100,
+      "mediaLink": [
+        "omni.com"
+      ],
+      "id": "789c"
     }
   ],
   "brands": [
@@ -85,6 +102,33 @@
       "id": "291",
       "name": "Apsra",
       "createdAt": "2024-07-24T10:19:25.374Z"
+    },
+    {
+      "id": "757",
+      "name": "Og Omni",
+      "createdAt": "2024-07-24T10:44:44.069Z"
+    }
+  ],
+  "cart": [
+    {
+      "id": "c78a",
+      "productId": "1",
+      "quantity": 1
+    },
+    {
+      "id": "f853",
+      "productId": "2aca",
+      "quantity": 1
+    },
+    {
+      "id": "c6fe",
+      "productId": "1583",
+      "quantity": 1
+    },
+    {
+      "id": "3d98",
+      "productId": "789c",
+      "quantity": 1
     }
   ]
 }

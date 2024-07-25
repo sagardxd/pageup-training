@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../../services/product.service';
+import { ProductService } from '../../../services/product/product.service';
 import { Product } from '../../../models/product';
+import { CartService } from '../../../services/cart/cart.service';
+import { CartItem } from '../../../models/cart';
 
 @Component({
   selector: 'app-product',
@@ -10,61 +12,81 @@ import { Product } from '../../../models/product';
 export class ProductComponent implements OnInit {
 
   public productList: Product[] = [];
-  public searchParam: string = '';
+  private cartItems: CartItem[] = [];
+  public searchParam = '';
   private productToDelete: string | null = null;
-  public showDeletePopup: boolean = false;
-  constructor(private productService: ProductService) { }
+  public showDeletePopup = false;
+  constructor(private productService: ProductService, private cartService: CartService) {}
 
   ngOnInit(): void {
     this.getProducts();
+    this.getCartItems();
   }
 
-  changeInSearch(event: { target: { value: string; } }) {
+  changeInSearch(event: { target: { value: string; } }): void {
     this.searchParam = event.target.value;
   }
 
-  public getProducts(){
-    this.productService.getProducts().subscribe(data =>{
+  public getProducts(): void {
+    this.productService.getProducts().subscribe(data => {
       this.productList = data;
     });
   }
 
-  public deleteProduct(id: string){
+  public deleteProduct(id: string): void {
     this.showDeletePopup = true;
     this.productToDelete = id;
+  }
 
-}
-  
 
-  public onChange(event: any) {
-    this.searchParam = event.target.value;
+  public onChange(event: Event): void {
+    this.searchParam = (event.target as HTMLInputElement).value;
     this.searchProduct();
   }
 
-  public searchProduct() {
+  public searchProduct(): void {
     if (this.searchParam == '') {
       this.getProducts();
-    } else{
+    } else {
       this.productService.searchProduct(this.searchParam).subscribe(data => {
-        this.productList = data;  
+        this.productList = data;
+      });
+    }
+  }
+
+  public confirmDelete(): void {
+    if (this.productToDelete != null) {
+      this.productService.deleteProduct(this.productToDelete).subscribe(() => {
+        this.showDeletePopup = false;
+        this.productToDelete = null;
+        this.getProducts();
+      });
+    }
+
+  }
+
+  public cancelDelete(): void {
+    this.showDeletePopup = false;
+  }
+
+  private getCartItems(): void {
+    this.cartService.getCartItems().subscribe(data => {
+      this.cartItems = data;
     });
   }
-}
 
-  public confirmDelete(){
-   if(this.productToDelete != null){
-    this.productService.deleteProduct(this.productToDelete).subscribe(data => {
-      console.log("deleted");
-      this.showDeletePopup = false;
-      this.productToDelete = null;
-      this.getProducts();
-    })
-   }
-
-  }
-
-  public cancelDelete(){
-    this.showDeletePopup = false;
+  public addToCart(id: string): void {
+    const item = {
+      productId: id,
+    };
+    if (this.cartItems.find(x => x.productId == id)) {
+      alert('Item already in cart');
+    } else{
+    this.cartService.addCartItem(item).subscribe(() => {
+        alert('Item added to cart');
+        this.cartService.notifyCartItemAdded();
+      });
+    }
   }
 
 }

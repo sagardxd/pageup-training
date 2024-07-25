@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { ProductService } from '../../../services/product.service';
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../../../services/product/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { CategoryService } from '../../../services/category.service';
+import { CategoryService } from '../../../services/category/category.service';
 import { Product, ProductForm } from '../../../models/product';
 import { Category } from '../../../models/category';
-import { BrandService } from '../../../services/brand.service';
+import { BrandService } from '../../../services/brand/brand.service';
 import { Brand } from '../../../models/brand';
 
 @Component({
@@ -13,27 +13,27 @@ import { Brand } from '../../../models/brand';
   templateUrl: './product-edit.component.html',
   styleUrl: './product-edit.component.scss'
 })
-export class ProductEditComponent {
+export class ProductEditComponent implements OnInit{
 
-  public paramId: string = '';
+  public paramId ='';
   public categoryArray: Category[] = [];
   public brandArray: Brand[] = [];
   public currProduct: Product = {
     id: '',
     productname: '',
     cid: '',
-    brandid   : '',
+    brandid: '',
     sellingPrice: 0,
     actualPrice: 0,
     discount: 0,
     mediaLink: [],
     createdAt: new Date()
   };
-  public edit: boolean = false;
+  public edit=  false;
   private productArray: Product[] = [];
 
   constructor(private productService: ProductService, private activatedRoute: ActivatedRoute,
-    private categoryService: CategoryService, private router: Router, private brandService: BrandService) {}
+    private categoryService: CategoryService, private router: Router, private brandService: BrandService) { }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(paramMap => {
@@ -42,7 +42,6 @@ export class ProductEditComponent {
 
     this.categoryService.getCategories().subscribe(data => {
       this.categoryArray = data;
-      console.log(this.categoryArray)
     });
 
     this.brandService.getBrands().subscribe(data => {
@@ -80,7 +79,7 @@ export class ProductEditComponent {
   public productForm: FormGroup<ProductForm> = new FormGroup<ProductForm>({
     productname: new FormControl(null, [Validators.required]),
     cid: new FormControl(null, [Validators.required]),
-    brandid : new FormControl(null, [Validators.required]),
+    brandid: new FormControl(null, [Validators.required]),
     sellingPrice: new FormControl(null, [Validators.required, Validators.min(0)]),
     actualPrice: new FormControl(null),
     discount: new FormControl({ value: null, disabled: true }),
@@ -90,7 +89,7 @@ export class ProductEditComponent {
 
 
 
-  private calculateDiscount() {
+  private calculateDiscount(): void {
     const sellingPrice = this.productForm.controls.sellingPrice.value;
     const actualPrice = this.productForm.controls.actualPrice.value;
 
@@ -102,21 +101,20 @@ export class ProductEditComponent {
     }
   }
 
-  public addLink() {
+  public addLink():void {
     const mediaLink = this.productForm.controls.mediaLink;
     mediaLink.push(new FormControl('', [Validators.required]));
   }
 
-  public submit() {
+  public submit() :void{
 
     const formValue = this.productForm.value;
-    console.log(formValue)
     const dataToSend = {
       ...formValue,
       sellingPrice: Number(formValue.sellingPrice),
       actualPrice: Number(formValue.actualPrice),
       discount: Number(((formValue.actualPrice! - formValue.sellingPrice!) / formValue.actualPrice!) * 100)
-    }
+    };
 
     // checking if the product exsists
     const productExists = this.productArray.find(product => product.productname === formValue.productname);
@@ -125,32 +123,34 @@ export class ProductEditComponent {
       return;
     }
 
-    this.productService.addProduct(dataToSend).subscribe(data => {
+    this.productService.addProduct(dataToSend).subscribe(() => {
       this.productForm.reset();
       alert('Product Added Successfully');
-    })
+    });
   }
 
-  private getEditData() {
+  private getEditData(): void {
     this.productService.getProductById(this.paramId).subscribe(data => {
       this.currProduct = data;
+      this.productForm.patchValue(data);
+
       this.productForm.controls.mediaLink.clear();
       for (let i = 0; i < this.currProduct.mediaLink.length; i++) {
         const mediaLink = this.productForm.controls.mediaLink;
         mediaLink.push(new FormControl());
         this.productForm.patchValue(data);
       }
-    })
+    });
   }
 
-  public update() {
-    this.productService.updateProduct(this.paramId, this.productForm.value).subscribe(data => {
-      this.router.navigate(['/product'])
+  public update():void {
+    this.productService.updateProduct(this.paramId, this.productForm.value).subscribe(() => {
+      this.router.navigate(['/product']);
       alert('Product Updated Successfully');
-    })
+    });
   }
 
-  public removeLink(index: number) {
+  public removeLink(index: number):void {
     this.productForm.controls.mediaLink.removeAt(index);
   }
 

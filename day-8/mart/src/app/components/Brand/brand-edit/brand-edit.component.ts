@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Brand, BrandForm } from '../../../models/brand';
-import { FormControl, FormGroup } from '@angular/forms';
-import { BrandService } from '../../../services/brand.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { BrandService } from '../../../services/brand/brand.service';
 import { createFind } from 'rxjs/internal/operators/find';
 
 @Component({
@@ -24,6 +24,10 @@ export class BrandEditComponent {
       this.paramId = (paramMap.get('id')) ?? '';
     });
 
+    this.brandService.getBrands().subscribe(data => {
+      this.brands = data;
+    });
+
     if (this.paramId > '0') {
       this.isEdit = true;
       this.getBrandbyId(this.paramId);
@@ -31,7 +35,7 @@ export class BrandEditComponent {
   }
   // brand form of a single formcontrol
   brandForm = new FormGroup<BrandForm>({
-    name : new FormControl(null)
+    name : new FormControl(null, [Validators.required])
   })
 
  //getting the branc by id
@@ -47,6 +51,13 @@ public addBrand(): void {
     name: this.brandForm.value.name ?? '',
     createdAt: new Date()
   };
+
+  for (let i = 0; i < this.brands.length; i++) {
+    if (this.brands[i].name === this.brandForm.controls.name.value) {
+      alert('Brand Already Present');
+      return;
+    }
+  }
 
   this.brandService.addBrand(brand).subscribe(() => {
     this.router.navigate(['/brand']);

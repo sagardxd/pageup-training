@@ -1,5 +1,5 @@
-import { Component, Input, input, OnInit } from '@angular/core';
-import { CategoryService } from '../../../services/category.service';
+import { Component,  OnInit } from '@angular/core';
+import { CategoryService } from '../../../services/category/category.service';
 import { Category } from '../../../models/category';
 
 @Component({
@@ -10,8 +10,8 @@ import { Category } from '../../../models/category';
 export class CategoryComponent implements OnInit{
 
   public categorylist: Category[] = [];
-  public searchParam: string = '';
-  public showDeletePopup: boolean = false;
+  public searchParam = '';
+  public showDeletePopup = false;
   public productToDelete: string | null = null;
     
   constructor(private catergoryService: CategoryService) { }
@@ -20,23 +20,23 @@ export class CategoryComponent implements OnInit{
     this.getCategories();
   }
 
-  public getCategories(){
+  public getCategories():void {
     this.catergoryService.getCategories().subscribe(data =>{
       this.categorylist = data;
     });
   }
 
-  public deleteCategory(id: string){
+  public deleteCategory(id: string):void {
     this.showDeletePopup = true;
     this.productToDelete = id;
 }
 
-  public onChange(event: Event) {
+  public onChange(event: Event) :void {
     this.searchParam = (event.target as HTMLInputElement).value;
     this.searchCategory();
   }
 
-  public searchCategory() {
+  public searchCategory() :void {
     if (this.searchParam == '') {
       this.getCategories();
     } else{
@@ -46,18 +46,18 @@ export class CategoryComponent implements OnInit{
   }
 }
 
-    public confirmDelete(){
+    public confirmDelete():void {
       if(this.productToDelete != null) {
-        this.catergoryService.deleteCategory(this.productToDelete).subscribe(data => {
+        this.catergoryService.deleteCategory(this.productToDelete).subscribe(() => {
           this.getCategories();
           this.productToDelete = null;
-          this.showDeletePopup = false
-        })
+          this.showDeletePopup = false;
+        });
       }
     }
 
-    public cancelDelete(){
-      this.showDeletePopup = false
+    public cancelDelete():void {
+      this.showDeletePopup = false;
     }
     
 }

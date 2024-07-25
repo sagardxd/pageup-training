@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
-import { CategoryService } from '../../../services/category.service';
+import { CategoryService } from '../../../services/category/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category, CategoryForm, SubCategoryData, SubCategoryForm } from '../../../models/category';
 
@@ -102,11 +102,7 @@ export class CategoryEditComponent {
         this.categoryForm.reset();
         alert('Category Added Successfully');
       })
-
-
     }
-
-  
 
   // getting the data to edit
   private getEditData() {
