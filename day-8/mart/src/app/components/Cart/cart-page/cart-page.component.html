@@ -1,12 +1,23 @@
-<div>
-    <ul>
-        <li *ngFor="let item of cartItems">
-            <div>
-                {{item.product}}
-                {{item.quantity}}
-                {{item.id}}
-            </div>
-            
-        </li>
+<div class="p-4">
+    <ul class="space-y-4">
+      <li *ngFor="let item of cartItems" class="border p-4 rounded shadow">
+        <div class="flex flex-col space-y-2">
+          <span class="font-semibold text-lg">{{item.product.productname}}</span>
+          <span class="text-gray-500 ">Actual Price: <span class="line-through">{{item.product.actualPrice | currency:"₹"}}</span></span>
+          <span class="text-green-500">Selling Price: {{item.product.sellingPrice | currency: "₹"}}</span>
+          <span class="text-red-500">Discount:
+             {{((item.product.actualPrice - item.product.sellingPrice)/item.product.actualPrice)*100 | number:'1.2-2'}}%</span>
+          <div class="flex gap-5">  
+             <span class="text-blue-500">Quantity: {{item.quantity}}</span>
+            <button (click)="increaseQuantity(item.id, item.productId, item.quantity)" class="border px-2">+</button>
+            <button (click)="decreaseQuantity(item.id, item.productId, item.quantity)" class="border px-2.5">-</button>
+        </div>
+        <div>
+            <button (click)="removeItemFromCart(item.id)">Remove Item</button>
+        </div>
+        </div>
+      </li>
     </ul>
-</div>
+  </div>
+
+  

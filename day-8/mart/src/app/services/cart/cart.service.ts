@@ -26,4 +26,12 @@ export class CartService {
     return this.httpClient.post<CartItem>('http://localhost:3000/cart', createBody);
   } 
 
+  public quantityUpdate(id: string ,createdBody: CartItem): Observable<CartItem> {
+    return this.httpClient.put<CartItem>(`http://localhost:3000/cart/${id}`, createdBody);
+  }
+
+  public deleteCartItem(id:string): Observable<void> {
+    return this.httpClient.delete<void>(`http://localhost:3000/cart/${id}`);
+  }
+
 }
