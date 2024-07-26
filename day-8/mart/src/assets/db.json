@@ -35,10 +35,13 @@
       ]
     },
     {
-      "id": "25939",
       "name": "Cars",
-      "createdAt": "2024-07-24T10:42:59.676Z",
-      "subCategory": []
+      "subCategory": [
+        {
+          "name": "Batmobile"
+        }
+      ],
+      "id": "25939"
     }
   ],
   "products": [
@@ -111,14 +114,19 @@
   ],
   "cart": [
     {
-      "id": "2a34",
+      "id": "9350",
       "productId": "1",
-      "quantity": 1
+      "quantity": 2
     },
     {
-      "id": "3c57",
-      "productId": "2aca",
-      "quantity": 1
+      "id": "76f4",
+      "productId": "789c",
+      "quantity": 3
+    },
+    {
+      "id": "2931",
+      "productId": "1583",
+      "quantity": 2
     }
   ]
 }

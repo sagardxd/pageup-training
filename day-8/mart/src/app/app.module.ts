@@ -13,6 +13,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { BrandListComponent } from './components/Brand/brand-list/brand-list.component';
 import { BrandEditComponent } from './components/Brand/brand-edit/brand-edit.component';
 import { CartPageComponent } from './components/Cart/cart-page/cart-page.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,9 @@ import { CartPageComponent } from './components/Cart/cart-page/cart-page.compone
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

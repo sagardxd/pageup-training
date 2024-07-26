@@ -69,7 +69,7 @@ export class CartPageComponent implements OnInit {
   }
 
   public decreaseQuantity(id: string, productId: string, quantity: number): void {
-    if (quantity > 0) {
+    if (quantity > 1) {
       const data = {
         id: id,
         productId: productId,
