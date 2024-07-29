@@ -1,0 +1,37 @@
+<div class="p-4">
+    <form [formGroup]="categoryForm" class="space-y-4">
+      <div>
+        <label for="">Category name: </label>
+      <input type="text" formControlName="name" class="border rounded p-2 w-[200px]" placeholder="Category Name">
+    </div>
+      <div>
+        <table class="min-w-[500px] bg-white border border-gray-300">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="py-2 px-4 border-b border-gray-300">#</th>
+              <th class="py-2 px-4 border-b border-gray-300">Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of categoryForm.controls.subCategory.controls; let i = index" [formGroup]="item"
+              class="hover:bg-gray-100">
+              <td class="py-2 px-4 border-b border-gray-300">{{i}}</td>
+              <td class="py-2 px-4 border-b border-gray-300 flex gap-2">
+                <input type="text" formControlName="name" class="border rounded p-2 w-[200px]"
+                  placeholder="Subcategory Name">
+                <button (click)="removeSubCategory(i)"
+                  class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2">Remove Subcategory</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  
+    <button (click)="addSubCategory()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2">
+      Add Sub Category
+    </button>
+
+    <button *ngIf="categoryForm.valid" (click)="addCategory()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">
+      Save
+    </button>

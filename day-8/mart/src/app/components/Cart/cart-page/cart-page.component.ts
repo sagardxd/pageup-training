@@ -11,7 +11,7 @@ import { ProductService } from '../../../services/product/product.service';
 export class CartPageComponent implements OnInit {
 
   public showRemovePopup = false;
-  private productToRemove : string | null = null;
+  private productToRemove: string | null = null;
   public cartItems: CartItemWithProduct[] = [];
   public cartData: CartItem[] = [];
   public callProductId = false;
@@ -78,21 +78,21 @@ export class CartPageComponent implements OnInit {
       this.cartService.quantityUpdate(id, data).subscribe(() => {
         this.getCartItems();
       });
-    }else{
-        this.showRemovePopup = true;
-        this.productToRemove = id;
+    } else {
+      this.showRemovePopup = true;
+      this.productToRemove = id;
     }
   }
 
   public confirmRemoveProduct(): void {
-    if(this.productToRemove != null){
+    if (this.productToRemove != null) {
       this.removeItemFromCart(this.productToRemove);
       this.showRemovePopup = false;
       this.productToRemove = null;
     }
   }
 
-  public cancelRemoveProduct():void {
+  public cancelRemoveProduct(): void {
     this.showRemovePopup = false;
   }
 

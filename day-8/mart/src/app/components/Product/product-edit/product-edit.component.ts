@@ -7,15 +7,17 @@ import { Product, ProductForm } from '../../../models/product';
 import { Category } from '../../../models/category';
 import { BrandService } from '../../../services/brand/brand.service';
 import { Brand } from '../../../models/brand';
+import { MatDialog } from '@angular/material/dialog';
+import { CategoryDialogComponent } from '../../Category/category-dialog/category-dialog.component';
 
 @Component({
   selector: 'app-product-edit',
   templateUrl: './product-edit.component.html',
   styleUrl: './product-edit.component.scss'
 })
-export class ProductEditComponent implements OnInit{
+export class ProductEditComponent implements OnInit {
 
-  public paramId ='';
+  public paramId = '';
   public categoryArray: Category[] = [];
   public brandArray: Brand[] = [];
   public currProduct: Product = {
@@ -29,11 +31,12 @@ export class ProductEditComponent implements OnInit{
     mediaLink: [],
     createdAt: new Date()
   };
-  public edit=  false;
+  public edit = false;
   private productArray: Product[] = [];
 
   constructor(private productService: ProductService, private activatedRoute: ActivatedRoute,
-    private categoryService: CategoryService, private router: Router, private brandService: BrandService) { }
+    private categoryService: CategoryService, private router: Router,
+    private brandService: BrandService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(paramMap => {
@@ -44,8 +47,11 @@ export class ProductEditComponent implements OnInit{
       this.categoryArray = data;
     });
 
-    this.brandService.getBrands().subscribe(data => {
-      this.brandArray = data;
+    this.getBrands();
+
+    //sunscribe to brand added event
+    this.brandService.brandAdded$.subscribe(() => {
+      this.getBrands();
     });
 
     this.productService.getProducts().subscribe(data => {
@@ -62,16 +68,29 @@ export class ProductEditComponent implements OnInit{
     });
   }
 
+  private getBrands(): void {
+    this.brandService.getBrands().subscribe(data => {
+      this.brandArray = data;
+    });
+  }
+
   private sellingPriceMoreThanActualPrice(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const group = control as FormGroup;
-      const sellingPrice = group.controls['sellingPrice'].value;
-      const actualPrice = group.controls['actualPrice'].value;
+      const sellingPrice = group.controls['sellingPrice']?.value;
+      const actualPrice = group.controls['actualPrice']?.value;
+      const discount = group.controls['discount']?.value;
+
+      const errors: ValidationErrors = {};
 
       if (sellingPrice != null && actualPrice != null && sellingPrice > actualPrice) {
-        return { sellingPriceMoreThanActualPrice: true };
+        errors['sellingPriceMoreThanActualPrice'] = true;
       }
-      return null;
+
+      if (discount != null && discount < 0) {
+        errors['negativeDiscount'] = true;
+      }
+      return Object.keys(errors).length ? errors : null;
     };
   }
 
@@ -81,7 +100,7 @@ export class ProductEditComponent implements OnInit{
     cid: new FormControl(null, [Validators.required]),
     brandid: new FormControl(null, [Validators.required]),
     sellingPrice: new FormControl(null, [Validators.required, Validators.min(0)]),
-    actualPrice: new FormControl(null),
+    actualPrice: new FormControl(null, [Validators.required, Validators.min(0)]),
     discount: new FormControl({ value: null, disabled: true }),
     mediaLink: new FormArray([new FormControl('', [Validators.required])]),
   }, { validators: this.sellingPriceMoreThanActualPrice() });
@@ -101,12 +120,12 @@ export class ProductEditComponent implements OnInit{
     }
   }
 
-  public addLink():void {
+  public addLink(): void {
     const mediaLink = this.productForm.controls.mediaLink;
     mediaLink.push(new FormControl('', [Validators.required]));
   }
 
-  public submit() :void{
+  public submit(): void {
 
     const formValue = this.productForm.value;
     const dataToSend = {
@@ -143,15 +162,32 @@ export class ProductEditComponent implements OnInit{
     });
   }
 
-  public update():void {
+  public update(): void {
     this.productService.updateProduct(this.paramId, this.productForm.value).subscribe(() => {
       this.router.navigate(['/product']);
       alert('Product Updated Successfully');
     });
   }
 
-  public removeLink(index: number):void {
+  public removeLink(index: number): void {
     this.productForm.controls.mediaLink.removeAt(index);
   }
+
+  public openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    const dialogRef = this.dialog.open( CategoryDialogComponent, {
+      width: '700px',
+      height: '600px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.categoryService.getCategories().subscribe(data => {
+        this.categoryArray = data;
+      });
+    });
+
+}
+
 
 }

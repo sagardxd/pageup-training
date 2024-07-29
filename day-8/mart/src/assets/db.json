@@ -42,6 +42,60 @@
         }
       ],
       "id": "25939"
+    },
+    {
+      "id": "3377",
+      "name": "het",
+      "createdAt": "2024-07-29T08:13:26.681Z",
+      "subCategory": [
+        {
+          "name": "er",
+          "createdAt": "2024-07-29T08:13:26.681Z"
+        }
+      ]
+    },
+    {
+      "id": "50901",
+      "name": "asdfasdf",
+      "createdAt": "2024-07-29T08:20:09.785Z",
+      "subCategory": [
+        {
+          "name": "sadfasdf",
+          "createdAt": "2024-07-29T08:20:09.785Z"
+        },
+        {
+          "name": "asdf",
+          "createdAt": "2024-07-29T08:20:09.785Z"
+        }
+      ]
+    },
+    {
+      "id": "4653",
+      "name": "sdfasdffffffffffff",
+      "createdAt": "2024-07-29T08:20:29.983Z",
+      "subCategory": [
+        {
+          "name": "asdfa",
+          "createdAt": "2024-07-29T08:20:29.983Z"
+        }
+      ]
+    },
+    {
+      "id": "85488",
+      "name": "asdffff",
+      "createdAt": "2024-07-29T08:22:27.850Z",
+      "subCategory": [
+        {
+          "name": "asdf",
+          "createdAt": "2024-07-29T08:22:27.850Z"
+        }
+      ]
+    },
+    {
+      "id": "39816",
+      "name": "hh",
+      "createdAt": "2024-07-29T10:12:01.931Z",
+      "subCategory": []
     }
   ],
   "products": [
@@ -98,28 +152,48 @@
     {
       "name": "Dell",
       "id": "315"
+    },
+    {
+      "id": "51",
+      "name": "Micro",
+      "createdAt": "2024-07-29T07:43:52.931Z"
+    },
+    {
+      "id": "278",
+      "name": "ge",
+      "createdAt": "2024-07-29T07:48:59.527Z"
+    },
+    {
+      "id": "379",
+      "name": "g",
+      "createdAt": "2024-07-29T07:53:44.331Z"
+    },
+    {
+      "id": "523",
+      "name": "asdf",
+      "createdAt": "2024-07-29T08:18:42.116Z"
+    },
+    {
+      "id": "647",
+      "name": "sdfasf",
+      "createdAt": "2024-07-29T08:20:25.055Z"
+    },
+    {
+      "id": "629",
+      "name": "hey",
+      "createdAt": "2024-07-29T10:13:09.381Z"
     }
   ],
   "cart": [
     {
-      "id": "1038",
       "productId": "1",
-      "quantity": 1
+      "quantity": 8,
+      "id": "dd80"
     },
     {
-      "id": "9ca9",
       "productId": "2aca",
-      "quantity": 1
-    },
-    {
-      "id": "57dd",
-      "productId": "1583",
-      "quantity": 1
-    },
-    {
-      "id": "abaf",
-      "productId": null,
-      "quantity": 1
+      "quantity": 4,
+      "id": "b8e7"
     }
   ]
 }

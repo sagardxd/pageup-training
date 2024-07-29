@@ -11,27 +11,31 @@ export class CartService {
   private cartItemAddedSubject = new Subject<void>();
   cartItemAdded$ = this.cartItemAddedSubject.asObservable();
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
-    // Method to notify to update the cart item count
-    public notifyCartItemAdded(): void {
-      this.cartItemAddedSubject.next();
-    }
+  // Method to notify to update the cart item count
+  public notifyCartItemAdded(): void {
+    this.cartItemAddedSubject.next();
+  }
 
   public getCartItems(): Observable<CartItem[]> {
     return this.httpClient.get<CartItem[]>('http://localhost:3000/cart');
   }
 
-  public addCartItem(createBody: {productId: string, quantity: number}): Observable<CartItem> {
+  public addCartItem(createBody: { productId: string, quantity: number }): Observable<CartItem> {
     return this.httpClient.post<CartItem>('http://localhost:3000/cart', createBody);
-  } 
+  }
 
-  public quantityUpdate(id: string ,createdBody: CartItem): Observable<CartItem> {
+  public quantityUpdate(id: string, createdBody: { quantity: number }): Observable<CartItem> {
     return this.httpClient.put<CartItem>(`http://localhost:3000/cart/${id}`, createdBody);
   }
 
-  public deleteCartItem(id:string): Observable<void> {
+  public deleteCartItem(id: string): Observable<void> {
     return this.httpClient.delete<void>(`http://localhost:3000/cart/${id}`);
+  }
+
+  public getCartItemById(id: string): Observable<CartItem> {
+    return this.httpClient.get<CartItem>(`http://localhost:3000/cart/${id}`);
   }
 
 }

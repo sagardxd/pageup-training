@@ -1,91 +1,78 @@
 <div class="p-4">
-  <h2>Dont input the discount in -ve</h2>
-    <form class="space-y-4">
-      <div [formGroup]="productForm" class="space-y-4">
-        <input 
-          type="text" 
-          formControlName="productname" 
-          placeholder="Product Name" 
-          class="border rounded p-2 w-[200px]"
-        >
+  <form class="space-y-4">
+    <div [formGroup]="productForm" class="space-y-4  flex flex-col gap-2">
+      <div class="flex items-center">
+        <label for=""> Product Name: </label>
+        <input type="text" formControlName="productname" placeholder="Product Name"
+          class="border rounded p-2 w-[200px]">
+      </div>
+      <div class="flex gap-3 items-center">
         <label for=""> Category: </label>
-        <select 
-          formControlName="cid" 
-          class="border rounded p-2 w-[200px]"
-        >
+        <select formControlName="cid" class="border rounded p-2 w-[200px]">
           <option *ngFor="let item of categoryArray" [value]="item.id">{{item.name}}</option>
         </select>
-
+        <button (click)="openDialog('0ms', '0ms')" mat-raised-button class="p-2  rounded-md">New Category + </button>
+      </div>
+      <div class="flex items-center gap-3">
         <label for=""> Brand: </label>
-        <select 
-          formControlName="brandid" 
-          class="border rounded p-2 w-[200px]"
-        >
+        <select formControlName="brandid" class="border rounded p-2 w-[200px]">
           <option *ngFor="let item of brandArray" [value]="item.id">{{item.name}}</option>
         </select>
-        <input 
-        type="text" 
-        formControlName="actualPrice" 
-        placeholder="Actual Price" 
-        class="border rounded p-2 w-[200px]"
-      >
+        <app-dialog></app-dialog>
+      </div>
+      <div class="flex items-center">
+        <label for="">Selling Price: </label> 
         <div class="flex flex-col">
-          <input 
-          type="text" 
-          formControlName="sellingPrice" 
-          placeholder="Selling Price" 
-          class="border rounded p-2 w-[200px]"
-        >
-        <div class="text-red-500" *ngIf="productForm.hasError('sellingPriceMoreThanActualPrice') && productForm.get('sellingPrice')?.dirty">
-          Selling price must be less than or equal to the actual price.
-        </div>
-        </div>
-        <input 
-          type="text" 
-          formControlName="discount" 
-          placeholder="Discount" 
-          class="border rounded p-2 w-[200px]"
-          readonly
-        >
-        <div class="space-y-2"  *ngFor="let item of productForm.controls.mediaLink.controls; let i = index" >
-          <input 
-            placeholder="Link" 
-            [formControl]="item" 
-            type="text" 
-            class="border rounded p-2 w-[200px]"
-          >
-          <button 
-          (click)="removeLink(i)"
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-          >Remove Link</button>
+          <input type="text" formControlName="sellingPrice" placeholder="Selling Price"
+            class="border rounded p-2 w-[200px]">
+          <div class="text-red-500"
+            *ngIf="productForm.hasError('sellingPriceMoreThanActualPrice') && productForm.hasError('negativeDiscount') &&  productForm.get('sellingPrice')?.dirty">
+            Selling price must be lesser than or equal to the actual price.
+          </div>
         </div>
       </div>
-    </form>
-    
-    <button 
-    (click)="addLink()" 
-    class="bg-blue-500 text-white px-4 py-2 mt-2 rounded hover:bg-blue-700 mr-2"
-  >
+      <div class="flex flex-col gap-3">
+        <div>
+          <label for="">Actual Price: </label>
+          <input type="text" formControlName="actualPrice" placeholder="Actual Price"
+            class="border rounded p-2 w-[200px]">
+        </div>
+ 
+        <div class="flex items-center mb-5">
+          <div>
+            <label for="">Total Discount on Item: </label>
+            <input type="text" formControlName="discount" placeholder="Discount" class="border rounded p-2 w-[100px]"
+              readonly>
+            <span>%</span>
+          </div>
+        </div>
+      </div>
+      <label for="" class="">Add Media Links: </label>
+      <div class="space-y-2 flex flex-col" *ngFor="let item of productForm.controls.mediaLink.controls;  let i = index">
+
+        <div class="flex gap-2">
+          <input placeholder="Link" [formControl]="item" type="text" class="border rounded p-2 w-[200px]">
+          <button (click)="removeLink(i)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2">Remove
+            Link</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <button (click)="addLink()" class="bg-blue-500 text-white px-4 py-2 mt-2 rounded hover:bg-blue-700 mr-2">
     Add Link
   </button>
-    <div  *ngIf="!edit" class="mt-4">
-      <button 
-        (click)="submit()" 
-        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-        *ngIf="productForm.valid"
-      >
-        Submit
-      </button>
-    </div>
+  <div *ngIf="!edit" class="mt-4">
+    <button (click)="submit()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+      *ngIf="productForm.valid">
+      Submit
+    </button>
   </div>
-    
-    <div  *ngIf="edit" class="mt-4">
-      <button 
-        (click)="update()" 
-        *ngIf="productForm.valid"
-        class="bg-yellow-500 text-white px-4 py-2 ml-4 rounded hover:bg-yellow-700"
-      >
-        Update
-      </button>
-    </div>
-  
+</div>
+
+<div *ngIf="edit" class="mt-4">
+  <button (click)="update()" *ngIf="productForm.valid"
+    class="bg-yellow-500 text-white px-4 py-2 ml-4 rounded hover:bg-yellow-700">
+    Update
+  </button>
+</div>

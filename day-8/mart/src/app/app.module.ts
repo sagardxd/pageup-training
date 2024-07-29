@@ -19,6 +19,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { DialogAnimationsExampleDialogComponent } from './components/Material-Components/Dialog/addbrand-dialog/dialog-animations-example-dialog.component';
 import { UpdateDialogComponent } from './components/Material-Components/Dialog/updatebrand-dialog/update-dialog.component';
+import { CategoryDialogComponent } from './components/Category/category-dialog/category-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { UpdateDialogComponent } from './components/Material-Components/Dialog/u
     DialogComponent,
     DialogAnimationsExampleDialogComponent,
     UpdateDialogComponent,
+    CategoryDialogComponent
   ],
   imports: [
     BrowserModule,

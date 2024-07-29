@@ -1,4 +1,4 @@
-  import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../../models/product';
 import { Observable } from 'rxjs';
@@ -14,7 +14,7 @@ export class ProductService {
     return this.httpClient.get<Product[]>('http://localhost:3000/products');
   }
 
-  public addProduct(data: any) { 
+  public addProduct(data: any) {
     return this.httpClient.post('http://localhost:3000/products', data);
   }
 
@@ -22,7 +22,7 @@ export class ProductService {
     return this.httpClient.get<Product>(`http://localhost:3000/products/${id}`);
   }
 
-  public updateProduct(id:string, data: any) {
+  public updateProduct(id: string, data: any) {
     return this.httpClient.put(`http://localhost:3000/products/${id}`, data);
   }
 

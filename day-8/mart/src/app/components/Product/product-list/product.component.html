@@ -20,14 +20,17 @@
     </div>
 
     <!-- Body Rows -->
-    <div *ngFor="let item of productList" class="flex border-b hover:bg-gray-100">
+    <div *ngFor="let item of productList; " class="flex border-b hover:bg-gray-100">
       <div class="w-1/4 py-2 px-4">{{item.id}}</div>
       <div class="w-1/2 py-2 px-4">{{item.productname}}</div>
-      <div class="w-1/4 py-2 px-4 flex gap-3">
-        <button
-        (click)="addToCart(item.id)"
-          class="bg-orange-400 text-white px-2 py-1 rounded">
-          Add to cart + 
+      <div class="w-1/3 py-2 px-4 flex gap-3">
+        <div class="flex gap-3 items-center">
+          <button (click)="updateQuantity(item.id, -1)" class="px-4 py-0.5 bg-slate-500">-</button>
+          <span>{{quantities[item.id] || 1}}</span>
+          <button (click)="updateQuantity(item.id, 1)" class="px-3 py-0.5 bg-slate-500">+</button>
+        </div>
+        <button (click)="addToCart(item.id)" class="bg-orange-400 text-white px-2 py-1 rounded">
+          Add to cart +
         </button>
         <button [routerLink]="['/productedit', item.id]"
           class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-700">
@@ -48,4 +51,4 @@
       <button (click)="confirmDelete()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Yes</button>
       <button (click)="cancelDelete()" class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-500">No</button>
     </div>
-</div>
+  </div>
