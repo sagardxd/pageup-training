@@ -5,7 +5,6 @@ import { CategoryEditComponent } from './components/Category/category-edit/categ
 import { ProductComponent } from './components/Product/product-list/product.component';
 import { ProductEditComponent } from './components/Product/product-edit/product-edit.component';
 import { BrandListComponent } from './components/Brand/brand-list/brand-list.component';
-import { BrandEditComponent } from './components/Brand/brand-edit/brand-edit.component';
 import { CartPageComponent } from './components/Cart/cart-page/cart-page.component';
 
 const routes: Routes = [
@@ -14,8 +13,6 @@ const routes: Routes = [
   { path: 'edit/:id', component: CategoryEditComponent },
   { path: 'category/create', component: CategoryEditComponent },
   { path: 'brand', component: BrandListComponent},
-  { path: 'brand/create', component: BrandEditComponent},
-  { path: 'brandedit/:id', component: BrandEditComponent},
   { path: 'product/create', component: ProductEditComponent },
   { path: 'product', component: ProductComponent },
   { path: 'productedit/:id', component: ProductEditComponent },

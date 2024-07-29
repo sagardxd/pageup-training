@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Update Brand</h1>
+<div mat-dialog-content >
+  <input placeholder="brand" [(ngModel)]="brandName" (change)="brandName" class="p-2">
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="updateBrand()">Save</button>
+</div>

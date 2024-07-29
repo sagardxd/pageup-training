@@ -8,6 +8,7 @@
           placeholder="Product Name" 
           class="border rounded p-2 w-[200px]"
         >
+        <label for=""> Category: </label>
         <select 
           formControlName="cid" 
           class="border rounded p-2 w-[200px]"
@@ -15,6 +16,7 @@
           <option *ngFor="let item of categoryArray" [value]="item.id">{{item.name}}</option>
         </select>
 
+        <label for=""> Brand: </label>
         <select 
           formControlName="brandid" 
           class="border rounded p-2 w-[200px]"

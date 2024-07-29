@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart/cart.service';
 import { CartItem } from '../../models/cart';
 
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit {
   public cartItemCount = 0;

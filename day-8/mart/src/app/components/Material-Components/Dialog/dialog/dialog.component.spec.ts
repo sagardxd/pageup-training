@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BrandEditComponent } from './brand-edit.component';
+import { DialogComponent } from './dialog.component';
 
-describe('BrandEditComponent', () => {
-  let component: BrandEditComponent;
-  let fixture: ComponentFixture<BrandEditComponent>;
+describe('DialogComponent', () => {
+  let component: DialogComponent;
+  let fixture: ComponentFixture<DialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BrandEditComponent]
+      declarations: [DialogComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(BrandEditComponent);
+    fixture = TestBed.createComponent(DialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

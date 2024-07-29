@@ -77,17 +77,6 @@
         "asus.com"
       ],
       "id": "1583"
-    },
-    {
-      "productname": "Van",
-      "cid": "25939",
-      "brandid": "757",
-      "sellingPrice": 10,
-      "actualPrice": 100,
-      "mediaLink": [
-        "omni.com"
-      ],
-      "id": "789c"
     }
   ],
   "brands": [
@@ -107,26 +96,30 @@
       "createdAt": "2024-07-24T10:19:25.374Z"
     },
     {
-      "id": "757",
-      "name": "Og Omni",
-      "createdAt": "2024-07-24T10:44:44.069Z"
+      "name": "Dell",
+      "id": "315"
     }
   ],
   "cart": [
     {
-      "id": "9350",
+      "id": "1038",
       "productId": "1",
-      "quantity": 2
+      "quantity": 1
     },
     {
-      "id": "76f4",
-      "productId": "789c",
-      "quantity": 3
+      "id": "9ca9",
+      "productId": "2aca",
+      "quantity": 1
     },
     {
-      "id": "2931",
+      "id": "57dd",
       "productId": "1583",
-      "quantity": 2
+      "quantity": 1
+    },
+    {
+      "id": "abaf",
+      "productId": null,
+      "quantity": 1
     }
   ]
 }
