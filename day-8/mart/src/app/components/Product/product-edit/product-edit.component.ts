@@ -136,7 +136,7 @@ export class ProductEditComponent implements OnInit {
     };
 
     // checking if the product exsists
-    const productExists = this.productArray.find(product => product.productname === formValue.productname);
+    const productExists = this.productArray.find(product => product.productname.toLowerCase() === formValue.productname?.toLocaleLowerCase());
     if (productExists) {
       alert('Product already exists');
       return;
@@ -174,7 +174,7 @@ export class ProductEditComponent implements OnInit {
   }
 
   public openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    const dialogRef = this.dialog.open( CategoryDialogComponent, {
+    const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: '700px',
       height: '600px',
       enterAnimationDuration,
@@ -187,7 +187,7 @@ export class ProductEditComponent implements OnInit {
       });
     });
 
-}
+  }
 
 
 }

@@ -55,54 +55,54 @@ export class CategoryEditComponent implements OnInit {
   });
 
   // add new subarray field
-  public addSubCategory() :void{
+  public addSubCategory(): void {
     const subCategory = this.categoryForm.controls.subCategory;
     subCategory.push(new FormGroup({
       name: new FormControl('', [Validators.required]),
     }));
   }
 
-  private getCategoryList():void {
-    this.categoryService.getCategories().subscribe(data =>{
+  private getCategoryList(): void {
+    this.categoryService.getCategories().subscribe(data => {
       this.categoryArray = data;
     });
   }
 
   // adding category in the list
-    public addCategory():void {
-      for (let i = 0; i < this.categoryForm.controls.subCategory.value.length; i++) {
+  public addCategory(): void {
+    for (let i = 0; i < this.categoryForm.controls.subCategory.value.length; i++) {
 
-        const temp: SubCategoryData = {
-          name: this.categoryForm.controls.subCategory.value[i].name,
-          createdAt: new Date()
-        };
-        this.subCategoryData.push(temp);
-      }
-      
-      // Checking if the category is already present
-      for (let i = 0; i < this.categoryArray.length; i++) {
-        if (this.categoryArray[i].name === this.categoryForm.controls.name.value) {
-          alert('Category Already Present');
-          return;
-        }
-      }
-
-
-      const newCategoryData = {
-        id: String(Math.floor(Math.random() * 100000) + 1),
-        name: this.categoryForm.controls.name!.value,
-        createdAt: new Date(),
-        subCategory: this.subCategoryData
+      const temp: SubCategoryData = {
+        name: this.categoryForm.controls.subCategory.value[i].name,
+        createdAt: new Date()
       };
-
-      this.categoryService.addCategory(newCategoryData).subscribe(() => {
-        this.categoryForm.reset();
-        alert('Category Added Successfully');
-      });
+      this.subCategoryData.push(temp);
     }
 
+    // Checking if the category is already present
+    for (let i = 0; i < this.categoryArray.length; i++) {
+      if ((this.categoryArray[i].name.toLowerCase()) === (this.categoryForm.controls.name.value)?.toLowerCase()) {
+        alert('Category Already Present');
+        return;
+      }
+    }
+
+
+    const newCategoryData = {
+      id: String(Math.floor(Math.random() * 100000) + 1),
+      name: this.categoryForm.controls.name!.value,
+      createdAt: new Date(),
+      subCategory: this.subCategoryData
+    };
+
+    this.categoryService.addCategory(newCategoryData).subscribe(() => {
+      this.categoryForm.reset();
+      alert('Category Added Successfully');
+    });
+  }
+
   // getting the data to edit
-  private getEditData():void {
+  private getEditData(): void {
     this.categoryService.getCategoryById(this.paramId).subscribe(data => {
       this.category = data;
 
@@ -119,7 +119,7 @@ export class CategoryEditComponent implements OnInit {
     });
   }
 
-  public updateData():void {
+  public updateData(): void {
     this.categoryService.updateCategory(this.paramId, this.categoryForm.value).subscribe(() => {
       alert('Category Updated Successfully');
     });
@@ -127,7 +127,7 @@ export class CategoryEditComponent implements OnInit {
     this.router.navigate(['/category']);
   }
 
-  public removeSubCategory(index: number):void {
+  public removeSubCategory(index: number): void {
     const subCategory = this.categoryForm.controls.subCategory;
     subCategory.removeAt(index);
   }

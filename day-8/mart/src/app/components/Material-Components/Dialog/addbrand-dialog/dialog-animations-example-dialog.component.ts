@@ -8,7 +8,7 @@ import { Brand } from '../../../../models/brand';
   templateUrl: './dialog-animations-example-dialog.component.html',
   styleUrl: './dialog-animations-example-dialog.component.scss'
 })
-export class DialogAnimationsExampleDialogComponent implements OnInit{
+export class DialogAnimationsExampleDialogComponent implements OnInit {
 
   public brandname = '';
   private brands: Brand[] = [];
@@ -21,7 +21,7 @@ export class DialogAnimationsExampleDialogComponent implements OnInit{
     this.getBrands();
   }
 
-  private getBrands() : void{
+  private getBrands(): void {
     this.brandService.getBrands().subscribe((data) => {
       this.brands = data;
     });
@@ -29,25 +29,30 @@ export class DialogAnimationsExampleDialogComponent implements OnInit{
 
   public addBrand(): void {
 
+    if (this.brandname == '') {
+      alert("Brandname is empty");
+      return;
+    }
+
     const data = {
       id: Math.floor(Math.random() * 1000).toString(),
-      name: this.brandname, 
+      name: this.brandname,
       createdAt: new Date
     };
 
-    
+
     for (let i = 0; i < this.brands.length; i++) {
-      if (this.brands[i].name === this.brandname) {
+      if (this.brands[i].name.toLowerCase() === this.brandname.toLowerCase()) {
         alert('Brand Already Present');
         return;
       }
     }
 
-    this.brandService.addBrand(data).subscribe(() => { 
+    this.brandService.addBrand(data).subscribe(() => {
       this.dialogRef.close();
       this.brandService.notifyBrandAdded();
       alert('Added brand');
-    }); 
+    });
 
     this.getBrands();
   }

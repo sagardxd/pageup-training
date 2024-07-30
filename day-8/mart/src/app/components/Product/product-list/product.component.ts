@@ -88,7 +88,6 @@ export class ProductComponent implements OnInit {
         this.cartItemIdToUpdateQuantity = cartElement.quantity;
       }
     }
-    console.log(this.cartItemIdToUpdate, this.cartItemIdToUpdateQuantity);
 
     if (this.cartItemIdToUpdate && this.cartItemIdToUpdateQuantity) {
       const body = {
