@@ -18,15 +18,13 @@ export class DepartmentService {
     return this.http.get<department>(`https://192.168.1.25:8081/api/Department/${id}`);
   }
 
-  createDepartment(name: string): Observable<any> {
+  createDepartment(name: string): Observable<postDepartmentResponse> {
     const body = { name };
-    return this.http.post<any>(`https://192.168.1.25:8081/api/Department`, body);
+    return this.http.post<postDepartmentResponse>(`https://192.168.1.25:8081/api/Department`, body);
   }
 
   deleteDepartment(id: number): Observable<deleteDepartmentResponse> {
     return this.http.delete<deleteDepartmentResponse>(`https://192.168.1.25:8081/api/Department/${id}`);
   }
-
-
 
 }

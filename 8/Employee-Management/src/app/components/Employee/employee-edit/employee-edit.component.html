@@ -1,0 +1,55 @@
+<div [formGroup]="EmployeeForm" class="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
+
+    <!-- Name Input -->
+    <div class="mb-4">
+        <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+        <input id="name" type="text" placeholder="Enter employee name" formControlName="name"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <!-- Salary Input -->
+    <div class="mb-4">
+        <label for="salary" class="block text-gray-700 font-medium mb-2">Salary</label>
+        <input id="salary" type="number" placeholder="Enter salary" formControlName="salary"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <!-- Department Select -->
+    <div class="mb-4">
+        <label for="department" class="block text-gray-700 font-medium mb-2">Department</label>
+        <select id="department" formControlName="departmentId" (change)="onDepartmentChange($event)"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option *ngFor="let item of departments" [value]="item.id">{{ item.name }}</option>
+        </select>
+    </div>
+
+    <!-- Department Employees Select -->
+    <div class="mb-4">
+        <label for="departmentEmployees" class="block text-gray-700 font-medium mb-2">Manager Employees</label>
+        <select id="departmentEmployees" formControlName="managerId"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option *ngFor="let item of departmentEmployees" [value]="item.id">{{ item.name }}</option>
+        </select>
+    </div>
+
+    <!-- Role Select -->
+    <div class="mb-4">
+        <label for="role" class="block text-gray-700 font-medium mb-2">Role</label>
+        <select id="role" formControlName="role"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="0">Employee</option>
+            <option value="1">Admin</option>
+            <option value="2">SuperAdmin</option>
+        </select>
+    </div>
+</div>
+
+<div *ngIf="!isEdit" class="text-center mt-2">
+    <button (click)="addEmployee()"
+        class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">Save</button>
+</div>
+
+<div *ngIf="isEdit" class="text-center mt-2">
+    <button (click)="updateEmployee()"
+        class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Update</button>
+</div>

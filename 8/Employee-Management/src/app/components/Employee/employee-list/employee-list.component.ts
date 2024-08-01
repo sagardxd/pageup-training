@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Employee } from '../../../models/emloyee';
+import { EmployeeService } from '../../../services/employee.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -7,4 +9,15 @@ import { Component } from '@angular/core';
 })
 export class EmployeeListComponent {
 
+  public employees: Employee[] = [];
+
+  constructor(private employeeService: EmployeeService) {
+    this.getEmployees();
+  }
+
+  private getEmployees() {
+    this.employeeService.getEmolpyees().subscribe((data) => {
+      this.employees = data.data;
+    });
+  }
 }
