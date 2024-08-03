@@ -10,5 +10,4 @@ export class AuthInterceptorService implements HttpInterceptor {
     const modifiedReq = req.clone({ headers: req.headers.append('token', 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJLaW1iZXJseSBKdXN0aWNlIiwiSWQiOiIiLCJqdGkiOiJiZTNiNTIxNy0zNDQ5LTQ1MzktOTkzZS00YzRjZjNmNTU4YTkiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTcyMjg2NDU0MCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NDQzMzgvIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NDQzMzgvIn0.3otPsiRA_avU5ivT6S8-DiSyo9rpEizz7CcLh4TIZzQ') });
     return next.handle(modifiedReq);
   }
-
 }
