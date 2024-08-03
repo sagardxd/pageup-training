@@ -20,6 +20,8 @@ export class EmployeeEditComponent implements OnInit {
   public isEdit = false;
 
   public EmployeeForm = new FormGroup<EmployeeForm>({
+    username: new FormControl(''),
+    password: new FormControl(''),
     name: new FormControl(''),
     salary: new FormControl(),
     departmentId: new FormControl(),
@@ -54,12 +56,14 @@ export class EmployeeEditComponent implements OnInit {
       const employee = response.data;
 
       // getting all the employees by department
-      if (employee.departmentName) {
-        this.employeeService.getEmployeesByDepartmentName(employee.departmentName).subscribe((response: Employees) => {
+      if (employee.departmentId) {
+        this.employeeService.getEmployeesByDepartmentName(employee.departmentId).subscribe((response: Employees) => {
           this.departmentEmployees = response.data;
 
           // setting the value of the form
           this.EmployeeForm.setValue({
+            username: null,
+            password: null,
             name: employee.name,
             salary: employee.salary,
             departmentId: employee.departmentId,
@@ -87,10 +91,10 @@ export class EmployeeEditComponent implements OnInit {
 
   private getEmployeeByDepartment(id: number): void {
     this.departmentService.getDepartmentById(id).subscribe((response: department) => {
-      const departmentName = response.data.name;
+      const departmentId = response.data.id;
 
       // calling the employee service to get the employees by department
-      this.employeeService.getEmployeesByDepartmentName(departmentName).subscribe((response: Employees) => {
+      this.employeeService.getEmployeesByDepartmentName(departmentId).subscribe((response: Employees) => {
         this.departmentEmployees = response.data;
       });
     });
@@ -98,9 +102,13 @@ export class EmployeeEditComponent implements OnInit {
 
   public addEmployee(): void {
     console.log(this.EmployeeForm.value)
-    if (this.EmployeeForm.value.name && this.EmployeeForm.value.salary) {
+    if (this.EmployeeForm.value.name && this.EmployeeForm.value.salary && this.EmployeeForm.value.username
+      && this.EmployeeForm.value.password
+    ) {
 
       const body = {
+        username: this.EmployeeForm.value.username,
+        password: this.EmployeeForm.value.password,
         name: this.EmployeeForm.value.name,
         salary: this.EmployeeForm.value.salary,
         departmentId: this.EmployeeForm.value.departmentId,

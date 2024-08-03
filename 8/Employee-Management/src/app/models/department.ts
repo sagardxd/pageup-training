@@ -1,6 +1,10 @@
 export interface departmentData {
     id: number,
-    name: string
+    name: string,
+    createdBy: number
+    updatedBy: number | null
+    createdOn: Date
+    updatedOn: Date | null
 }
 
 export interface departments {
