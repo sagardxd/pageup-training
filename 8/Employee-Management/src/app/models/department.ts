@@ -32,3 +32,28 @@ export interface deleteDepartmentResponse {
     message: string,
     data: boolean
 }
+
+export interface paginatedBody {
+    pageIndex: number,
+    pagedItemsCount: number,
+    orderKey: string,
+    sortedOrder: number,
+    search: string
+}
+
+export interface paginatedDepartmentData {
+    success: boolean,
+    status: number,
+    message: string,
+    data: paginatedData
+}
+
+export interface paginatedData {
+    data: departmentData[]
+    totalPages: number,
+    totalItems: number
+}
+export interface paginatedDepartmentDataList {
+    data: paginatedData
+
+}

@@ -69,5 +69,17 @@ export interface EmployeeForm {
     role: FormControl<Role | null>
 }
 
+export interface paginatedEmployeeData {
+    success: boolean,
+    status: number,
+    message: string,
+    data: paginatedData
+}
+
+export interface paginatedData {
+    data: Employee[]
+    totalPages: number,
+    totalItems: number
+}
 
 

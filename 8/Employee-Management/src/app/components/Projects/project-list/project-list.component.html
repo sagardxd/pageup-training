@@ -1,0 +1,51 @@
+<div class="container mx-auto px-4 py-6 flex flex-col">
+    <div class="flex justify-between pb-4">
+        <h1 class="text-2xl font-bold">Project List</h1>
+        <button routerLink="/project-add" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
+            Add Project
+        </button>
+    </div>
+    <div class="flex justify-center p-10 gap-2">
+        <input type="text" placeholder="search" class="p-2 w-[300px] border border-black"
+            [(ngModel)]="paginationData.search">
+        <button class="bg-blue-500 p-2 px-4 rounded-md text-white" (click)="handleSearch()">Search</button>
+    </div>
+    <table matSort (matSortChange)="sortData($event)" class="min-w-md  bg-white border border-gray-300 rounded-md ">
+        <thead>
+            <tr>
+                <th class="px-4 py-2 border-b border-gray-200 text-left w-[170px]">Sno.</th>
+                <th mat-sort-header="Name" class="px-4 py-2 border-b border-gray-200 text-left w-[170px]">Name</th>
+                <th mat-sort-header="Status" class="px-4 py-2 border-b border-gray-200 text-left w-[170px]">Status</th>
+
+                <th class="px-4 py-2 border-b border-gray-200 text-left w-[170px]">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of projects; let i = index" class="hover:bg-gray-100">
+                <td class="px-4 py-2 border-b border-gray-200 ">{{ i + 1 }}</td>
+                <td class="px-4 py-2 border-b border-gray-200 ">{{ item.name }}</td>
+                <td class="px-4 py-2 border-b border-gray-200 ">{{ item.status }}</td>
+                <td class="px-4 py-2 border-b border-gray-200  flex gap-2">
+                    <button routerLink="/project-view/{{ item.id }}"
+                        class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700">
+                        View
+                    </button>
+                    <button routerLink="/project-edit/{{ item.id }}"
+                        class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
+                        Edit
+                    </button>
+                    <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div class="px-12">
+    <mat-paginator [length]="totalItems" [pageSize]="paginationData.pagedItemsCount"
+        [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page" [hidePageSize]="" (page)="onPageEvent($event)">
+    </mat-paginator>
+</div>

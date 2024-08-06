@@ -82,7 +82,6 @@ export class EmployeeEditComponent implements OnInit {
   }
 
   public onDepartmentChange(event: any): void {
-    console.log("hi")
     this.departmentId = event.target.value;
     if (this.departmentId) {
       this.getEmployeeByDepartment(this.departmentId);
@@ -90,13 +89,9 @@ export class EmployeeEditComponent implements OnInit {
   }
 
   private getEmployeeByDepartment(id: number): void {
-    this.departmentService.getDepartmentById(id).subscribe((response: department) => {
-      const departmentId = response.data.id;
-
-      // calling the employee service to get the employees by department
-      this.employeeService.getEmployeesByDepartmentName(departmentId).subscribe((response: Employees) => {
-        this.departmentEmployees = response.data;
-      });
+    // calling the employee service to get the employees by department
+    this.employeeService.getEmployeesByDepartmentName(id).subscribe((response: Employees) => {
+      this.departmentEmployees = response.data;
     });
   }
 

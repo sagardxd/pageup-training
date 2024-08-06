@@ -1,0 +1,18 @@
+<div class="space-y-4 flex flex-col max-w-lg p-10 justify-center">
+    <input type="text" placeholder="name"
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    <input type="text" placeholder="description"
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Project Status</label>
+        <select
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="0">Pending</option>
+            <option value="1">Active</option>
+            <option value="2">Complete</option>
+        </select>
+    </div>
+    <button (click)="addEmployeeDialog()"
+        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Add
+        Employees</button>
+</div>

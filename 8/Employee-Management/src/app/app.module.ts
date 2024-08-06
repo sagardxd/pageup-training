@@ -7,12 +7,19 @@ import { EmployeeListComponent } from './components/Employee/employee-list/emplo
 import { DepartmentListComponent } from './components/Department/department-list/department-list.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { DialogComponent } from './components/Department/deparment-dialog/dialog/dialog.component';
 import { EmployeeEditComponent } from './components/Employee/employee-edit/employee-edit.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { ProjectListComponent } from './components/Projects/project-list/project-list.component';
+import { DeleteDialogComponent } from './components/ReusableComps/delete-dialog/delete-dialog.component';
+import { MatSortModule } from '@angular/material/sort';
+import { ProjectEditComponent } from './components/Projects/project-edit/project-edit.component';
+import { ProjectViewComponent } from './components/Projects/project-view/project-view.component';
+import { AddEmployeesComponent } from './components/Projects/add-employees/add-employees.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +27,11 @@ import { AuthInterceptorService } from './services/auth-interceptor.service';
     DepartmentListComponent,
     DialogComponent,
     EmployeeEditComponent,
+    ProjectListComponent,
+    DeleteDialogComponent,
+    ProjectEditComponent,
+    ProjectViewComponent,
+    AddEmployeesComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,7 +39,10 @@ import { AuthInterceptorService } from './services/auth-interceptor.service';
     HttpClientModule,
     ReactiveFormsModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatPaginatorModule,
+    FormsModule,
+    MatSortModule
   ],
   providers: [
     provideAnimationsAsync(),
