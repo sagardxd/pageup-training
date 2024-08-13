@@ -1,24 +1,25 @@
 import { FormControl } from "@angular/forms"
 import { department } from './department';
 
-export enum Role {
+export enum EmployeeRole {
     Employee = 0,
     Admin = 1,
     SuperAdmin = 2
 }
 export interface Employee {
-    id: number,
-    name: string,
+    id: number
+    name: string
     departmentName: string | null
     departmentId: number | null
     managerName: string | null
-    managerId: number | null
-    role: Role,
-    salary: number,
-    createdBy: number
-    updatedBy: number | null
+    role: EmployeeRole
+    salary: number
+    email: string
+    address: string
+    phone: string | null
+    imageUrl: string
+    createdBy: string
     createdOn: Date
-    updatedOn: Date | null
 }
 export interface Employees {
     success: boolean,
@@ -30,19 +31,25 @@ export interface Employees {
 export interface postEmployee {
     username: string
     password: string
-    name: string,
+    name: string
     salary: number
+    email: string
+    phone: string | null
+    address: string
     departmentId: number | null | undefined,
     managerId: number | null | undefined,
-    role: Role | null | undefined,
+    role: EmployeeRole | null | undefined,
 }
 
 export interface updateEmployee {
-    name: string,
-    salary: number
+    name: string | null | undefined
+    salary: number | null | undefined
+    email: string | null | undefined
+    phone: string | null | undefined
+    address: string | null | undefined
     departmentId: number | null | undefined,
     managerId: number | null | undefined,
-    role: Role | null | undefined,
+    role: EmployeeRole | null | undefined,
 }
 
 export interface postEmployeeResponse {
@@ -63,10 +70,13 @@ export interface EmployeeForm {
     username: FormControl<string | null>
     password: FormControl<string | null>
     name: FormControl<string | null>
+    email: FormControl<string | null>
+    phone: FormControl<string | null>
+    address: FormControl<string | null>
     salary: FormControl<number | null>
     departmentId: FormControl<number | null>
     managerId: FormControl<number | null>
-    role: FormControl<Role | null>
+    role: FormControl<EmployeeRole | null>
 }
 
 export interface paginatedEmployeeData {

@@ -1,0 +1,72 @@
+<div class="container mx-auto px-4 py-6 bg-white rounded-lg shadow-md max-w-lg">
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6">Add Task</h1>
+
+    <form [formGroup]="taskForm">
+
+        <div class="py-3 flex justify-between">
+            <div>
+                Project:
+                <span class="font-medium">{{projectName}}</span>
+            </div>
+            <select name="tasktype" id="">
+                <option value="0">Epic</option>
+                <option value="1">Feature</option>
+                <option value="2">Userstory</option>
+                <option value="3">Task</option>
+                <option value="4">Bug</option>
+            </select>
+        </div>
+
+        <!-- Name Input -->
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700 font-medium mb-2">Task Name</label>
+            <input id="name" type="text" placeholder="Enter task name" formControlName="name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+
+        <!-- Description Input -->
+        <div class="mb-4">
+            <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>
+            <textarea id="description" placeholder="Enter task description" formControlName="description"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="4"></textarea>
+        </div>
+
+        <!-- Assigned To Select -->
+        <div class="mb-4" *ngIf="paramId === null">
+            <label class="block text-gray-700 font-medium mb-2">Assign To</label>
+            <select formControlName="assignedTo"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option *ngFor="let item of assignedTo;" [value]="item.employeeId"> {{item.employeeName}}
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-4" *ngIf="paramId != null">
+            <label class="block text-gray-700 font-medium mb-2">Assign To</label>
+            <select formControlName="assignedTo"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option *ngFor="let item of project?.members;" [value]="item.employeeId"> {{item.employeeName}}
+                </option>
+            </select>
+        </div>
+
+        <!-- Status Select -->
+        <div class="mb-4">
+            <label for="status" class="block text-gray-700 font-medium mb-2">Status</label>
+            <select id="status" formControlName="status"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option [ngValue]="TaskStatus.Pending">Pending</option>
+                <option [ngValue]="TaskStatus.Active">In Progress</option>
+            </select>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" (click)="addTask()"
+                class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Save Task
+            </button>
+        </div>
+    </form>
+</div>

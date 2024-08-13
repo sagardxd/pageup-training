@@ -5,7 +5,8 @@ import { paginatedBody } from '../../../models/department';
 import { PageEvent } from '@angular/material/paginator';
 import { paginatedEmployeeData } from '../../../models/emloyee';
 import { MatDialog } from '@angular/material/dialog';
-import { AddEmployeesComponent } from '../add-employees/add-employees.component';
+import { ActivatedRoute } from '@angular/router';
+import { DeletedialogService } from '../../../services/deletedialog.service';
 
 @Component({
   selector: 'app-project-list',
@@ -19,17 +20,35 @@ export class ProjectListComponent implements OnInit {
     pageIndex: 1,
     pagedItemsCount: 10,
     orderKey: "",
-    sortedOrder: 2,
+    sortedOrder: 0,
     search: ""
   }
 
   public totalPages = 0;
   public totalItems = 0;
 
-  constructor(private projectService: ProjectService) { }
+  private paramId = '';
+  public isEdit = false;
+
+  constructor(private projectService: ProjectService,
+    private activatedRoute: ActivatedRoute,
+    private deletedialogService: DeletedialogService
+  ) { }
 
   ngOnInit(): void {
     this.getPaginatedProjectData();
+    this.getParamId();
+  }
+
+  private getParamId(): void {
+    this.activatedRoute.paramMap.subscribe(paramMap => {
+      this.paramId = (paramMap.get('id')) ?? '';
+      if (this.paramId) {
+        this.isEdit = true;
+        this.getProjectData();
+      }
+
+    });
   }
 
   private getPaginatedProjectData() {
@@ -38,6 +57,13 @@ export class ProjectListComponent implements OnInit {
       this.totalPages = response.data.totalPages;
       this.totalItems = response.data.totalItems;
     });
+  }
+
+  private getProjectData(): void {
+    this.projectService.getProjectById(Number(this.paramId)).subscribe((response) => {
+
+    });
+
   }
 
   public onPageEvent(event: PageEvent): void {
@@ -66,6 +92,16 @@ export class ProjectListComponent implements OnInit {
       this.paginationData.sortedOrder = 2;
     }
     this.getPaginatedProjectData();
+  }
+
+  public handleDelete(id: number): void {
+    this.deletedialogService.openDialog().afterClosed().subscribe(result => {
+      if (result) {
+        this.projectService.deleteProject(id).subscribe(() => {
+          this.getPaginatedProjectData();
+        });
+      }
+    });
   }
 
 }

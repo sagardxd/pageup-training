@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';  // import the HttpClient module
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EmployeeById, Employees, paginatedEmployeeData, postEmployee, postEmployeeResponse, updateEmployee } from '../models/emloyee';

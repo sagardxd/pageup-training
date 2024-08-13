@@ -1,34 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Employee } from '../../../models/emloyee';
 import { EmployeeService } from '../../../services/employee.service';
 import { DeletedialogService } from '../../../services/deletedialog.service';
 import { paginatedBody } from '../../../models/department';
 import { PageEvent } from '@angular/material/paginator';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.scss'
 })
+
+
 export class EmployeeListComponent {
 
   public employees: Employee[] = [];
-  public projectEmployees: number[] = [];
+  public projectEmployees: { id: number, name: string }[] = [];
 
   public paginationData: paginatedBody = {
     pageIndex: 1,
-    pagedItemsCount: 5,
+    pagedItemsCount: 10,
     orderKey: "",
-    sortedOrder: 2,
+    sortedOrder: 0,
     search: ""
   }
 
-  public isAdding = true;
+  public isAdding = false;
 
   public totalPages = 0;
   public totalItems = 0;
 
-  constructor(private employeeService: EmployeeService, private deleteDialogService: DeletedialogService) {
+  public dialogRef!: MatDialogRef<EmployeeListComponent>;
+
+  constructor(private employeeService: EmployeeService,
+    private deleteDialogService: DeletedialogService,
+  ) {
     this.getPaginationList();
   }
 
@@ -83,15 +90,20 @@ export class EmployeeListComponent {
     this.getPaginationList();
   }
 
-  public addEmployeeInProject(id: number) {
-    this.projectEmployees.push(id);
+  public addEmployeeInProject(name: string, id: number) {
+    const employee = { id, name };
+    this.projectEmployees.push(employee);
   }
 
   public removeEmployeeInProject(id: number) {
-    this.projectEmployees.splice(this.projectEmployees.indexOf(id), 1);
+    this.projectEmployees = this.projectEmployees.filter(emp => emp.id !== id);
   }
 
   public exsistInArray(id: number): boolean {
-    return this.projectEmployees.includes(id);
+    return this.projectEmployees.some(emp => emp.id === id);
+  }
+
+  public saveProjectEmployees() {
+    this.dialogRef.close(this.projectEmployees);
   }
 }

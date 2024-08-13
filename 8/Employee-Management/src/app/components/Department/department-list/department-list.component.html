@@ -1,39 +1,60 @@
-<div class="container mx-auto px-4 py-6 flex flex-col">
-    <div class="flex justify-between pb-4">
-        <h1 class="text-2xl font-bold">Departments List</h1>
-        <button (click)="addDepartment()" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
-            Add Department
-        </button>
+<div class="flex">
+    <app-navbar></app-navbar>
+    <div class="container px-8 py-6 flex flex-col text-sm">
+        <!-- Header Section -->
+        <div class="flex justify-between items-center pb-4">
+            <h1 class="text-2xl font-semibold text-gray-800">Departments List</h1>
+            <button (click)="addDepartment()"
+                class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700">
+                Add Department
+            </button>
+        </div>
+
+        <!-- Search Section -->
+        <div class="flex justify-center py-6 gap-4">
+            <input type="text" placeholder="Search departments..."
+                class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                [(ngModel)]="paginationData.search" />
+            <button class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+                (click)="handleSearch()">
+                Search
+            </button>
+        </div>
+
+        <!-- Departments Table -->
+        <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+            <table matSort (matSortChange)="sortData($event)"
+                class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm">
+                <thead class="bg-gray-200 text-gray-600  text-sm leading-normal">
+                    <tr>
+                        <th class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">Sno</th>
+                        <th mat-sort-header="Name" class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">
+                            Name
+                        </th>
+                        <th class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    <tr *ngFor="let item of departments; let i = index" class="hover:bg-gray-50">
+                        <td class="px-6 py-4 border-b border-gray-200">{{ i + 1 }}</td>
+                        <td class="px-6 py-4 border-b border-gray-200 font-medium">{{ item.name }}</td>
+                        <td class="px-6 py-4 border-b border-gray-200 flex gap-2">
+                            <button (click)="deleteDepartment(item.id)"
+                                class="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginator -->
+        <div class="flex justify-end pt-6">
+            <mat-paginator [length]="totalItems" [pageSize]="paginationData.pagedItemsCount"
+                [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page" (page)="onPageEvent($event)">
+            </mat-paginator>
+        </div>
     </div>
-    <div class="flex justify-center p-10 gap-2">
-        <input type="text" placeholder="search" class="p-2 w-[300px] border border-black"
-            [(ngModel)]="paginationData.search">
-        <button class="bg-blue-500 p-2 px-4 rounded-md text-white" (click)="handleSearch()">Search</button>
-    </div>
-    <table matSort (matSortChange)="sortData($event)" class="min-w-md  bg-white border border-gray-300 rounded-md ">
-        <thead>
-            <tr>
-                <th class="px-4 py-2 border-b border-gray-200 text-left w-[170px]">Sno.</th>
-                <th mat-sort-header="Name" class="px-4 py-2 border-b border-gray-200 text-left w-[170px]">Name</th>
-                <th class="px-4 py-2 border-b border-gray-200 text-left w-[170px]">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of departments; let i = index" class="hover:bg-gray-100">
-                <td class="px-4 py-2 border-b border-gray-200 w-[170px]">{{ i + 1 }}</td>
-                <td class="px-4 py-2 border-b border-gray-200 w-[170px]">{{ item.name }}</td>
-                <td class="px-4 py-2 border-b border-gray-200 w-[170px]">
-                    <button (click)="deleteDepartment(item.id)"
-                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div class="px-12">
-    <mat-paginator [length]="totalItems" [pageSize]="paginationData.pagedItemsCount"
-        [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page" (page)="onPageEvent($event)">
-    </mat-paginator>
+
 </div>

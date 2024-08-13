@@ -1,0 +1,47 @@
+<div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
+    <div class="flex items-center space-x-4">
+        <!-- Employee Image -->
+        <img [src]="employee?.imageUrl" alt="Employee Image" class="w-20 h-20 rounded-full object-cover">
+
+        <!-- Employee Name and Role -->
+        <div>
+            <h2 class="text-xl font-semibold text-gray-800">{{ employee?.name }}</h2>
+            <p class="text-sm text-gray-500">{{ employee?.role === 2 ? 'Super Admin' : employee?.role === 1 ? 'Admin':
+                'Employee'}}</p>
+        </div>
+    </div>
+
+    <!-- Employee Details -->
+    <div class="mt-6 space-y-4">
+        <div>
+            <h3 class="text-sm font-medium text-gray-600">Email</h3>
+            <p class="text-gray-800">{{ employee?.email }}</p>
+        </div>
+        <div>
+            <h3 class="text-sm font-medium text-gray-600">Address</h3>
+            <p class="text-gray-800">{{ employee?.address }}</p>
+        </div>
+        <div>
+            <h3 class="text-sm font-medium text-gray-600">Salary</h3>
+            <p class="text-gray-800">{{ employee?.salary | currency:'INR' }}</p>
+        </div>
+        <div>
+            <h3 class="text-sm font-medium text-gray-600">Phone Number</h3>
+            <p class="text-gray-800">{{ employee?.phone }}</p>
+        </div>
+        <div *ngIf="employee?.departmentName">
+            <h3 class="text-sm font-medium text-gray-600">Department</h3>
+            <p class="text-gray-800">{{ employee?.departmentName }}</p>
+        </div>
+        <div *ngIf="employee?.managerName">
+            <h3 class="text-sm font-medium text-gray-600">Manager</h3>
+            <p class="text-gray-800">{{ employee?.managerName }}</p>
+        </div>
+    </div>
+
+    <!-- Footer with Created By Information -->
+    <div class="mt-6 border-t pt-4">
+        <p class="text-sm text-gray-500">Created by {{ employee?.createdBy }} on {{ employee?.createdOn |
+            date:'longDate' }}</p>
+    </div>
+</div>

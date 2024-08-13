@@ -11,15 +11,13 @@ export interface project {
     description: string
     status: ProjectStatus
     createdBy: number
-    updatedBy: number | null,
     createdOn: Date
-    updatedOn: Date | null
 }
 
 export enum ProjectStatus {
     Pending = 0,
     Active = 1,
-    Complete = 2,
+    Completed = 2,
 }
 
 export interface paginatedProjectData {
@@ -39,5 +37,56 @@ export interface projectForm {
     name: FormControl<string | null>
     description: FormControl<string | null>
     status: FormControl<ProjectStatus | null>
-    members: FormArray<FormControl<number>>
+    members: FormArray<FormControl<number | null>>
+}
+
+export interface projectPostBody {
+    name: string
+    description: string
+    status: ProjectStatus
+    members: { employeeId: number }[]
+}
+
+export interface projectRequestResponse {
+    success: boolean
+    status: number
+    message: string
+    data: number
+}
+
+export interface projectDeleteResponse {
+    success: boolean
+    status: number
+    message: string
+    data: boolean
+}
+
+
+export interface projectByIdResponse {
+    success: boolean
+    status: number
+    message: string
+    data: projectByIdData
+}
+
+export interface projectByIdData {
+    createdBy: string
+    createdOn: Date
+    id: number
+    name: string
+    description: string
+    status: ProjectStatus
+    tasks: Task[]
+    members: Employee[]
+}
+
+export interface Employee {
+    employeeId: number
+    employeeName: string
+}
+
+export interface Task {
+    id: number
+    name: string
+    description: string
 }

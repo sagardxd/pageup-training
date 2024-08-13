@@ -19,7 +19,13 @@ import { DeleteDialogComponent } from './components/ReusableComps/delete-dialog/
 import { MatSortModule } from '@angular/material/sort';
 import { ProjectEditComponent } from './components/Projects/project-edit/project-edit.component';
 import { ProjectViewComponent } from './components/Projects/project-view/project-view.component';
-import { AddEmployeesComponent } from './components/Projects/add-employees/add-employees.component';
+import { EmployeeViewComponent } from './components/Employee/employee-view/employee-view.component';
+import { TaskListComponent } from './components/Task/task-list/task-list.component';
+import { TaskEditComponent } from './components/Task/task-edit/task-edit.component';
+import { TaskViewComponent } from './components/Task/task-view/task-view.component';
+import { NavbarComponent } from './components/Navbar/navbar/navbar.component';
+import { LoginComponent } from './components/Auth/login/login.component';
+import { TaskStoryComponent } from './components/Task/task-story/task-story.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +37,13 @@ import { AddEmployeesComponent } from './components/Projects/add-employees/add-e
     DeleteDialogComponent,
     ProjectEditComponent,
     ProjectViewComponent,
-    AddEmployeesComponent,
+    EmployeeViewComponent,
+    TaskListComponent,
+    TaskEditComponent,
+    TaskViewComponent,
+    NavbarComponent,
+    LoginComponent,
+    TaskStoryComponent,
   ],
   imports: [
     BrowserModule,

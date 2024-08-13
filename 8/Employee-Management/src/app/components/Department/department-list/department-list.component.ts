@@ -19,7 +19,7 @@ export class DepartmentListComponent implements OnInit {
     pageIndex: 1,
     pagedItemsCount: 10,
     orderKey: "",
-    sortedOrder: 2,
+    sortedOrder: 0,
     search: ""
   }
 
@@ -72,7 +72,12 @@ export class DepartmentListComponent implements OnInit {
   }
 
   public onPageEvent(event: PageEvent): void {
-    this.paginationData.pageIndex = event.pageIndex + 1;
+    if (event.pageSize != this.paginationData.pagedItemsCount) {
+      this.paginationData.pageIndex = 1;
+    } else {
+      this.paginationData.pageIndex = event.pageIndex + 1;
+
+    }
     this.paginationData.pagedItemsCount = event.pageSize;
     this.getPaginationList();
   }
@@ -83,6 +88,7 @@ export class DepartmentListComponent implements OnInit {
   }
 
   public sortData(event: any): void {
+    console.log(event.page);
     console.log(event.active);
     console.log(event.direction);
     this.paginationData.orderKey = event.active;

@@ -5,6 +5,7 @@ import { departmentData, departments, department } from '../../../models/departm
 import { Employee, EmployeeById, EmployeeForm, Employees } from '../../../models/emloyee';
 import { EmployeeService } from '../../../services/employee.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { last } from 'rxjs';
 
 @Component({
   selector: 'app-employee-edit',
@@ -23,6 +24,9 @@ export class EmployeeEditComponent implements OnInit {
     username: new FormControl(''),
     password: new FormControl(''),
     name: new FormControl(''),
+    email: new FormControl(''),
+    address: new FormControl(''),
+    phone: new FormControl(),
     salary: new FormControl(),
     departmentId: new FormControl(),
     managerId: new FormControl(),
@@ -61,15 +65,32 @@ export class EmployeeEditComponent implements OnInit {
           this.departmentEmployees = response.data;
 
           // setting the value of the form
-          this.EmployeeForm.setValue({
+          this.EmployeeForm.patchValue({
             username: null,
             password: null,
-            name: employee.name,
-            salary: employee.salary,
-            departmentId: employee.departmentId,
-            managerId: employee.managerId,
-            role: employee.role
+            name: employee.name ?? '',
+            salary: employee.salary ?? 0,
+            email: employee.email ?? '',
+            phone: employee.phone ?? '',
+            address: employee.address ?? '',
+            departmentId: employee.departmentId ?? null,
+            managerId: employee.id ?? null,
+            role: employee.role ?? ''
           });
+        });
+      } else {
+        // setting the form values even if departmentId is not present
+        this.EmployeeForm.patchValue({
+          username: null,
+          password: null,
+          name: employee.name ?? '',
+          salary: employee.salary ?? 0,
+          email: employee.email ?? '',
+          phone: employee.phone ?? '',
+          address: employee.address ?? '',
+          departmentId: null,
+          managerId: null,
+          role: employee.role ?? ''
         });
       }
     });
@@ -98,7 +119,8 @@ export class EmployeeEditComponent implements OnInit {
   public addEmployee(): void {
     console.log(this.EmployeeForm.value)
     if (this.EmployeeForm.value.name && this.EmployeeForm.value.salary && this.EmployeeForm.value.username
-      && this.EmployeeForm.value.password
+      && this.EmployeeForm.value.password && this.EmployeeForm.value.email && this.EmployeeForm.value.address
+      && this.EmployeeForm.value.phone
     ) {
 
       const body = {
@@ -106,6 +128,9 @@ export class EmployeeEditComponent implements OnInit {
         password: this.EmployeeForm.value.password,
         name: this.EmployeeForm.value.name,
         salary: this.EmployeeForm.value.salary,
+        email: this.EmployeeForm.value.email,
+        phone: this.EmployeeForm.value.phone,
+        address: this.EmployeeForm.value.address,
         departmentId: this.EmployeeForm.value.departmentId,
         managerId: this.EmployeeForm.value.managerId,
         role: Number(this.EmployeeForm.value.role)
@@ -119,11 +144,16 @@ export class EmployeeEditComponent implements OnInit {
   }
 
   public updateEmployee(): void {
-    if (this.EmployeeForm.value.name && this.EmployeeForm.value.salary && this.paramId) {
+    if (this.EmployeeForm.value.name && this.EmployeeForm.value.salary && this.paramId,
+      this.EmployeeForm.value.email && this.EmployeeForm.value.address && this.EmployeeForm.value.phone
+    ) {
 
       const body = {
         name: this.EmployeeForm.value.name,
         salary: this.EmployeeForm.value.salary,
+        email: this.EmployeeForm.value.email,
+        address: this.EmployeeForm.value.address,
+        phone: this.EmployeeForm.value.phone,
         departmentId: Number(this.EmployeeForm.value.departmentId),
         managerId: Number(this.EmployeeForm.value.managerId),
         role: Number(this.EmployeeForm.value.role)

@@ -1,0 +1,58 @@
+<div class="flex">
+    <app-navbar></app-navbar>
+    <div class="container px-8 py-6  text-sm">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-semibold text-gray-800">Task List</h1>
+
+        </div>
+        <div class="flex items-center justify-center p-6">
+            <input type="text" [(ngModel)]="paginationData.search" placeholder="Search tasks..."
+                class="p-3 w-[300px]  border border-gray-300 rounded-lg" />
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg ml-4" (click)="handleSearch()">Search</button>
+        </div>
+
+        <table matSort (matSortChange)="sortData($event)"
+            class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <tr>
+                    <th class="py-3 px-6 text-left">Sno</th>
+                    <th mat-sort-header="Name" class="py-3 px-6 text-left cursor-pointer"
+                        (click)="sortData({ active: 'name', direction: 'asc' })">
+                        Task Name</th>
+                    <th mat-sort-header="Description" class="py-3 px-6 text-left">Description</th>
+                    <th mat-sort-header="Assigner" class="py-3 px-6 text-left">Assigner</th>
+                    <th mat-sort-header="Assignee" class="py-3 px-6 text-left">Assignee</th>
+                    <th class="py-3 px-6 text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-normal">
+                <tr *ngFor="let task of tasks; let i = index" class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6 text-left whitespace-nowrap">
+                        <span class="font-medium">{{i + 1 }}</span>
+                    </td>
+                    <td class="py-3 px-6 text-left">
+                        <span class="font-medium">{{ task.name }}</span>
+                    </td>
+                    <td class="py-3 px-6 text-left">{{ task.description }}</td>
+                    <td class="py-3 px-6 text-left">{{ task.assignerName }}</td>
+                    <td class="py-3 px-6 text-left">{{ task.assigneeName }}</td>
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex item-center justify-center space-x-2">
+                            <button class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                                routerLink="/task/view/{{task.id}}">View</button>
+                            <button class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                                routerLink="/task-edit/{{task.id}}">Edit</button>
+                            <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                                (click)="deleteTask(task.id)">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="flex justify-end pt-6">
+            <mat-paginator [length]="totalItems" [pageSize]="paginationData.pagedItemsCount"
+                [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page" (page)="onPageEvent($event)">
+            </mat-paginator>
+        </div>
+    </div>
+</div>
