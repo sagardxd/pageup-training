@@ -94,3 +94,37 @@ export enum TaskType {
     Task = 3,
     Bug = 4
 }
+
+export interface TaskPaginationBody {
+    pageIndex: number
+    pagedItemsCount: number
+    orderKey: string
+    sortedOrder: number
+    search: string
+    filters: [filterData] | null
+}
+
+interface filterData {
+    item1: string
+    item2: number
+}
+
+export interface TaskPaginationResponse {
+    success: boolean
+    status: number
+    message: string
+    data: {
+        data: taskpaginationData[]
+        totalPages: number
+        totalItems: number
+    }
+}
+
+export interface taskpaginationData {
+    id: number
+    name: string
+    status: TaskStatus
+    assigneeName: string
+    taskType: TaskType
+    createdOn: Date
+}

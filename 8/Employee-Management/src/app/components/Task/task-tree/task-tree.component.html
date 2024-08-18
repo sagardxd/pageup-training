@@ -1,0 +1,13 @@
+<div *ngFor="let item of items;  let i = index" class="work-item  pl-4 py-2 mb-4 transition-all duration-300">
+    <div class="item-header flex justify-between items-center bg-gray-100 hover:bg-gray-200 cursor-pointer p-2 rounded-lg shadow-sm"
+        (click)="toggle(item)">
+        <span class="font-medium text-gray-700">
+            {{ i + 1 }}. {{ getTaskTypeLabel(item.taskType) }}: {{ item.name }}</span>
+    </div>
+    <div *ngIf="item.isExpanded" class="item-children ml-4 mt-2">
+        <div *ngIf="!item.childrenLoaded && !item.children" class="text-gray-600 text-sm italic">Loading...</div>
+        <div *ngIf="item.childrenLoaded && (!item.children || item.children.length === 0)"
+            class="text-gray-500 text-sm italic">No children exist.</div>
+        <app-task-tree *ngIf="item.children" [items]="item.children"></app-task-tree>
+    </div>
+</div>

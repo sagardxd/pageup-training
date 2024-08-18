@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'project-add', component: ProjectEditComponent },
   { path: 'project-edit/:id', component: ProjectEditComponent },
   { path: 'project-view/:id', component: ProjectViewComponent },
-  { path: 'task', component: TaskListComponent },
+  // { path: 'task', component: TaskListComponent },
   { path: 'task-edit/:id', component: TaskEditComponent },
   { path: 'task/view/:id', component: TaskViewComponent },
   { path: 'task/add', component: TaskEditComponent }

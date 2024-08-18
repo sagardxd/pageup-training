@@ -40,7 +40,6 @@ export class TaskListComponent implements OnInit {
       this.tasks = response.data.data;
       this.totalPages = response.data.totalPages;
       this.totalItems = response.data.totalItems;
-      console.log(response)
     });
   }
 

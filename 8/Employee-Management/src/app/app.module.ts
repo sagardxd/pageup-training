@@ -25,7 +25,8 @@ import { TaskEditComponent } from './components/Task/task-edit/task-edit.compone
 import { TaskViewComponent } from './components/Task/task-view/task-view.component';
 import { NavbarComponent } from './components/Navbar/navbar/navbar.component';
 import { LoginComponent } from './components/Auth/login/login.component';
-import { TaskStoryComponent } from './components/Task/task-story/task-story.component';
+import { MatTreeModule } from '@angular/material/tree';
+import { TaskTreeComponent } from './components/Task/task-tree/task-tree.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +44,7 @@ import { TaskStoryComponent } from './components/Task/task-story/task-story.comp
     TaskViewComponent,
     NavbarComponent,
     LoginComponent,
-    TaskStoryComponent,
+    TaskTreeComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +55,8 @@ import { TaskStoryComponent } from './components/Task/task-story/task-story.comp
     MatButtonModule,
     MatPaginatorModule,
     FormsModule,
-    MatSortModule
+    MatSortModule,
+    MatTreeModule
   ],
   providers: [
     provideAnimationsAsync(),
