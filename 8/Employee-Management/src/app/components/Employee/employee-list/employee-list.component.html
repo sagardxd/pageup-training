@@ -22,7 +22,7 @@
         <div class="flex justify-center py-6 gap-4">
             <input type="text" placeholder="Search employees..."
                 class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                [(ngModel)]="paginationData.search">
+                [(ngModel)]="paginationData.search" (keyup.enter)="handleSearch()">
             <button class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
                 (click)="handleSearch()">
                 Search
@@ -53,7 +53,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of employees; let i = index" class="hover:bg-gray-50">
-                        <td class="px-6 py-4 border-b border-gray-200 text-gray-700">{{ i + 1 }}</td>
+                        <td class="px-6 py-4 border-b border-gray-200 text-gray-700">{{ i + 1 +
+                            (paginationData.pageIndex - 1) *
+                            paginationData.pagedItemsCount }}</td>
                         <td class="px-6 py-4 border-b border-gray-200 text-gray-700 font-medium">{{ item.name }}</td>
                         <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
                             <div *ngIf="item.role === 0">Employee</div>

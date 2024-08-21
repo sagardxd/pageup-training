@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectService } from '../../../services/project.service';
-import { projectByIdData, projectByIdResponse, projectForm } from '../../../models/project';
+import { projectByIdData, projectByIdResponse, ProjectStatus } from '../../../models/project';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskEditComponent } from '../../Task/task-edit/task-edit.component';
 import { TaskService } from '../../../services/task.service';
@@ -9,6 +9,7 @@ import { EmployeeListComponent } from '../../Employee/employee-list/employee-lis
 import { WorkItem } from '../../Task/task-tree/task-tree.component';
 import { TaskPaginationBody } from '../../../models/task';
 import { PageEvent } from '@angular/material/paginator';
+import { updateEmployee } from '../../../models/emloyee';
 
 @Component({
   selector: 'app-project-view',
@@ -17,7 +18,7 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class ProjectViewComponent implements OnInit {
 
-  private paramId = '';
+  public paramId = '';
   public project: projectByIdData | null = null;
   public epicList: WorkItem[] = [];
   public paginationData: TaskPaginationBody = {
@@ -59,9 +60,11 @@ export class ProjectViewComponent implements OnInit {
   }
 
   private getProjectData(): void {
+    console.log("refreshing project data")
     this.projectService.getProjectById(Number(this.paramId)).subscribe((response: projectByIdResponse) => {
       if (response.success) {
         this.project = response.data;
+        console.log(response.data)
       }
     });
   }
@@ -78,9 +81,7 @@ export class ProjectViewComponent implements OnInit {
     dialogRef.componentInstance.projectId = this.project?.id;
     dialogRef.componentInstance.dialogRef = dialogRef;
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getProjectData();
-      }
+      this.getEpicTasks();
     });
   }
 
@@ -103,11 +104,21 @@ export class ProjectViewComponent implements OnInit {
       height: '600px',
     });
 
-    // dialogRef.componentInstance.projectEmployees = this.project?.members ?? [];
     dialogRef.componentInstance.dialogRef = dialogRef;
     dialogRef.componentInstance.isAdding = true;
-  }
+    dialogRef.componentInstance.projectEmployees = this.project?.members?.map(member => ({ id: member.employeeId, name: member.employeeName })) ?? [];
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const newMembers = result.map((employee: any) => ({
+          employeeId: employee.id,
+          employeeName: employee.name,
+        }));
+
+        this.project!.members = newMembers;
+      }
+    });
+  }
 
   public sortData(event: any): void {
     console.log(event.active);
@@ -123,7 +134,6 @@ export class ProjectViewComponent implements OnInit {
     else {
       this.paginationData.sortedOrder = 2;
     }
-    // this.getPaginatedTaskList();
   }
 
   public onPageEvent(event: PageEvent): void {
@@ -132,5 +142,30 @@ export class ProjectViewComponent implements OnInit {
     this.getEpicTasks();
   }
 
+  public updateEmployee(): void {
+    console.log('clicked')
+    const projectData = {
+      name: this.project?.name ?? '',
+      description: this.project?.description ?? '',
+      status: this.project?.status ?? 0,
+      members: this.project?.members?.map(member => ({ employeeId: member.employeeId })) ?? []
+    }
+
+    this.projectService.updateProject(Number(this.paramId), projectData).subscribe(response => {
+      if (response.success) {
+        alert('Employee Removed Successfully');
+        this.getProjectData();
+      }
+    });
+  }
+
+  public getStatusLabel(status: ProjectStatus): string {
+    switch (status) {
+      case ProjectStatus.Pending: return 'Pending';
+      case ProjectStatus.Active: return 'Active';
+      case ProjectStatus.Completed: return 'Completed';
+      default: return '';
+    }
+  }
 
 }

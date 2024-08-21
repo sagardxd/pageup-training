@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TaskById, TaskByIdResponse, TaskReview, TaskReviewResponse } from '../../../models/task';
+import { subTasks, TaskById, TaskByIdResponse, TaskReview, TaskReviewResponse, TaskStatus, TaskType } from '../../../models/task';
 import { TaskService } from '../../../services/task.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,19 +14,18 @@ export class TaskViewComponent implements OnInit {
   private paramId: string | null = null;
   public taskReviews: TaskReview[] = [];
   public newReviewContent = '';
+  public subTasks: subTasks[] = [];
 
   constructor(private taskService: TaskService,
     private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.getParamId();
-    this.getTaskById();
-  }
-
-  private getParamId() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.paramId = params.get('id');
+      if (this.paramId) {
+        this.getTaskById();
+      }
     });
   }
 
@@ -37,10 +36,34 @@ export class TaskViewComponent implements OnInit {
           if (result.success) {
             this.task = result.data.task;
             this.taskReviews = result.data.reviews || [];
+            this.subTasks = result.data.subTasks || [];
+            this
           } else {
             console.error('Failed to fetch task:', result.message);
           }
         });
+    }
+  }
+
+  // Method to get the status label from the enum
+  getStatusLabel(status: TaskStatus): string {
+    switch (status) {
+      case TaskStatus.Pending: return 'Pending';
+      case TaskStatus.Active: return 'In Progress';
+      case TaskStatus.Completed: return 'Completed';
+      default: return '';
+    }
+  }
+
+  // Method to get the task type label from the enum
+  getTaskTypeLabel(type: TaskType): string {
+    switch (type) {
+      case TaskType.Epic: return 'Epic';
+      case TaskType.Feature: return 'Feature';
+      case TaskType.Userstory: return 'User Story';
+      case TaskType.Task: return 'Task';
+      case TaskType.Bug: return 'Bug';
+      default: return '';
     }
   }
 

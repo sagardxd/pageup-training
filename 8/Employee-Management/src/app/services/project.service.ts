@@ -30,4 +30,8 @@ export class ProjectService {
     return this.http.delete<projectDeleteResponse>(`${this.url}/Project/${id}`);
   }
 
+  public updateProject(id: number, body: projectPostBody): Observable<projectRequestResponse> {
+    return this.http.put<projectRequestResponse>(`${this.url}/Project/${id}`, body);
+  }
+
 }

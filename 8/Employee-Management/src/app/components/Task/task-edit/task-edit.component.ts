@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { TaskForm, Tasks, TaskStatus, TaskByIdResponse } from '../../../models/task';
-import { Employee, project, projectByIdData, projectByIdResponse } from '../../../models/project';
+import { TaskForm, Tasks, TaskStatus, TaskByIdResponse, TaskType } from '../../../models/task';
+import { Employee, projectByIdData, projectByIdResponse } from '../../../models/project';
 import { TaskService } from '../../../services/task.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -22,8 +22,15 @@ export class TaskEditComponent implements OnInit {
   public dialogRef!: MatDialogRef<TaskEditComponent>
   public paramId: string | null = null;
   public project: projectByIdData | null = null;
+  public isTaskEdit = false;
 
-
+  public taskTypeLabels: { [key: number]: string } = {
+    0: 'Epic',
+    1: 'Feature',
+    2: 'Userstory',
+    3: 'Task',
+    4: 'Bug'
+  };
 
   constructor(private taskService: TaskService,
     private activatedRoute: ActivatedRoute, private projectService: ProjectService
@@ -33,10 +40,16 @@ export class TaskEditComponent implements OnInit {
     this.getParamId();
   }
 
+  public getTaskTypeLabel(taskTypeValue: number | null): string {
+    return this.taskTypeLabels[taskTypeValue ?? 0];
+  }
+
   public taskForm = new FormGroup<TaskForm>({
     name: new FormControl<string | null>(''),
     description: new FormControl<string | null>(''),
     assignedTo: new FormControl<number | null>(null),
+    taskType: new FormControl<TaskType | null>(null),
+    parentId: new FormControl<number | null>(null),
     projectId: new FormControl<number | null>(null),
     status: new FormControl<TaskStatus | null>(TaskStatus.Pending)
   });
@@ -52,14 +65,16 @@ export class TaskEditComponent implements OnInit {
 
   public addTask(): void {
 
-    if (this.taskForm.value.assignedTo &&
+    if (
       this.taskForm.value.name && this.taskForm.value.description
     ) {
       const TaskData = {
         name: this.taskForm.value.name,
         description: this.taskForm.value.description,
-        assignedTo: this.taskForm.value.assignedTo,
-        projectId: Number(this.projectId),
+        assignedTo: Number(this.taskForm.value.assignedTo),
+        taskType: Number(this.taskForm.value.taskType!),
+        parentId: this.taskForm.value.parentId! || 0,
+        projectId: Number(this.projectId || this.paramId),
         status: this.taskForm.value.status!
       }
 
@@ -70,6 +85,7 @@ export class TaskEditComponent implements OnInit {
             this.dialogRef.close(true);
           }
         });
+        console.log(TaskData)
       } catch (error) {
         console.log(error)
       }

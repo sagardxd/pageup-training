@@ -17,7 +17,6 @@ export class EmployeeListComponent {
 
   public employees: Employee[] = [];
   public projectEmployees: { id: number, name: string }[] = [];
-
   public paginationData: paginatedBody = {
     pageIndex: 1,
     pagedItemsCount: 10,
@@ -25,12 +24,9 @@ export class EmployeeListComponent {
     sortedOrder: 0,
     search: ""
   }
-
   public isAdding = false;
-
   public totalPages = 0;
   public totalItems = 0;
-
   public dialogRef!: MatDialogRef<EmployeeListComponent>;
 
   constructor(private employeeService: EmployeeService,
@@ -59,14 +55,11 @@ export class EmployeeListComponent {
     });
   }
 
-
-
   public onPageEvent(event: PageEvent): void {
     this.paginationData.pageIndex = event.pageIndex + 1;
     this.paginationData.pagedItemsCount = event.pageSize;
     this.getPaginationList();
   }
-
 
   public handleSearch(): void {
     this.getPaginationList();
@@ -86,7 +79,6 @@ export class EmployeeListComponent {
     else {
       this.paginationData.sortedOrder = 2;
     }
-
     this.getPaginationList();
   }
 

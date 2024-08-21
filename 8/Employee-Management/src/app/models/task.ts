@@ -1,4 +1,5 @@
 import { FormControl } from "@angular/forms"
+import { project } from './project';
 
 export interface paginatedTaskData {
     success: boolean,
@@ -48,6 +49,8 @@ export interface TaskForm {
     name: FormControl<string | null>
     description: FormControl<string | null>
     assignedTo: FormControl<number | null>
+    taskType: FormControl<TaskType | null>
+    parentId: FormControl<number | null>
     projectId: FormControl<number | null>
     status: FormControl<TaskStatus | null>
 }
@@ -58,8 +61,15 @@ export interface TaskByIdResponse {
     message: string
     data: {
         task: TaskById,
-        reviews: TaskReview[] | null
+        reviews: TaskReview[] | null,
+        subTasks: [subTasks] | null
     }
+}
+
+export interface subTasks {
+    id: number
+    name: string
+    taskType: TaskType
 }
 
 export interface TaskById {
@@ -67,6 +77,8 @@ export interface TaskById {
     name: string
     description: string
     status: TaskStatus
+    projectId: number
+    taskType: TaskType
     assignerName: string
     assigneName: string
     createdOn: Date
