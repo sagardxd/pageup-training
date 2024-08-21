@@ -1,107 +1,169 @@
-<div class="flex">
-    <div *ngIf="!isAdding"><app-navbar></app-navbar></div>
-    <div class="px-8 py-6 bg-white shadow-md rounded-lg text-sm w-full">
-        <!-- Header Section -->
-        <div class="flex justify-between items-center pb-4">
-            <h1 class="text-2xl font-semibold text-gray-800">Employees List</h1>
-            <div *ngIf="!isAdding">
-                <button routerLink="/employee/add"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    Add Employee
-                </button>
-            </div>
-            <div mat-dialog-actions *ngIf="isAdding">
-                <button (click)="saveProjectEmployees()"
-                    class="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                    Save
-                </button>
-            </div>
-        </div>
-
-        <!-- Search Section -->
-        <div class="flex justify-center py-6 gap-4">
-            <input type="text" placeholder="Search employees..."
-                class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                [(ngModel)]="paginationData.search" (keyup.enter)="handleSearch()">
-            <button class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
-                (click)="handleSearch()">
-                Search
-            </button>
-        </div>
-
-        <!-- Employees Table -->
-        <div class="overflow-x-auto bg-white border border-gray-300 rounded-md shadow-sm">
-            <table matSort (matSortChange)="sortData($event)" class="min-w-full">
-                <thead class="bg-gray-100 font-bold">
-                    <tr>
-                        <th class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">Sno</th>
-                        <th mat-sort-header="Name" class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">
-                            Name
-                        </th>
-                        <th mat-sort-header="Role" class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">
-                            Role
-                        </th>
-                        <th mat-sort-header="Email" class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">
-                            Email
-                        </th>
-                        <th mat-sort-header="DepartmentId"
-                            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">
-                            Department Name
-                        </th>
-                        <th class="px-6 py-3 border-b border-gray-200 text-left text-gray-600">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of employees; let i = index" class="hover:bg-gray-50">
-                        <td class="px-6 py-4 border-b border-gray-200 text-gray-700">{{ i + 1 +
-                            (paginationData.pageIndex - 1) *
-                            paginationData.pagedItemsCount }}</td>
-                        <td class="px-6 py-4 border-b border-gray-200 text-gray-700 font-medium">{{ item.name }}</td>
-                        <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
-                            <div *ngIf="item.role === 0">Employee</div>
-                            <div *ngIf="item.role === 1">Admin</div>
-                            <div *ngIf="item.role === 2">Super Admin</div>
-                        </td>
-                        <td class="px-6 py-4 border-b border-gray-200 text-gray-700">{{ item.email || 'N/A' }}</td>
-                        <td class="px-6 py-4 border-b border-gray-200 text-gray-700">{{ item.departmentName || 'none' }}
-                        </td>
-                        <td class="px-6 py-4 border-b border-gray-200 flex gap-2">
-                            <div *ngIf="!isAdding" class="flex gap-2">
-                                <button routerLink="/employee/view/{{ item.id }}"
-                                    class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700">
-                                    View
-                                </button>
-                                <button routerLink="/employee/edit/{{ item.id }}"
-                                    class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">
-                                    Edit
-                                </button>
-                                <button (click)="deleteEmployee(item.id)"
-                                    class="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700">
-                                    Delete
-                                </button>
-                            </div>
-                            <div *ngIf="isAdding" class="flex gap-2">
-                                <button *ngIf="!exsistInArray(item.id)"
-                                    (click)="addEmployeeInProject(item.name, item.id)"
-                                    class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700">
-                                    +
-                                </button>
-                                <button *ngIf="exsistInArray(item.id)" (click)="removeEmployeeInProject(item.id)"
-                                    class="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700">
-                                    -
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Paginator -->
-        <div class="flex justify-end pt-6">
-            <mat-paginator [length]="totalItems" [pageSize]="paginationData.pagedItemsCount"
-                [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page" (page)="onPageEvent($event)">
-            </mat-paginator>
-        </div>
+<div class="flex min-h-full">
+  <div *ngIf="!isAdding"><app-navbar></app-navbar></div>
+  <div class="px-8 py-6 bg-white shadow-md rounded-lg text-sm w-full">
+    <!-- Header Section -->
+    <div class="flex justify-between items-center pb-4">
+      <h1 class="text-2xl font-semibold text-gray-800">Employees List</h1>
+      <div *ngIf="!isAdding">
+        <button
+          routerLink="/employee/add"
+          class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Add Employee
+        </button>
+      </div>
+      <div mat-dialog-actions *ngIf="isAdding">
+        <button
+          (click)="saveProjectEmployees()"
+          class="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          Save
+        </button>
+      </div>
     </div>
+
+    <!-- Search Section -->
+    <div class="flex justify-center py-6 gap-4">
+      <input
+        type="text"
+        placeholder="Search employees..."
+        class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [(ngModel)]="paginationData.search"
+        (keyup.enter)="handleSearch()"
+      />
+      <button
+        class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+        (click)="handleSearch()"
+      >
+        Search
+      </button>
+    </div>
+
+    <!-- Employees Table -->
+    <div
+      class="overflow-x-auto bg-white border border-gray-300 rounded-md shadow-sm"
+    >
+      <table matSort (matSortChange)="sortData($event)" class="min-w-full">
+        <thead class="bg-gray-100 font-bold">
+          <tr>
+            <th
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Sno
+            </th>
+            <th
+              mat-sort-header="Name"
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Name
+            </th>
+            <th
+              mat-sort-header="Role"
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Role
+            </th>
+            <th
+              mat-sort-header="Email"
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Email
+            </th>
+            <th
+              mat-sort-header="DepartmentId"
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Department Name
+            </th>
+            <th
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of employees; let i = index"
+            class="hover:bg-gray-50"
+          >
+            <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+              {{
+                i +
+                  1 +
+                  (paginationData.pageIndex - 1) *
+                    paginationData.pagedItemsCount
+              }}
+            </td>
+            <td
+              class="px-6 py-4 border-b border-gray-200 text-gray-700 font-medium"
+            >
+              {{ item.name }}
+            </td>
+            <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+              <div *ngIf="item.role === 0">Employee</div>
+              <div *ngIf="item.role === 1">Admin</div>
+              <div *ngIf="item.role === 2">Super Admin</div>
+            </td>
+            <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+              {{ item.email || "N/A" }}
+            </td>
+            <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+              {{ item.departmentName || "none" }}
+            </td>
+            <td class="px-6 py-4 border-b border-gray-200 flex gap-2">
+              <div *ngIf="!isAdding" class="flex gap-2">
+                <button
+                  routerLink="/employee/view/{{ item.id }}"
+                  class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
+                >
+                  View
+                </button>
+                <button
+                  routerLink="/employee/edit/{{ item.id }}"
+                  class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                >
+                  Edit
+                </button>
+                <button
+                  (click)="deleteEmployee(item.id)"
+                  class="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+              <div *ngIf="isAdding" class="flex gap-2">
+                <button
+                  *ngIf="!exsistInArray(item.id)"
+                  (click)="addEmployeeInProject(item.name, item.id)"
+                  class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
+                >
+                  +
+                </button>
+                <button
+                  *ngIf="exsistInArray(item.id)"
+                  (click)="removeEmployeeInProject(item.id)"
+                  class="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700"
+                >
+                  -
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginator -->
+    <div class="flex justify-end pt-6">
+      <mat-paginator
+        [length]="totalItems"
+        [pageSize]="paginationData.pagedItemsCount"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page"
+        (page)="onPageEvent($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
 </div>
