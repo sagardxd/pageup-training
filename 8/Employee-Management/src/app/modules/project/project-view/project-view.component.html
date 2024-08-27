@@ -1,0 +1,251 @@
+<div
+  *ngIf="project"
+  class="w-full px-28 mx-auto p-8 bg-white shadow rounded-lg"
+>
+  <h1 class="text-3xl font-semibold text-gray-900 mb-6">{{ project.name }}</h1>
+
+  <div class="flex">
+    <!-- Main Project Details -->
+    <div *ngIf="project" class="w-full px-8 py-6 bg-white rounded-lg">
+      <div class="space-y-5">
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Description:</span>
+          <p class="ml-3 text-gray-600">{{ project.description }}</p>
+        </div>
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Status:</span>
+          <p class="ml-3 text-gray-600">{{ getStatusLabel(project.status) }}</p>
+        </div>
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Created By:</span>
+          <p class="ml-3 text-gray-600">{{ project.createdBy || "Null" }}</p>
+        </div>
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Created On:</span>
+          <p class="ml-3 text-gray-600">
+            {{ project.createdOn | date : "medium" }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Summary Card -->
+    <div class="w-[300px] p-6 bg-white rounded-lg mr-8">
+      <div class="space-y-4">
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Total Tasks:</span>
+          <p class="ml-3 text-gray-600">{{ project.totalTasks || 0 }}</p>
+        </div>
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Pending Tasks:</span>
+          <p class="ml-3 text-gray-600">{{ project.pendingTasks || 0 }}</p>
+        </div>
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Active Tasks:</span>
+          <p class="ml-3 text-gray-600">{{ project.activeTasks || 0 }}</p>
+        </div>
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Completed Tasks:</span>
+          <p class="ml-3 text-gray-600">
+            {{ project.completedTasks || 0 }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-10 mt-10">
+    <div class="flex justify-between items-center pb-5">
+      <div class="flex gap-3 items-center">
+        <h2 class="text-2xl font-semibold text-gray-800">Tasks</h2>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center">
+      <div class="flex gap-5 items-center justify-center">
+        <div class="flex flex-col">
+          <mat-form-field>
+            <mat-label>Task type</mat-label>
+            <mat-select multiple (selectionChange)="onTaskTypeChange($event)">
+              @for (type of taskTypeList; track type.id) {
+              <mat-option [value]="type.id"
+                >{{ type.name }}({{ type.countVal }})</mat-option
+              >
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+          <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select multiple (selectionChange)="onStatusChange($event)">
+              @for (status of statusList; track status.id) {
+              <mat-option [value]="status.id"
+                >{{ status.name }}({{ status.countVal }})</mat-option
+              >
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+          <mat-form-field>
+            <mat-label>Sprint</mat-label>
+            <mat-select (selectionChange)="onSprintChange($event)">
+              @for (item of sprints; track item) {
+              <div class="flex items-center p-2">
+                <i
+                  (click)="sprintById(item.id); $event.stopPropagation()"
+                  class="material-icons"
+                  >remove_red_eye</i
+                >
+                <mat-option [value]="item.id">{{ item.name }}</mat-option>
+              </div>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+          <mat-form-field>
+            <mat-label>Assign</mat-label>
+            <mat-select (selectionChange)="onAssignChange($event)">
+              @for (assign of assignList; track assign.value) {
+              <mat-option [value]="assign.value"
+                >{{ assign.name }}({{ assign.countVal }})</mat-option
+              >
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+          <mat-form-field>
+            <mat-label>Assigned To</mat-label>
+            <mat-select (selectionChange)="onAssignToChange($event)" multiple>
+              @for (assignedTo of project.members; track assignedTo.employeeId)
+              {
+              <mat-option [value]="assignedTo.employeeId">{{
+                assignedTo.employeeName
+              }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+              <input
+                matStartDate
+                formControlName="start"
+                placeholder="Start date"
+              />
+              <input matEndDate formControlName="end" placeholder="End date" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-3 justify-end pt-4">
+      <div>
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          (click)="createTask()"
+        >
+          Add Task
+        </button>
+      </div>
+      <div>
+        <button
+          class="bg-green-600 px-4 py-2 text-white rounded-md shadow hover:bg-green-700"
+          (click)="fetchTasks()"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="flex justify-center py-6 gap-4">
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [(ngModel)]="paginationData.search"
+        (keyup.enter)="handleSearch()"
+      />
+      <button
+        class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+        (click)="handleSearch()"
+      >
+        Search
+      </button>
+    </div>
+
+    <app-task-tree
+      [items]="epicList"
+      [projectId]="paramId"
+      [pageIndex]="paginationData.pageIndex"
+      [pageItemsCount]="paginationData.pagedItemsCount"
+      (taskUpdated)="handleTaskUpdated()"
+    ></app-task-tree>
+
+    <div>
+      <div class="flex justify-end pt-6">
+        <mat-paginator
+          [length]="totalItems"
+          [pageSize]="paginationData.pagedItemsCount"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          aria-label="Select page"
+          (page)="onPageEvent($event)"
+        >
+        </mat-paginator>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <div class="flex justify-between mb-5">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Members</h2>
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded-lg"
+          (click)="addEmployee()"
+        >
+          Add Employee
+        </button>
+      </div>
+
+      <div *ngIf="project.members.length === 0" class="text-gray-500 mt-10">
+        No members available
+      </div>
+      <ul class="space-y-3">
+        <li
+          *ngFor="let member of project.members"
+          class="bg-gray-50 p-4 rounded-lg flex justify-between border border-gray-200"
+        >
+          <p class="text-lg font-medium text-gray-700">
+            {{ member.employeeName }}
+          </p>
+          <button (click)="removeEmployee(member.employeeId)">Remove</button>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <button
+        (click)="updateEmployee()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-5"
+      >
+        Update
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!project" class="text-center text-gray-500">
+    <p>Loading project details...</p>
+  </div>
+</div>
+
+<p-toast />

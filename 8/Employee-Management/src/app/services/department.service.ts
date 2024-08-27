@@ -1,15 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { deleteDepartmentResponse, department, departments, paginatedBody, paginatedDepartmentData, postDepartmentResponse } from '../models/department';
+import {
+  deleteDepartmentResponse,
+  department,
+  departments,
+  paginatedBody,
+  paginatedDepartmentData,
+  postDepartmentResponse,
+} from '../models/department';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DepartmentService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   url = environment.apiURL;
 
@@ -17,9 +23,14 @@ export class DepartmentService {
     return this.http.get<departments>(`${this.url}/Department`);
   }
 
-  getPaginatedDepartment(paginatedData: paginatedBody): Observable<paginatedDepartmentData> {
+  getPaginatedDepartment(
+    paginatedData: paginatedBody
+  ): Observable<paginatedDepartmentData> {
     const body = paginatedData;
-    return this.http.post<paginatedDepartmentData>(`${this.url}/Paginated/departments`, body);
+    return this.http.post<paginatedDepartmentData>(
+      `${this.url}/Department/pagination`,
+      body
+    );
   }
 
   getDepartmentPaginated(): Observable<departments> {
@@ -31,10 +42,15 @@ export class DepartmentService {
 
   createDepartment(name: string): Observable<postDepartmentResponse> {
     const body = { name };
-    return this.http.post<postDepartmentResponse>(`${this.url}/Department`, body);
+    return this.http.post<postDepartmentResponse>(
+      `${this.url}/Department`,
+      body
+    );
   }
 
   deleteDepartment(id: number): Observable<deleteDepartmentResponse> {
-    return this.http.delete<deleteDepartmentResponse>(`${this.url}/Department/${id}`);
+    return this.http.delete<deleteDepartmentResponse>(
+      `${this.url}/Department/${id}`
+    );
   }
 }

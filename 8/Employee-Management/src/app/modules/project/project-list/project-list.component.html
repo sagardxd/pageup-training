@@ -1,0 +1,165 @@
+<div class="flex min-h-full">
+  <app-navbar></app-navbar>
+  <div class="container px-8 py-6 flex flex-col text-sm">
+    <!-- Header Section -->
+    <div class="flex justify-between items-center pb-4">
+      <h1 class="text-2xl font-semibold text-gray-800">Project List</h1>
+      <button
+        routerLink="/project/add"
+        class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
+      >
+        Add Project
+      </button>
+    </div>
+
+    <div class="flex justify-center gap-3">
+      <!-- Search Section -->
+      <div class="flex justify-center py-6 gap-4">
+        <input
+          type="text"
+          placeholder="Search projects..."
+          class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [(ngModel)]="paginationData.search"
+          (keyup.enter)="handleSearch()"
+        />
+        <button
+          class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+          (click)="handleSearch()"
+        >
+          Search
+        </button>
+      </div>
+
+      <div class="flex items-end">
+        <mat-form-field>
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input
+              matStartDate
+              formControlName="start"
+              placeholder="Start date"
+            />
+            <input matEndDate formControlName="end" placeholder="End date" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Projects Table -->
+    <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+      <table
+        matSort
+        (matSortChange)="sortData($event)"
+        class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm"
+      >
+        <thead
+          class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal"
+        >
+          <tr>
+            <th
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Sno.
+            </th>
+            <th
+              mat-sort-header="Name"
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Name
+            </th>
+
+            <th
+              mat-sort-header="Description"
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Description
+            </th>
+            <th
+              mat-sort-header="Status"
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Status
+            </th>
+            <th
+              class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-50">
+          <tr
+            *ngFor="let item of projects; let i = index"
+            class="hover:bg-gray-50"
+          >
+            <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+              {{
+                i +
+                  1 +
+                  (paginationData.pageIndex - 1) *
+                    paginationData.pagedItemsCount
+              }}
+            </td>
+            <td
+              class="px-6 py-4 border-b border-gray-200 text-gray-700 font-medium"
+            >
+              {{ item.name }}
+            </td>
+            <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+              {{ item.description }}
+            </td>
+            <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+              <ng-container *ngIf="item.status === 0">Pending</ng-container>
+              <ng-container *ngIf="item.status === 1">Active</ng-container>
+              <ng-container *ngIf="item.status === 2">Completed</ng-container>
+            </td>
+            <td class="px-6 py-4 border-b border-gray-200 flex gap-4">
+              <div routerLink="/project/view/{{ item.id }}">
+                <svg
+                  class="size-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 576 512"
+                >
+                  <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                  <path
+                    d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
+                  />
+                </svg>
+              </div>
+              <div (click)="handleDelete(item.id)">
+                <svg
+                  class="size-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                  <path
+                    d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
+                  />
+                </svg>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginator -->
+    <div class="flex justify-end pt-6">
+      <mat-paginator
+        [length]="totalItems"
+        [pageSize]="paginationData.pagedItemsCount"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page"
+        (page)="onPageEvent($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+<p-toast />

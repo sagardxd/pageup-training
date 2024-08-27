@@ -1,0 +1,284 @@
+<div
+  class="container mx-auto px-4 py-6 bg-white rounded-lg shadow-md max-w-lg h-[80vh] overflow-y-auto"
+>
+  <div>
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6">Add Task</h1>
+  </div>
+  <form [formGroup]="taskForm">
+    <div class="py-3 flex justify-between items-center">
+      <div>
+        <div class="flex">
+          <div *ngIf="!isEdit">Project:</div>
+          <span class="font-medium">{{ projectName }}</span>
+        </div>
+      </div>
+      <ng-container
+        *ngIf="!isEdit; else showTaskTypeLabel"
+        class="flex flex-col"
+      >
+        <div class="flex flex-col">
+          <label>Task type:</label>
+          <select
+            name="tasktype"
+            formControlName="taskType"
+            class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="0">Epic</option>
+            <option value="1">Feature</option>
+            <option value="2">Userstory</option>
+            <option value="3">Task</option>
+            <option value="4">Bug</option>
+          </select>
+          <!-- Validation message for taskType -->
+          <div
+            *ngIf="
+              taskForm.get('taskType')?.invalid &&
+              (taskForm.get('taskType')?.touched ||
+                taskForm.get('taskType')?.dirty)
+            "
+            class="text-red-500 mt-2"
+          >
+            Task Type is required.
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #showTaskTypeLabel>
+        <div *ngIf="taskForm.controls.taskType.value! < 3">
+          {{ getTaskTypeLabel(taskForm.get("taskType")?.value ?? null) }}
+        </div>
+        <div *ngIf="taskForm.controls.taskType.value! >= 3">
+          <select
+            name="tasktype"
+            formControlName="taskType"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="3">Task</option>
+            <option value="4">Bug</option>
+          </select>
+          <!-- Validation message for taskType -->
+          <div
+            *ngIf="
+              taskForm.get('taskType')?.invalid &&
+              (taskForm.get('taskType')?.touched ||
+                taskForm.get('taskType')?.dirty)
+            "
+            class="text-red-500 mt-2"
+          >
+            Task Type is required.
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Name Input -->
+    <div class="mb-4">
+      <label for="name" class="block text-gray-700 font-medium mb-2"
+        >Task Name</label
+      >
+      <input
+        id="name"
+        type="text"
+        placeholder="Enter task name"
+        formControlName="name"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <!-- Validation message for name -->
+      <div
+        *ngIf="
+          taskForm.get('name')?.invalid &&
+          (taskForm.get('name')?.touched || taskForm.get('name')?.dirty)
+        "
+        class="text-red-500 mt-2"
+      >
+        Task Name is required.
+      </div>
+    </div>
+
+    <!-- Description Input -->
+    <div class="mb-4">
+      <label for="description" class="block text-gray-700 font-medium mb-2"
+        >Description</label
+      >
+      <textarea
+        id="description"
+        placeholder="Enter task description"
+        formControlName="description"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        rows="4"
+      ></textarea>
+      <!-- Validation message for description -->
+      <div
+        *ngIf="
+          taskForm.get('description')?.invalid &&
+          (taskForm.get('description')?.touched ||
+            taskForm.get('description')?.dirty)
+        "
+        class="text-red-500 mt-2"
+      >
+        Description is required atleast 10 characters.
+      </div>
+    </div>
+
+    <!-- Assigned To Select -->
+    <div *ngIf="!isEdit" class="mb-4">
+      <label class="block text-gray-700 font-medium mb-4">Assign To</label>
+      <select
+        formControlName="assignedTo"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option *ngFor="let item of assignedTo" [value]="item.employeeId">
+          {{ item.employeeName }}
+        </option>
+      </select>
+      <!-- Validation message for assignedTo -->
+      <div
+        *ngIf="
+          taskForm.get('assignedTo')?.invalid &&
+          (taskForm.get('assignedTo')?.touched ||
+            taskForm.get('assignedTo')?.dirty)
+        "
+        class="text-red-500 mt-2"
+      >
+        Please select an employee to assign the task.
+      </div>
+    </div>
+
+    <div *ngIf="isEdit && project?.members?.length" class="mb-4">
+      <label class="block text-gray-700 font-medium mb-2">Assign To</label>
+      <select
+        formControlName="assignedTo"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option *ngFor="let item of project?.members" [value]="item.employeeId">
+          {{ item.employeeName }}
+        </option>
+      </select>
+      <!-- Validation message for assignedTo -->
+      <div
+        *ngIf="
+          taskForm.get('assignedTo')?.invalid &&
+          (taskForm.get('assignedTo')?.touched ||
+            taskForm.get('assignedTo')?.dirty)
+        "
+        class="text-red-500 mt-2"
+      >
+        Please select an employee to assign the task.
+      </div>
+    </div>
+
+    <!-- sprint-->
+    <label class="block text-gray-700 font-medium mb-2">Select Sprint</label>
+    <select
+      formControlName="sprintId"
+      class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <option *ngFor="let item of sprints" [ngValue]="item.id">
+        {{ item.name }}
+      </option>
+    </select>
+
+    <!-- Status Select -->
+    <div class="mb-4">
+      <label for="status" class="block text-gray-700 font-medium mb-2"
+        >Status</label
+      >
+
+      <select
+        id="status"
+        formControlName="status"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option [ngValue]="TaskStatus.Pending">Pending</option>
+        <option [ngValue]="TaskStatus.Active">In Progress</option>
+      </select>
+      <!-- Validation message for status -->
+      <div
+        *ngIf="
+          taskForm.get('status')?.invalid &&
+          (taskForm.get('status')?.touched || taskForm.get('status')?.dirty)
+        "
+        class="text-red-500 mt-2"
+      >
+        Status is required.
+      </div>
+    </div>
+
+    <!-- Task Estimated Hours - Show only if taskType is 3 or 4 -->
+    <div
+      *ngIf="
+        taskForm.controls.taskType.value == 3 ||
+        taskForm.controls.taskType.value == 4
+      "
+      class="mb-4"
+    >
+      <label
+        for="originalEstimateHours"
+        class="block text-gray-700 font-medium mb-2"
+      >
+        Task Estimated Hours
+      </label>
+      <input
+        id="originalEstimateHours"
+        type="number"
+        placeholder="Enter hours"
+        formControlName="originalEstimateHours"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <div
+      *ngIf="
+        isEdit &&
+        (taskForm.controls.taskType.value === 3 ||
+          taskForm.controls.taskType.value === 4)
+      "
+      class="mb-4"
+    >
+      <label
+        for="=remainingEstimatedHours."
+        class="block text-gray-700 font-medium mb-2"
+        >Remaning Estimated Hours</label
+      >
+      <input
+        type="number"
+        placeholder="Enter hours"
+        formControlName="remainingEstimatedHours"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <div *ngIf="!isEdit" class="text-center mt-4">
+      <button
+        (click)="addTask()"
+        [ngClass]="{
+          'bg-green-500 hover:bg-green-600': !(
+            taskForm.pristine || taskForm.invalid
+          ),
+          'bg-gray-400 cursor-not-allowed':
+            taskForm.pristine || taskForm.invalid
+        }"
+        class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Save Task
+      </button>
+    </div>
+    <div *ngIf="isEdit" class="text-center mt-4">
+      <button
+        (click)="updateTask()"
+        [disabled]="taskForm.pristine"
+        [ngClass]="{
+          'bg-blue-500 hover:bg-blue-600': !(
+            taskForm.pristine || taskForm.invalid
+          ),
+          'bg-gray-400 cursor-not-allowed':
+            taskForm.pristine || taskForm.invalid
+        }"
+        class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Update Task
+      </button>
+    </div>
+  </form>
+</div>
+<p-toast />

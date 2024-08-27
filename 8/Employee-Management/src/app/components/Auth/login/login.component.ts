@@ -7,29 +7,32 @@ import { AuthInterceptorService } from '../../../services/auth-interceptor.servi
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   public username: string = '';
   public password: string = '';
 
-  constructor(private router: Router, private loginService: LoginService,
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
     private authInterceptorService: AuthInterceptorService
-  ) { }
+  ) {}
 
   onSubmit(): void {
     if (this.username && this.password) {
-      this.loginService.login({ username: this.username, password: this.password }).subscribe((res: LoginResponse) => {
-        if (res) {
-          localStorage.setItem('token', res.data.token);
-          this.router.navigate(['/department']);
-          this.username = '';
-          this.password = '';
-        } else {
-          alert('Invalid username or password');
-        }
-      });
-
+      this.loginService
+        .login({ username: this.username, password: this.password })
+        .subscribe((res: LoginResponse) => {
+          if (res) {
+            localStorage.setItem('token', res.data.token);
+            this.router.navigate(['/department']);
+            this.username = '';
+            this.password = '';
+          } else {
+            alert('Invalid username or password');
+          }
+        });
     } else {
       alert('Invalid username or password');
     }
