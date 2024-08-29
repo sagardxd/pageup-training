@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { paginatedBody } from '../models/department';
 import {
+  EmployeesProject,
   paginatedProjectData,
   projectByIdResponse,
   projectDeleteResponse,
@@ -49,6 +50,12 @@ export class ProjectService {
     return this.http.put<projectRequestResponse>(
       `${this.url}/Project/${id}`,
       body
+    );
+  }
+
+  public getProjectOfEmployee(id: number): Observable<EmployeesProject> {
+    return this.http.get<EmployeesProject>(
+      `${this.url}/Project/employee/${id}`
     );
   }
 }

@@ -11,6 +11,7 @@ import { DeletedialogService } from '../../../services/deletedialog.service';
 import { PageEvent } from '@angular/material/paginator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { RequestHandlerService } from '../../../services/request-handler.service';
 
 @Component({
   selector: 'app-department-list',
@@ -36,7 +37,8 @@ export class DepartmentListComponent implements OnInit {
     private departmentService: DepartmentService,
     private dialog: MatDialog,
     private deleteDialogService: DeletedialogService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private requestHandler: RequestHandlerService
   ) {
     this.range = new FormGroup({
       start: new FormControl(null, [Validators.required]),

@@ -15,9 +15,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { RouterModule } from '@angular/router';
+import { LoaderComponent } from './loader/loader.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [NavbarComponent, CardComponent, DeleteDialogComponent],
+  declarations: [
+    NavbarComponent,
+    CardComponent,
+    DeleteDialogComponent,
+    LoaderComponent,
+  ],
   imports: [
     CommonModule,
     MatIconModule,
@@ -33,7 +40,13 @@ import { RouterModule } from '@angular/router';
     MatDatepickerModule,
     MatNativeDateModule,
     RouterModule,
+    MatProgressSpinnerModule,
   ],
-  exports: [NavbarComponent, CardComponent, DeleteDialogComponent],
+  exports: [
+    NavbarComponent,
+    CardComponent,
+    DeleteDialogComponent,
+    LoaderComponent,
+  ],
 })
 export class SharedModule {}

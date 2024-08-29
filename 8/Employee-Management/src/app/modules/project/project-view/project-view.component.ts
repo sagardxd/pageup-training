@@ -14,7 +14,12 @@ import { WorkItem } from '../../task/task-tree/task-tree.component';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SprintService } from '../../../services/sprint.service';
-import { Sprint, sprintGetBody } from '../../../models/sprint';
+import {
+  Sprint,
+  sprintByIdResponse,
+  sprintGetBody,
+  sprintPostBody,
+} from '../../../models/sprint';
 import { MatSelectChange } from '@angular/material/select';
 import {
   FormBuilder,
@@ -24,6 +29,7 @@ import {
 } from '@angular/forms';
 import { TaskCount, TaskPaginationBodyTask } from '../../../models/task';
 import { MessageService } from 'primeng/api';
+import { DeletedialogService } from '../../../services/deletedialog.service';
 
 @Component({
   selector: 'app-project-view',
@@ -35,6 +41,7 @@ export class ProjectViewComponent implements OnInit {
   public sprints: Sprint[] = [];
   public project: projectByIdData | null = null;
   public epicList: WorkItem[] = [];
+  public hasChanged: boolean = false;
   public paginationData: TaskPaginationBodyTask = {
     pageIndex: 1,
     pagedItemsCount: 10,
@@ -48,6 +55,7 @@ export class ProjectViewComponent implements OnInit {
     assignedTo: null,
     sprintId: null,
   };
+  public updating = false;
   public taskCount: TaskCount | null = null;
   public totalItems = 0;
   public taskTypeList: { id: number; name: string; countVal: number }[] = [
@@ -67,6 +75,7 @@ export class ProjectViewComponent implements OnInit {
     { value: true, name: 'Assigned', countVal: 0 },
   ];
   public range: FormGroup;
+  private sprintId = 0;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -76,7 +85,8 @@ export class ProjectViewComponent implements OnInit {
     private sprintService: SprintService,
     private router: Router,
     private fb: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private deleteDialogService: DeletedialogService
   ) {
     this.range = this.fb.group({
       start: [null, Validators.required],
@@ -93,6 +103,31 @@ export class ProjectViewComponent implements OnInit {
     });
     this.getTaskCount();
   }
+
+  public addSprint() {
+    const data: sprintPostBody = {
+      name: this.sprintForm.controls.name.value ?? null,
+      startDate: this.sprintForm.controls.startDate.value ?? null,
+      endDate: this.sprintForm.controls.endDate.value ?? null,
+      projectId: Number(this.paramId),
+    };
+
+    this.sprintService.createSprint(data, 0).subscribe((response) => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Added',
+        detail: 'Added Sprint Successfully',
+      });
+      this.sprintForm.reset();
+      this.ngOnInit();
+    });
+  }
+
+  public sprintForm = new FormGroup({
+    name: new FormControl<string | null>('', [Validators.required]),
+    startDate: new FormControl<Date | null>(null, [Validators.required]),
+    endDate: new FormControl<Date | null>(null, [Validators.required]),
+  });
 
   private getTaskCount(): void {
     this.taskService.getTaskCount().subscribe((response: TaskCount) => {
@@ -147,7 +182,7 @@ export class ProjectViewComponent implements OnInit {
 
   private getTasks(): void {
     this.taskService
-      .getEpicTasks(this.paramId, this.paginationData)
+      .getEpicTasks(Number(this.paramId), this.paginationData)
       .subscribe((response) => {
         if (response.success) {
           this.epicList = response.data.data;
@@ -205,6 +240,7 @@ export class ProjectViewComponent implements OnInit {
       summary: 'Removed',
       detail: 'Removed Employee Successfully',
     });
+    this.hasChanged = true;
   }
 
   public addEmployee(): void {
@@ -234,6 +270,7 @@ export class ProjectViewComponent implements OnInit {
           summary: 'Added',
           detail: 'Added Employees Successfully',
         });
+        this.hasChanged = true;
       }
     });
   }
@@ -278,7 +315,7 @@ export class ProjectViewComponent implements OnInit {
             summary: 'Updated',
             detail: 'Updated Employee Successfully',
           });
-
+          this.hasChanged = false;
           this.getProjectData();
         }
       });
@@ -344,5 +381,65 @@ export class ProjectViewComponent implements OnInit {
       assignedTo: null,
       sprintId: null,
     };
+  }
+
+  public updateSprint(id: number): void {
+    this.sprintService
+      .getSprintById(id)
+      .subscribe((res: sprintByIdResponse) => {
+        this.sprintForm.setValue({
+          name: res.data.name,
+          startDate: res.data.startDate,
+          endDate: res.data.endDate,
+        });
+        console.log(res.data);
+        this.sprintId = res.data.id;
+        console.log(this.sprintId);
+      });
+
+    this.updating = true;
+  }
+
+  public updateSprintData() {
+    console.log(this.sprintId);
+    const data: sprintPostBody = {
+      name: this.sprintForm.controls.name.value ?? null,
+      startDate: this.sprintForm.controls.startDate.value ?? null,
+      endDate: this.sprintForm.controls.endDate.value ?? null,
+      projectId: Number(this.paramId),
+    };
+
+    this.sprintService
+      .createSprint(data, this.sprintId)
+      .subscribe((response) => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'updated',
+          detail: 'Updated Sprint Successfully',
+        });
+        this.sprintForm.reset();
+        this.getSprints();
+      });
+  }
+
+  public deleteSprint(id: number): void {
+    this.deleteDialogService
+      .openDialog()
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.sprintService.deleteSprint(id).subscribe((res) => {
+            if (res) {
+              this.getSprints();
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Deleted',
+                detail: 'Deleted Sprint Successfully',
+              });
+            }
+          });
+        }
+      });
+    //
   }
 }

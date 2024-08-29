@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import {
   paginatedTaskData,
   TaskByIdResponse,
+  TaskByProjectIdAndTasktypeResponse,
   TaskCount,
   TaskLogResponse,
   TaskPaginationBodyTask,
@@ -13,6 +14,7 @@ import {
   TaskPostBody,
   TaskPostResponse,
   TaskReviewResponse,
+  TaskType,
   TasUpdatetBody,
 } from '../models/task';
 
@@ -32,7 +34,7 @@ export class TaskService {
   }
 
   public getEpicTasks(
-    id: string,
+    id: number,
     paginatedData: TaskPaginationBodyTask
   ): Observable<TaskPaginationResponse> {
     return this.http.post<TaskPaginationResponse>(
@@ -83,5 +85,32 @@ export class TaskService {
 
   public getTaskCount(): Observable<TaskCount> {
     return this.http.get<TaskCount>(`${this.url}/Tasks/Count`);
+  }
+
+  public getTaskByProjectIdAndTasktype(
+    projectId: number,
+    taskType: TaskType
+  ): Observable<TaskByProjectIdAndTasktypeResponse> {
+    return this.http.get<TaskByProjectIdAndTasktypeResponse>(
+      `${this.url}/Tasks/${projectId}/type=${taskType}`
+    );
+  }
+
+  public changeParentId(taskId: number, changeParentId: number) {
+    const patchData = [
+      {
+        op: 'replace',
+        path: `/parentId`,
+        value: changeParentId,
+      },
+    ];
+    return this.http.patch(`${this.url}/Tasks/${taskId}`, patchData, {
+      headers: { 'Content-Type': 'application/json-patch+json' },
+    });
+  }
+
+  public editTaskReview(content: string, taskReviewId: number) {
+    const body = { content };
+    return this.http.put(`${this.url}/TaskReview/${taskReviewId}`, body);
   }
 }

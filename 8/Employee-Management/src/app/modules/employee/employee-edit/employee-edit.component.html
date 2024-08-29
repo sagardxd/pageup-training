@@ -282,14 +282,16 @@
     <button
       *ngIf="!isEdit"
       (click)="addEmployee()"
-      class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+      [disabled]="EmployeeForm.invalid"
+      class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
     >
       Save
     </button>
     <button
       *ngIf="isEdit"
       (click)="updateEmployee()"
-      class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      [disabled]="EmployeeForm.pristine"
+      class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
     >
       Update
     </button>

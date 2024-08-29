@@ -17,9 +17,16 @@ import { TaskEditComponent } from './task-edit/task-edit.component';
 import { SharedModule } from '../shared/shared.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SprintTasksComponent } from './sprint-tasks/sprint-tasks.component';
+import { RouterModule } from '@angular/router';
+import { TaskListComponent } from './task-list/task-list.component';
 
 @NgModule({
-  declarations: [TaskViewComponent, TaskEditComponent, SprintTasksComponent],
+  declarations: [
+    TaskViewComponent,
+    TaskEditComponent,
+    SprintTasksComponent,
+    TaskListComponent,
+  ],
   imports: [
     CommonModule,
     TaskRoutingModule,
@@ -37,6 +44,7 @@ import { SprintTasksComponent } from './sprint-tasks/sprint-tasks.component';
     MatButtonModule,
     DragDropModule,
     MatIconModule,
+    RouterModule,
   ],
   exports: [],
 })

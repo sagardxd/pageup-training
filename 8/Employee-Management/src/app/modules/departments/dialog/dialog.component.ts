@@ -5,6 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MessageService } from 'primeng/api';
+import { RequestHandlerService } from '../../../services/request-handler.service';
 
 @Component({
   selector: 'app-dialog',
@@ -18,12 +19,14 @@ export class DialogComponent {
     private departmentService: DepartmentService,
     private dialogRef: MatDialogRef<DialogComponent>,
     private messageService: MessageService,
-    private snackBar: MatSnackBar
+    private requestHandler: RequestHandlerService
   ) {}
 
   public name = new FormControl('', [Validators.required]);
 
   addDepartment(): void {
+    this.requestHandler.startRequest();
+
     if (this.name.valid) {
       if (this.name.value) {
         this.requesting = false;
@@ -36,6 +39,7 @@ export class DialogComponent {
                 summary: 'Success',
                 detail: 'Added Department',
               });
+              this.requestHandler.stopRequest();
               this.dialogRef.close(true);
             }
           },

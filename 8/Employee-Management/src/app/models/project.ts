@@ -27,6 +27,13 @@ export interface paginatedProjectData {
   data: paginatedData;
 }
 
+export interface EmployeesProject {
+  success: boolean;
+  status: number;
+  message: string;
+  data: project[];
+}
+
 interface paginatedData {
   data: project[];
   totalPages: number;

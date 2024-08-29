@@ -36,7 +36,7 @@ export interface TaskPostBody {
   assignedTo: number;
   sprintId: number;
   taskType: TaskType;
-  parentId: number;
+  parentId: number | null;
   projectId: number;
   status: TaskStatus;
   originalEstimateHours: number | null;
@@ -122,6 +122,7 @@ export interface TaskReview {
   reviewedBy: string;
   reviewerAvatarUrl: string;
   createdOn: Date;
+  employeeId: number;
 }
 
 export interface TaskReviewResponse {
@@ -207,4 +208,17 @@ export interface TaskCount {
     assigned: number;
     unAssigned: number;
   };
+}
+
+export interface TaskByProjectIdAndTasktypeResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  data: parentTaskList[];
+}
+
+export interface parentTaskList {
+  id: number;
+  name: string;
+  taskType: TaskType;
 }

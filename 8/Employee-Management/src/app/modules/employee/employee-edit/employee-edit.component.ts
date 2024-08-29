@@ -1,11 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DepartmentService } from '../../../services/department.service';
-import {
-  departmentData,
-  departments,
-  department,
-} from '../../../models/department';
+import { departmentData, departments } from '../../../models/department';
 import {
   Employee,
   EmployeeById,
@@ -14,9 +10,8 @@ import {
 } from '../../../models/emloyee';
 import { EmployeeService } from '../../../services/employee.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { last } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MessageService } from 'primeng/api';
+import { RequestHandlerService } from '../../../services/request-handler.service';
 
 @Component({
   selector: 'app-employee-edit',
@@ -57,7 +52,8 @@ export class EmployeeEditComponent implements OnInit {
     private employeeService: EmployeeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private requestHandler: RequestHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -168,18 +164,29 @@ export class EmployeeEditComponent implements OnInit {
         role: Number(this.EmployeeForm.value.role),
       };
 
-      this.employeeService.addEmployee(body).subscribe((response) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Added Employee Successfully',
-        });
-        this.EmployeeForm.reset();
+      this.employeeService.addEmployee(body).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Added Employee Successfully',
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Error:', error);
+        },
+        complete: () => {
+          this.requestHandler.stopRequest();
+          this.EmployeeForm.reset();
+        },
       });
     }
   }
 
   public updateEmployee(): void {
+    this.requestHandler.startRequest();
     if (
       (this.EmployeeForm.value.name &&
         this.EmployeeForm.value.salary &&
@@ -201,13 +208,22 @@ export class EmployeeEditComponent implements OnInit {
 
       this.employeeService
         .updateEmployee(body, Number(this.paramId))
-        .subscribe((response) => {
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Updated',
-            detail: 'Updated Employee Successfully',
-          });
-          this.router.navigate(['/employee']);
+        .subscribe({
+          next: (response) => {
+            this.messageService.add({
+              severity: 'info',
+              summary: 'Updated',
+              detail: 'Updated Employee Successfully',
+            });
+            this.router.navigate(['/employee']);
+          },
+          error: (error) => {
+            console.error('Error:', error);
+          },
+          complete: () => {
+            this.requestHandler.stopRequest();
+            this.EmployeeForm.reset();
+          },
         });
     }
   }

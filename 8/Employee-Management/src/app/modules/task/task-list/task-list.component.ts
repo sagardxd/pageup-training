@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { paginatedBody } from '../../../models/department';
 import { PageEvent } from '@angular/material/paginator';
 import { TaskService } from '../../../services/task.service';
-import { paginatedTaskData, Tasks } from '../../../models/task';
-import { Task } from '../../../models/project';
+import {
+  TaskPaginationBodyTask,
+  taskpaginationData,
+  TaskPaginationResponse,
+} from '../../../models/task';
 import { DeletedialogService } from '../../../services/deletedialog.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-list',
@@ -12,15 +15,22 @@ import { DeletedialogService } from '../../../services/deletedialog.service';
   styleUrl: './task-list.component.scss',
 })
 export class TaskListComponent implements OnInit {
-  public tasks: Tasks[] = [];
+  public tasks: taskpaginationData[] = [];
+  public projectId: number = 0;
+  public dialogref: any = null;
 
-  public paginationData: paginatedBody = {
+  public paginationData: TaskPaginationBodyTask = {
     pageIndex: 1,
     pagedItemsCount: 10,
     orderKey: '',
     sortedOrder: 0,
     search: '',
     dateRange: null,
+    types: null,
+    status: null,
+    assign: null,
+    assignedTo: null,
+    sprintId: null,
   };
 
   public totalPages = 0;
@@ -28,7 +38,8 @@ export class TaskListComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private deletedialogService: DeletedialogService
+    private deletedialogService: DeletedialogService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,11 +48,13 @@ export class TaskListComponent implements OnInit {
 
   private getPaginatedTaskList() {
     this.taskService
-      .getPaginatedTasks(this.paginationData)
-      .subscribe((response: paginatedTaskData) => {
-        this.tasks = response.data.data;
-        this.totalPages = response.data.totalPages;
-        this.totalItems = response.data.totalItems;
+      .getEpicTasks(this.projectId, this.paginationData)
+      .subscribe((response: TaskPaginationResponse) => {
+        if (response.success) {
+          this.tasks = response.data.data;
+          this.totalItems = response.data.totalItems;
+          this.totalPages = response.data.totalPages;
+        }
       });
   }
 
@@ -81,5 +94,10 @@ export class TaskListComponent implements OnInit {
           });
         }
       });
+  }
+
+  public redirectToTask(id: number) {
+    this.dialogref.close();
+    this.router.navigate(['/task/view', id]);
   }
 }

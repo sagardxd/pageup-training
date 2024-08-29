@@ -9,9 +9,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
-import { MessageService, SharedModule } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 import { LoginComponent } from './components/Auth/login/login.component';
+import { LoaderService } from './services/loader.service';
+import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -28,6 +30,7 @@ import { LoginComponent } from './components/Auth/login/login.component';
   ],
   providers: [
     provideAnimationsAsync(),
+    LoaderService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

@@ -114,23 +114,19 @@ export class TaskEditComponent implements OnInit {
   }
 
   public addTask(): void {
-    if (
-      this.taskForm.value.name &&
-      this.taskForm.value.description &&
-      this.taskForm.value.originalEstimateHours
-    ) {
+    if (this.taskForm.value.name && this.taskForm.value.description) {
       const TaskData = {
         name: this.taskForm.value.name,
         description: this.taskForm.value.description,
         assignedTo: Number(this.taskForm.value.assignedTo),
         sprintId: Number(this.taskForm.value.sprintId),
-        taskType: Number(this.taskForm.value.taskType!),
-        parentId: this.taskForm.value.parentId! || 0,
+        taskType: Number(this.taskForm.value.taskType),
+        parentId: this.taskForm.value.parentId! || null,
         projectId: Number(this.projectId || this.paramId),
         status: this.taskForm.value.status!,
-        originalEstimateHours: this.taskForm.value.originalEstimateHours,
+        originalEstimateHours: this.taskForm.value.originalEstimateHours || 0,
       };
-
+      console.log('hi');
       try {
         this.taskService.postTask(TaskData).subscribe((response) => {
           if (response) {

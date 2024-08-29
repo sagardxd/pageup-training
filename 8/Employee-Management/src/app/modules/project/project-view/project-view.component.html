@@ -54,6 +54,126 @@
     </div>
   </div>
 
+  <!-- Sprint Section -->
+  <div class="flex gap-10 p-6">
+    <!-- Sprint Form Section -->
+    <div class="mt-10 p-5 flex flex-col gap-2" [formGroup]="sprintForm">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Add Sprint</h2>
+      <div class="flex flex-col space-y-4 max-w-72">
+        <label class="text-lg font-medium text-gray-700">Sprint Name</label>
+        <input
+          class="p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter sprint name"
+          formControlName="name"
+        />
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input
+              matStartDate
+              formControlName="startDate"
+              placeholder="Start date"
+            />
+            <input
+              matEndDate
+              formControlName="endDate"
+              placeholder="End date"
+            />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+        </mat-form-field>
+      </div>
+      <div *ngIf="!updating">
+        <button
+          [disabled]="sprintForm.invalid"
+          [ngClass]="{
+            'bg-blue-500 hover:bg-blue-600 cursor-pointer': sprintForm.valid,
+            'bg-gray-300 cursor-not-allowed': sprintForm.invalid
+          }"
+          class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          (click)="addSprint()"
+        >
+          Add
+        </button>
+      </div>
+      <div *ngIf="updating">
+        <button
+          [disabled]="sprintForm.invalid"
+          [ngClass]="{
+            'bg-blue-500 hover:bg-blue-600 cursor-pointer': sprintForm.valid,
+            'bg-gray-300 cursor-not-allowed':
+              sprintForm.pristine || sprintForm.invalid
+          }"
+          class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          (click)="updateSprintData()"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+
+    <!-- Sprints Table Section -->
+    <div
+      class="flex-1 mt-10 p-6 bg-white border border-gray-200 rounded-lg shadow-lg"
+    >
+      <h1 class="text-2xl font-bold mb-4">Sprints</h1>
+      <div class="overflow-x-auto">
+        <table
+          class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md"
+        >
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="py-3 px-4 text-left text-gray-600 font-semibold">
+                ID
+              </th>
+              <th class="py-3 px-4 text-left text-gray-600 font-semibold">
+                Name
+              </th>
+              <th class="py-3 px-4 text-left text-gray-600 font-semibold">
+                Start Date
+              </th>
+              <th class="py-3 px-4 text-left text-gray-600 font-semibold">
+                End Date
+              </th>
+              <th class="py-3 px-4 text-left text-gray-600 font-semibold">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sprint of sprints" class="border-t">
+              <td class="py-3 px-4">{{ sprint.id }}</td>
+              <td class="py-3 px-4">{{ sprint.name }}</td>
+              <td class="py-3 px-4">
+                {{ sprint.startDate | date : "mediumDate" }}
+              </td>
+              <td class="py-3 px-4">
+                {{ sprint.endDate | date : "mediumDate" }}
+              </td>
+              <td class="py-3 px-4 flex space-x-2">
+                <button [routerLink]="['/task/sprint', sprint.id]">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button (click)="updateSprint(sprint.id)">
+                  <mat-icon>update</mat-icon>
+                </button>
+                <button (click)="deleteSprint(sprint.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <div class="mb-10 mt-10">
     <div class="flex justify-between items-center pb-5">
       <div class="flex gap-3 items-center">
@@ -93,11 +213,6 @@
             <mat-select (selectionChange)="onSprintChange($event)">
               @for (item of sprints; track item) {
               <div class="flex items-center p-2">
-                <i
-                  (click)="sprintById(item.id); $event.stopPropagation()"
-                  class="material-icons"
-                  >remove_red_eye</i
-                >
                 <mat-option [value]="item.id">{{ item.name }}</mat-option>
               </div>
               }
@@ -236,7 +351,9 @@
     <div>
       <button
         (click)="updateEmployee()"
+        [disabled]="!hasChanged"
         class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-5"
+        [ngClass]="{ 'opacity-50 cursor-not-allowed': !hasChanged }"
       >
         Update
       </button>

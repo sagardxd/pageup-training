@@ -34,12 +34,12 @@
           >
             Task Name
           </th>
-          <th mat-sort-header="Description" class="py-3 px-6 text-left">
+          <!-- <th mat-sort-header="Description" class="py-3 px-6 text-left">
             Description
           </th>
           <th mat-sort-header="Assigner" class="py-3 px-6 text-left">
             Assigner
-          </th>
+          </th> -->
           <th mat-sort-header="Assignee" class="py-3 px-6 text-left">
             Assignee
           </th>
@@ -57,18 +57,19 @@
           <td class="py-3 px-6 text-left">
             <span class="font-medium">{{ task.name }}</span>
           </td>
-          <td class="py-3 px-6 text-left">{{ task.description }}</td>
-          <td class="py-3 px-6 text-left">{{ task.assignerName }}</td>
+          <!-- <td class="py-3 px-6 text-left">{{ task. }}</td>
+          <td class="py-3 px-6 text-left">{{ task.assignerName }}</td> -->
           <td class="py-3 px-6 text-left">{{ task.assigneeName }}</td>
           <td class="py-3 px-6 text-center">
             <div class="flex item-center justify-center space-x-2">
               <button
                 class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                (click)="redirectToTask(task.id)"
                 routerLink="/task/view/{{ task.id }}"
               >
                 View
               </button>
-              <button
+              <!-- <button
                 class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
                 routerLink="/task-edit/{{ task.id }}"
               >
@@ -79,7 +80,7 @@
                 (click)="deleteTask(task.id)"
               >
                 Delete
-              </button>
+              </button> -->
             </div>
           </td>
         </tr>

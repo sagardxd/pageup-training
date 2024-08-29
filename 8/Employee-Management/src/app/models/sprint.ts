@@ -32,3 +32,17 @@ export interface sprintTasks {
   assigneeName: string;
   createdOn: Date;
 }
+
+export interface sprintPostBody {
+  name: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
+  projectId: number;
+}
+
+export interface sprintByIdResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  data: Sprint;
+}

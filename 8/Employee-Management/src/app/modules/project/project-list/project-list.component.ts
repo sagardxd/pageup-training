@@ -30,7 +30,8 @@ export class ProjectListComponent implements OnInit {
   public totalItems = 0;
   private paramId = '';
   public isEdit = false;
-  range: FormGroup;
+  public range: FormGroup;
+  public role: number | null = null;
 
   constructor(
     private projectService: ProjectService,
@@ -47,10 +48,15 @@ export class ProjectListComponent implements OnInit {
   ngOnInit(): void {
     this.getPaginatedProjectData();
     this.getParamId();
+    this.getRole();
     // Subscribe to value changes on the form group
     this.range.valueChanges.subscribe((value) => {
       this.updateDateRange(value);
     });
+  }
+
+  private getRole(): void {
+    this.role = Number(localStorage.getItem('role')) || null;
   }
 
   private updateDateRange(value: any) {

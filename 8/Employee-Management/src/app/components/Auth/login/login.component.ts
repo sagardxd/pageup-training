@@ -13,20 +13,32 @@ export class LoginComponent {
   public username: string = '';
   public password: string = '';
 
-  constructor(
-    private router: Router,
-    private loginService: LoginService,
-    private authInterceptorService: AuthInterceptorService
-  ) {}
+  constructor(private router: Router, private loginService: LoginService) {}
 
   onSubmit(): void {
     if (this.username && this.password) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      localStorage.removeItem('isManager');
+      localStorage.removeItem('id');
       this.loginService
         .login({ username: this.username, password: this.password })
         .subscribe((res: LoginResponse) => {
           if (res) {
             localStorage.setItem('token', res.data.token);
-            this.router.navigate(['/department']);
+            localStorage.setItem('role', String(res.data.employee.role));
+            localStorage.setItem('id', String(res.data.employee.id));
+
+            localStorage.setItem(
+              'isManager',
+              String(res.data.employee.isManager)
+            );
+
+            if (res.data.employee.role === 0) {
+              this.router.navigate(['/project']);
+            } else {
+              this.router.navigate(['/department']);
+            }
             this.username = '';
             this.password = '';
           } else {
