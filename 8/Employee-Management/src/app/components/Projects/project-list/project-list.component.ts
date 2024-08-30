@@ -11,18 +11,17 @@ import { DeletedialogService } from '../../../services/deletedialog.service';
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
-  styleUrl: './project-list.component.scss'
+  styleUrl: './project-list.component.scss',
 })
 export class ProjectListComponent implements OnInit {
-
   public projects: project[] = [];
   public paginationData: paginatedBody = {
     pageIndex: 1,
     pagedItemsCount: 10,
-    orderKey: "",
+    orderKey: '',
     sortedOrder: 0,
-    search: ""
-  }
+    search: '',
+  };
 
   public totalPages = 0;
   public totalItems = 0;
@@ -30,10 +29,11 @@ export class ProjectListComponent implements OnInit {
   private paramId = '';
   public isEdit = false;
 
-  constructor(private projectService: ProjectService,
+  constructor(
+    private projectService: ProjectService,
     private activatedRoute: ActivatedRoute,
     private deletedialogService: DeletedialogService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getPaginatedProjectData();
@@ -41,29 +41,29 @@ export class ProjectListComponent implements OnInit {
   }
 
   private getParamId(): void {
-    this.activatedRoute.paramMap.subscribe(paramMap => {
-      this.paramId = (paramMap.get('id')) ?? '';
+    this.activatedRoute.paramMap.subscribe((paramMap) => {
+      this.paramId = paramMap.get('id') ?? '';
       if (this.paramId) {
         this.isEdit = true;
         this.getProjectData();
       }
-
     });
   }
 
   private getPaginatedProjectData() {
-    this.projectService.getPaginatedProjects(this.paginationData).subscribe((response: paginatedProjectData) => {
-      this.projects = response.data.data;
-      this.totalPages = response.data.totalPages;
-      this.totalItems = response.data.totalItems;
-    });
+    this.projectService
+      .getPaginatedProjects(this.paginationData)
+      .subscribe((response: paginatedProjectData) => {
+        this.projects = response.data.data;
+        this.totalPages = response.data.totalPages;
+        this.totalItems = response.data.totalItems;
+      });
   }
 
   private getProjectData(): void {
-    this.projectService.getProjectById(Number(this.paramId)).subscribe((response) => {
-
-    });
-
+    this.projectService
+      .getProjectById(Number(this.paramId))
+      .subscribe((response) => {});
   }
 
   public onPageEvent(event: PageEvent): void {
@@ -71,7 +71,6 @@ export class ProjectListComponent implements OnInit {
     this.paginationData.pagedItemsCount = event.pageSize;
     this.getPaginatedProjectData();
   }
-
 
   public handleSearch(): void {
     this.getPaginatedProjectData();
@@ -84,24 +83,24 @@ export class ProjectListComponent implements OnInit {
 
     if (event.direction === 'asc') {
       this.paginationData.sortedOrder = 1;
-    }
-    else if (event.direction === 'desc') {
+    } else if (event.direction === 'desc') {
       this.paginationData.sortedOrder = 0;
-    }
-    else {
+    } else {
       this.paginationData.sortedOrder = 2;
     }
     this.getPaginatedProjectData();
   }
 
   public handleDelete(id: number): void {
-    this.deletedialogService.openDialog().afterClosed().subscribe(result => {
-      if (result) {
-        this.projectService.deleteProject(id).subscribe(() => {
-          this.getPaginatedProjectData();
-        });
-      }
-    });
+    this.deletedialogService
+      .openDialog()
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.projectService.deleteProject(id).subscribe(() => {
+            this.getPaginatedProjectData();
+          });
+        }
+      });
   }
-
 }
