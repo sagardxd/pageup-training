@@ -1,14 +1,22 @@
 <div
   class="container mx-auto px-4 py-6 bg-white rounded-lg shadow-md max-w-lg h-[80vh] overflow-y-auto"
 >
-  <div>
+  <div class="flex justify-between items-center">
     <h1 class="text-3xl font-semibold text-gray-800 mb-6">Add Task</h1>
+    <button
+      class="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+      (click)="closeDialog()"
+    >
+      Close
+    </button>
   </div>
   <form [formGroup]="taskForm">
     <div class="py-3 flex justify-between items-center">
       <div>
         <div class="flex">
           <div *ngIf="!isEdit">Project:</div>
+          <!-- <div *ngIf="isEdit">Parent Task:</div> -->
+
           <span class="font-medium">{{ projectName }}</span>
         </div>
       </div>
@@ -32,9 +40,9 @@
           <!-- Validation message for taskType -->
           <div
             *ngIf="
-              taskForm.get('taskType')?.invalid &&
-              (taskForm.get('taskType')?.touched ||
-                taskForm.get('taskType')?.dirty)
+              taskForm.controls.taskType.invalid &&
+              (taskForm.controls.taskType.touched ||
+                taskForm.controls.taskType.dirty)
             "
             class="text-red-500 mt-2"
           >
@@ -45,7 +53,7 @@
 
       <ng-template #showTaskTypeLabel>
         <div *ngIf="taskForm.controls.taskType.value! < 3">
-          {{ getTaskTypeLabel(taskForm.get("taskType")?.value ?? null) }}
+          {{ getTaskTypeLabel(taskForm.controls.taskType.value ?? null) }}
         </div>
         <div *ngIf="taskForm.controls.taskType.value! >= 3">
           <select
@@ -59,9 +67,9 @@
           <!-- Validation message for taskType -->
           <div
             *ngIf="
-              taskForm.get('taskType')?.invalid &&
-              (taskForm.get('taskType')?.touched ||
-                taskForm.get('taskType')?.dirty)
+              taskForm.controls.taskType.invalid &&
+              (taskForm.controls.taskType.touched ||
+                taskForm.controls.taskType.dirty)
             "
             class="text-red-500 mt-2"
           >
@@ -86,8 +94,8 @@
       <!-- Validation message for name -->
       <div
         *ngIf="
-          taskForm.get('name')?.invalid &&
-          (taskForm.get('name')?.touched || taskForm.get('name')?.dirty)
+          taskForm.controls.name.invalid &&
+          (taskForm.controls.name.touched || taskForm.controls.name.dirty)
         "
         class="text-red-500 mt-2"
       >
@@ -110,9 +118,9 @@
       <!-- Validation message for description -->
       <div
         *ngIf="
-          taskForm.get('description')?.invalid &&
-          (taskForm.get('description')?.touched ||
-            taskForm.get('description')?.dirty)
+          taskForm.controls.description.invalid &&
+          (taskForm.controls.description.touched ||
+            taskForm.controls.description.dirty)
         "
         class="text-red-500 mt-2"
       >
@@ -134,9 +142,9 @@
       <!-- Validation message for assignedTo -->
       <div
         *ngIf="
-          taskForm.get('assignedTo')?.invalid &&
-          (taskForm.get('assignedTo')?.touched ||
-            taskForm.get('assignedTo')?.dirty)
+          taskForm.controls.assignedTo.invalid &&
+          (taskForm.controls.assignedTo.touched ||
+            taskForm.controls.assignedTo.dirty)
         "
         class="text-red-500 mt-2"
       >
@@ -157,9 +165,9 @@
       <!-- Validation message for assignedTo -->
       <div
         *ngIf="
-          taskForm.get('assignedTo')?.invalid &&
-          (taskForm.get('assignedTo')?.touched ||
-            taskForm.get('assignedTo')?.dirty)
+          taskForm.controls.assignedTo.invalid &&
+          (taskForm.controls.assignedTo.touched ||
+            taskForm.controls.assignedTo.dirty)
         "
         class="text-red-500 mt-2"
       >
@@ -195,8 +203,8 @@
       <!-- Validation message for status -->
       <div
         *ngIf="
-          taskForm.get('status')?.invalid &&
-          (taskForm.get('status')?.touched || taskForm.get('status')?.dirty)
+          taskForm.controls.status.invalid &&
+          (taskForm.controls.status.touched || taskForm.controls.status.dirty)
         "
         class="text-red-500 mt-2"
       >
@@ -246,9 +254,16 @@
         formControlName="remainingEstimatedHours"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+      <!-- Validation message for status -->
+      <div
+        *ngIf="taskForm.hasError('remainingHoursValidator')"
+        class="text-red-500 mt-2"
+      >
+        The remaining hours should not exceed the original estimated hours.
+      </div>
     </div>
 
-    <div *ngIf="!isEdit" class="text-center mt-4">
+    <div *ngIf="!isEdit || isAdding" class="text-center mt-4">
       <button
         (click)="addTask()"
         [ngClass]="{
@@ -263,7 +278,7 @@
         Save Task
       </button>
     </div>
-    <div *ngIf="isEdit" class="text-center mt-4">
+    <div *ngIf="isEdit && !isAdding" class="text-center mt-4">
       <button
         (click)="updateTask()"
         [disabled]="taskForm.pristine"

@@ -46,8 +46,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPaginatedProjectData();
     this.getParamId();
+    this.getPaginatedProjectData();
     this.getRole();
     // Subscribe to value changes on the form group
     this.range.valueChanges.subscribe((value) => {
@@ -76,29 +76,38 @@ export class ProjectListComponent implements OnInit {
   }
 
   private getParamId(): void {
-    this.activatedRoute.paramMap.subscribe((paramMap) => {
-      this.paramId = paramMap.get('id') ?? '';
-      if (this.paramId) {
-        this.isEdit = true;
-        this.getProjectData();
-      }
+    this.activatedRoute.paramMap.subscribe({
+      next: (paramMap) => {
+        this.paramId = paramMap.get('id') ?? '';
+        if (this.paramId) {
+          this.isEdit = true;
+        }
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error getting ParamId',
+        });
+      },
     });
   }
 
   private getPaginatedProjectData() {
-    this.projectService
-      .getPaginatedProjects(this.paginationData)
-      .subscribe((response: paginatedProjectData) => {
+    this.projectService.getPaginatedProjects(this.paginationData).subscribe({
+      next: (response: paginatedProjectData) => {
         this.projects = response.data.data;
         this.totalPages = response.data.totalPages;
         this.totalItems = response.data.totalItems;
-      });
-  }
-
-  private getProjectData(): void {
-    this.projectService
-      .getProjectById(Number(this.paramId))
-      .subscribe((response) => {});
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error fetching Projects',
+        });
+      },
+    });
   }
 
   public onPageEvent(event: PageEvent): void {
@@ -130,17 +139,26 @@ export class ProjectListComponent implements OnInit {
     this.deletedialogService
       .openDialog()
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.projectService.deleteProject(id).subscribe(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Deleted',
-              detail: 'Department Deleted Successfully',
+      .subscribe({
+        next: (result) => {
+          if (result) {
+            this.projectService.deleteProject(id).subscribe(() => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Deleted',
+                detail: 'Project Deleted Successfully',
+              });
+              this.getPaginatedProjectData();
             });
-            this.getPaginatedProjectData();
+          }
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error Deleting Project',
           });
-        }
+        },
       });
   }
 }

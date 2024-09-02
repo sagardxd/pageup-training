@@ -14,9 +14,11 @@ import { MessageService } from 'primeng/api';
 import { LoginComponent } from './components/Auth/login/login.component';
 import { LoaderService } from './services/loader.service';
 import { SharedModule } from './modules/shared/shared.module';
+import { ToastModule } from 'primeng/toast';
+import { DisableButtonsOnLoadDirective } from './directive/disable-buttons-on-load.directive';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, DisableButtonsOnLoadDirective],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -27,6 +29,7 @@ import { SharedModule } from './modules/shared/shared.module';
     MatPaginatorModule,
     FormsModule,
     SharedModule,
+    ToastModule,
   ],
   providers: [
     provideAnimationsAsync(),

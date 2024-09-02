@@ -1,5 +1,5 @@
 export const environment = {
-  apiURL: 'https://192.168.1.8:8081',
+  apiURL: 'https://192.168.1.37:8081',
   token:
     'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJQcmluY2UiLCJJZCI6IjEiLCJVc2VySWQiOiIyIiwianRpIjoiMWVmYmY4NDktZTg3ZS00NmU5LWI5N2YtOWIwMDliZThjNmVhIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiU3VwZXJBZG1pbiIsImV4cCI6MTcyMzUzNDAwNSwiaXNzIjoiSnd0SXNzdWVyIiwiYXVkIjoiSnd0QXVkaWVuY2UifQ.LRBaWkNQJowqoftOmyfm1KL2NcqJ4pbTaIRcHmz1jEE',
 };

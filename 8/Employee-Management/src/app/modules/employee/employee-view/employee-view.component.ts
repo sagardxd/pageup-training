@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TaskListComponent } from '../../task/task-list/task-list.component';
 import { TaskService } from '../../../services/task.service';
 import { TaskPaginationBodyTask } from '../../../models/task';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-employee-view',
@@ -24,7 +25,8 @@ export class EmployeeViewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private employeeService: EmployeeService,
     private projectService: ProjectService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -37,46 +39,69 @@ export class EmployeeViewComponent implements OnInit {
   }
 
   private getParamId(): void {
-    this.activatedRoute.paramMap.subscribe((paramMap) => {
-      this.paramId = paramMap.get('id') ?? '';
-      if (this.paramId) {
-        this.getEmployeeData(Number(this.paramId));
-      }
+    this.activatedRoute.paramMap.subscribe({
+      next: (paramMap) => {
+        this.paramId = paramMap.get('id') ?? '';
+        if (this.paramId) {
+          this.getEmployeeData(Number(this.paramId));
+        }
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to get Deparments',
+        });
+      },
     });
   }
 
   private getEmployeeData(id: number) {
-    this.employeeService
-      .getEmployeeById(id)
-      .subscribe((response: EmployeeById) => {
+    this.employeeService.getEmployeeById(id).subscribe({
+      next: (response: EmployeeById) => {
         if (response.success) {
           this.employee = response.data;
           console.log(response.data);
         }
-      });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to fetch Employees',
+        });
+      },
+    });
   }
 
   getEmployeeProjects(id: number | undefined): void {
     if (id) {
-      this.projectService
-        .getProjectOfEmployee(id)
-        .subscribe((response: EmployeesProject) => {
+      this.projectService.getProjectOfEmployee(id).subscribe({
+        next: (response: EmployeesProject) => {
           this.projects = response.data;
           console.log(this.projects);
-        });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to fetch project',
+          });
+        },
+      });
     }
   }
 
   public getProjectTasks(id: number): void {
-    // this.taskService.getEpicTasks()
-
     const dialogRef = this.dialog.open(TaskListComponent, {
       width: '1000px',
       height: '600px',
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '0ms',
+      disableClose: true,
     });
 
+    dialogRef.componentInstance;
     dialogRef.componentInstance.dialogref = dialogRef;
     dialogRef.componentInstance.projectId = id;
     if (this.id != null) {

@@ -29,6 +29,7 @@ export class EmployeeListComponent implements OnInit {
     dateRange: null,
     status: null,
   };
+  public activeStatus: null | number = null;
   public employeeCount: EmployeeCount | null = null;
   public isAdding = false;
   public totalPages = 0;
@@ -63,9 +64,6 @@ export class EmployeeListComponent implements OnInit {
         startDate: start,
         endDate: end,
       };
-
-      console.log(this.paginationData.dateRange);
-
       if (this.paginationData.dateRange.endDate != null) {
         this.getPaginationList();
       }
@@ -73,41 +71,64 @@ export class EmployeeListComponent implements OnInit {
   }
 
   private getPaginationList() {
-    this.employeeService
-      .getPaginatedEmployees(this.paginationData)
-      .subscribe((response) => {
+    this.employeeService.getPaginatedEmployees(this.paginationData).subscribe({
+      next: (response) => {
         this.employees = response.data.data;
         this.totalPages = response.data.totalPages;
         this.totalItems = response.data.totalItems;
-      });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error fetching Employees',
+        });
+      },
+    });
   }
 
   private getCount(): void {
-    this.employeeService
-      .employeeCount()
-      .subscribe((response: EmployeeCount) => {
+    this.employeeService.employeeCount().subscribe({
+      next: (response: EmployeeCount) => {
         this.employeeCount = response;
-      });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error getting Employee List Count',
+        });
+      },
+    });
   }
 
   public deleteEmployee(id: number) {
     this.deleteDialogService
       .openDialog()
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.employeeService.deleteEmployee(id).subscribe((data) => {
-            if (data.success) {
-              this.getPaginationList();
-              console.log('hi');
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Deleted',
-                detail: 'Department Deleted Successfully',
-              });
-            }
+      .subscribe({
+        next: (result) => {
+          if (result) {
+            this.employeeService.deleteEmployee(id).subscribe((data) => {
+              if (data.success) {
+                this.getPaginationList();
+                console.log('hi');
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Deleted',
+                  detail: 'Department Deleted Successfully',
+                });
+              }
+            });
+          }
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error Deleting Employee',
           });
-        }
+        },
       });
   }
 
@@ -156,7 +177,12 @@ export class EmployeeListComponent implements OnInit {
   }
 
   public changeStatus(val: number | null): void {
+    this.activeStatus = val;
     this.paginationData.status = val;
     this.getPaginationList();
+  }
+
+  public closedialog(): void {
+    this.dialogRef.close();
   }
 }

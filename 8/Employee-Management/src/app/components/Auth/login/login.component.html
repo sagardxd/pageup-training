@@ -2,7 +2,7 @@
   <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
     <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Login</h2>
 
-    <form (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="mb-4">
         <label for="username" class="block text-gray-700 font-medium mb-2"
           >Username</label
@@ -10,7 +10,7 @@
         <input
           type="text"
           id="username"
-          [(ngModel)]="username"
+          formControlName="username"
           name="username"
           class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
@@ -24,7 +24,7 @@
         <input
           type="password"
           id="password"
-          [(ngModel)]="password"
+          formControlName="password"
           name="password"
           class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
@@ -33,10 +33,12 @@
 
       <button
         type="submit"
-        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        [disabled]="loginForm.invalid"
+        class="w-full bg-blue-600 text-white py-2 rounded-lg transition-colors duration-300 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
         Login
       </button>
     </form>
   </div>
 </div>
+<p-toast></p-toast>

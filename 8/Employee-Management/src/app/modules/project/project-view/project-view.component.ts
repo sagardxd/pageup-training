@@ -30,6 +30,7 @@ import {
 import { TaskCount, TaskPaginationBodyTask } from '../../../models/task';
 import { MessageService } from 'primeng/api';
 import { DeletedialogService } from '../../../services/deletedialog.service';
+import { AddSprintComponent } from '../../task/add-sprint/add-sprint.component';
 
 @Component({
   selector: 'app-project-view',
@@ -75,7 +76,7 @@ export class ProjectViewComponent implements OnInit {
     { value: true, name: 'Assigned', countVal: 0 },
   ];
   public range: FormGroup;
-  private sprintId = 0;
+  public isEmployee = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -102,38 +103,17 @@ export class ProjectViewComponent implements OnInit {
       this.updateDateRange(value);
     });
     this.getTaskCount();
+
+    if (localStorage.getItem('role') === '0') this.isEmployee = true;
   }
-
-  public addSprint() {
-    const data: sprintPostBody = {
-      name: this.sprintForm.controls.name.value ?? null,
-      startDate: this.sprintForm.controls.startDate.value ?? null,
-      endDate: this.sprintForm.controls.endDate.value ?? null,
-      projectId: Number(this.paramId),
-    };
-
-    this.sprintService.createSprint(data, 0).subscribe((response) => {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Added',
-        detail: 'Added Sprint Successfully',
-      });
-      this.sprintForm.reset();
-      this.ngOnInit();
-    });
-  }
-
-  public sprintForm = new FormGroup({
-    name: new FormControl<string | null>('', [Validators.required]),
-    startDate: new FormControl<Date | null>(null, [Validators.required]),
-    endDate: new FormControl<Date | null>(null, [Validators.required]),
-  });
 
   private getTaskCount(): void {
-    this.taskService.getTaskCount().subscribe((response: TaskCount) => {
-      this.taskCount = response;
-      this.setTaskCountVal();
-    });
+    this.taskService
+      .getTaskCount(Number(this.paramId))
+      .subscribe((response: TaskCount) => {
+        this.taskCount = response;
+        this.setTaskCountVal();
+      });
   }
 
   private setTaskCountVal(): void {
@@ -210,6 +190,7 @@ export class ProjectViewComponent implements OnInit {
       width: '500px',
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '0ms',
+      disableClose: true,
     });
 
     dialogRef.componentInstance.projectName = this.project?.name ?? '';
@@ -222,11 +203,24 @@ export class ProjectViewComponent implements OnInit {
   }
 
   public deleteTask(id: number): void {
-    this.taskService.deleteTask(id).subscribe((response) => {
-      if (response) {
-        alert('Task Deleted Successfully');
-        this.getProjectData();
-      }
+    this.taskService.deleteTask(id).subscribe({
+      next: (response) => {
+        if (response) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Deleted',
+            detail: 'Deleted Task Successfully',
+          });
+          this.getProjectData();
+        }
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error deleting Task',
+        });
+      },
     });
   }
 
@@ -257,21 +251,30 @@ export class ProjectViewComponent implements OnInit {
         name: member.employeeName,
       })) ?? [];
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const newMembers = result.map((employee: any) => ({
-          employeeId: employee.id,
-          employeeName: employee.name,
-        }));
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) {
+          const newMembers = result.map((employee: any) => ({
+            employeeId: employee.id,
+            employeeName: employee.name,
+          }));
 
-        this.project!.members = newMembers;
+          this.project!.members = newMembers;
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Added',
+            detail: 'Added Employees Successfully',
+          });
+          this.hasChanged = true;
+        }
+      },
+      error: (err) => {
         this.messageService.add({
-          severity: 'info',
-          summary: 'Added',
-          detail: 'Added Employees Successfully',
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error adding employees',
         });
-        this.hasChanged = true;
-      }
+      },
     });
   }
 
@@ -308,16 +311,25 @@ export class ProjectViewComponent implements OnInit {
 
     this.projectService
       .updateProject(Number(this.paramId), projectData)
-      .subscribe((response) => {
-        if (response.success) {
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Updated',
+              detail: 'Updated Project Successfully',
+            });
+            this.hasChanged = false;
+            this.getProjectData();
+          }
+        },
+        error: (err) => {
           this.messageService.add({
-            severity: 'success',
-            summary: 'Updated',
-            detail: 'Updated Employee Successfully',
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error updating Project',
           });
-          this.hasChanged = false;
-          this.getProjectData();
-        }
+        },
       });
   }
 
@@ -383,63 +395,50 @@ export class ProjectViewComponent implements OnInit {
     };
   }
 
-  public updateSprint(id: number): void {
-    this.sprintService
-      .getSprintById(id)
-      .subscribe((res: sprintByIdResponse) => {
-        this.sprintForm.setValue({
-          name: res.data.name,
-          startDate: res.data.startDate,
-          endDate: res.data.endDate,
-        });
-        console.log(res.data);
-        this.sprintId = res.data.id;
-        console.log(this.sprintId);
-      });
-
-    this.updating = true;
-  }
-
-  public updateSprintData() {
-    console.log(this.sprintId);
-    const data: sprintPostBody = {
-      name: this.sprintForm.controls.name.value ?? null,
-      startDate: this.sprintForm.controls.startDate.value ?? null,
-      endDate: this.sprintForm.controls.endDate.value ?? null,
-      projectId: Number(this.paramId),
-    };
-
-    this.sprintService
-      .createSprint(data, this.sprintId)
-      .subscribe((response) => {
-        this.messageService.add({
-          severity: 'info',
-          summary: 'updated',
-          detail: 'Updated Sprint Successfully',
-        });
-        this.sprintForm.reset();
-        this.getSprints();
-      });
-  }
-
   public deleteSprint(id: number): void {
     this.deleteDialogService
       .openDialog()
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.sprintService.deleteSprint(id).subscribe((res) => {
-            if (res) {
-              this.getSprints();
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Deleted',
-                detail: 'Deleted Sprint Successfully',
-              });
-            }
+      .subscribe({
+        next: (result) => {
+          if (result) {
+            this.sprintService.deleteSprint(id).subscribe((res) => {
+              if (res) {
+                this.getSprints();
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Deleted',
+                  detail: 'Deleted Sprint Successfully',
+                });
+              }
+            });
+          }
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error Deleting Sprint',
           });
-        }
+        },
       });
     //
+  }
+
+  public updateSprint(sprintId: number): void {
+    const dialogRef = this.dialog.open(AddSprintComponent, {
+      width: '1000px',
+      height: '600px',
+    });
+    dialogRef.componentInstance.projectId = this.paramId;
+    dialogRef.componentInstance.getSprintData(sprintId);
+  }
+
+  public addSprint(): void {
+    const dialogRef = this.dialog.open(AddSprintComponent, {
+      width: '1000px',
+      height: '600px',
+    });
+    dialogRef.componentInstance.projectId = this.paramId;
   }
 }

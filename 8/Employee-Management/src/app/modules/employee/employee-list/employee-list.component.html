@@ -5,47 +5,75 @@
   <div class="px-8 py-6 bg-white shadow-md rounded-lg text-sm w-full">
     <!-- Header Section -->
     <div class="flex justify-between items-center pb-4">
-      <h1 class="text-2xl font-semibold text-gray-800">Employees List</h1>
-      <div *ngIf="!isAdding">
-        <button
-          routerLink="/employee/add"
-          class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Add Employee
-        </button>
+      <div class="flex justify-between w-full">
+        <h1 class="text-2xl font-semibold text-gray-800">Employees List</h1>
+        <div *ngIf="!isAdding">
+          <button
+            routerLink="/employee/add"
+            class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Add Employee
+          </button>
+        </div>
       </div>
-      <div mat-dialog-actions *ngIf="isAdding">
-        <button
-          (click)="saveProjectEmployees()"
-          class="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          Save
-        </button>
+      <div class="flex gap-3">
+        <div mat-dialog-actions *ngIf="isAdding">
+          <button
+            (click)="saveProjectEmployees()"
+            class="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            Save
+          </button>
+        </div>
+        <div mat-dialog-actions *ngIf="isAdding">
+          <button
+            (click)="closedialog()"
+            class="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
 
     <div class="flex justify-center gap-4">
       <button
-        class="px-6 py-2 bg-gray-200 text-gray-800 rounded-md shadow-md"
+        [ngClass]="{
+          'bg-gray-300': activeStatus === null,
+          'bg-gray-100': activeStatus !== null
+        }"
+        class="px-6 py-2 text-gray-800 rounded-md shadow-md"
         (click)="changeStatus(null)"
       >
         Total {{ this.employeeCount?.total }}
       </button>
       <button
-        class="px-6 py-2 bg-blue-100 text-blue-800 rounded-md shadow-md"
+        [ngClass]="{
+          'bg-blue-300': activeStatus === 2,
+          'bg-blue-100': activeStatus !== 2
+        }"
+        class="px-6 py-2 text-blue-800 rounded-md shadow-md"
         (click)="changeStatus(2)"
       >
         Super Admin {{ this.employeeCount?.superAdmin }}
       </button>
       <button
-        class="px-6 py-2 bg-green-100 text-green-800 rounded-md shadow-md"
+        [ngClass]="{
+          'bg-green-300': activeStatus === 1,
+          'bg-green-100': activeStatus !== 1
+        }"
+        class="px-6 py-2 text-green-800 rounded-md shadow-md"
         (click)="changeStatus(1)"
       >
         Admin {{ this.employeeCount?.admin }}
       </button>
       <button
+        [ngClass]="{
+          'bg-yellow-300': activeStatus === 0,
+          'bg-yellow-100': activeStatus !== 0
+        }"
+        class="px-6 py-2 text-yellow-800 rounded-md shadow-md"
         (click)="changeStatus(0)"
-        class="px-6 py-2 bg-yellow-100 text-yellow-800 rounded-md shadow-md"
       >
         Employee {{ this.employeeCount?.employee }}
       </button>
@@ -120,7 +148,7 @@
               Email
             </th>
             <th
-              mat-sort-header="DepartmentId"
+              mat-sort-header="DepartmentI"
               class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
             >
               Department Name

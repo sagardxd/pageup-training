@@ -10,8 +10,6 @@ import {
   TaskMessage,
   TaskReview,
   TaskReviewResponse,
-  TaskStatus,
-  TaskType,
 } from '../../../models/task';
 import { TaskService } from '../../../services/task.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -58,20 +56,28 @@ export class TaskViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.userId = Number(localStorage.getItem('id'));
-    this.activatedRoute.paramMap.subscribe((params) => {
-      this.paramId = params.get('id');
-      if (this.paramId) {
-        this.getTaskById();
-        this.getTaskLogs();
-      }
+    this.activatedRoute.paramMap.subscribe({
+      next: (params) => {
+        this.paramId = params.get('id');
+        if (this.paramId) {
+          this.getTaskById();
+          this.getTaskLogs();
+        }
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Getting ParamId',
+        });
+      },
     });
   }
 
   private getTaskById(): void {
     if (this.paramId) {
-      this.taskService
-        .getTaskById(Number(this.paramId))
-        .subscribe((result: TaskByIdResponse) => {
+      this.taskService.getTaskById(Number(this.paramId)).subscribe({
+        next: (result: TaskByIdResponse) => {
           if (result.success) {
             console.log(result);
             this.task = result.data.task;
@@ -86,7 +92,15 @@ export class TaskViewComponent implements OnInit {
           } else {
             console.error('Failed to fetch task:', result.message);
           }
-        });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error Fetching Task Details',
+          });
+        },
+      });
     }
   }
 
@@ -94,20 +108,24 @@ export class TaskViewComponent implements OnInit {
     const body = {
       content: this.newReviewContent,
     };
-    this.taskService
-      .addReview(Number(this.paramId), body)
-      .subscribe((result: TaskReviewResponse) => {
+    this.taskService.addReview(Number(this.paramId), body).subscribe({
+      next: (result: TaskReviewResponse) => {
         if (result.success) {
           this.newReviewContent = '';
           this.getTaskById();
-        } else {
-          console.error('Failed to add review:', result.message);
         }
-      });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Adding Review',
+        });
+      },
+    });
   }
 
   public editTask(): void {
-    console.log('ey');
     const dialogRef = this.dialog.open(TaskEditComponent, {
       width: '500px',
       enterAnimationDuration: '0ms',
@@ -125,11 +143,18 @@ export class TaskViewComponent implements OnInit {
   }
 
   private getTaskLogs(): void {
-    this.taskService
-      .getTaskLog(Number(this.paramId))
-      .subscribe((response: TaskLogResponse) => {
+    this.taskService.getTaskLog(Number(this.paramId)).subscribe({
+      next: (response: TaskLogResponse) => {
         this.taskLogs = response.data;
-      });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Fetching TaskLogs',
+        });
+      },
+    });
   }
 
   public editParent(): void {
@@ -138,18 +163,22 @@ export class TaskViewComponent implements OnInit {
     if (this.parent) {
       val = this.parent.taskType;
     }
-    try {
-      console.log('this-task', this.task, val);
-      if (this.task) {
-        if (val !== undefined)
-          this.taskService
-            .getTaskByProjectIdAndTasktype(this.task?.projectId, val)
-            .subscribe((response: TaskByProjectIdAndTasktypeResponse) => {
+    if (this.task) {
+      if (val !== undefined)
+        this.taskService
+          .getTaskByProjectIdAndTasktype(this.task?.projectId, val)
+          .subscribe({
+            next: (response: TaskByProjectIdAndTasktypeResponse) => {
               this.changeParentsList = response.data;
-            });
-      }
-    } catch (error) {
-      console.log(error);
+            },
+            error: (err) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error Fetching Parents Details',
+              });
+            },
+          });
     }
   }
 
@@ -167,14 +196,23 @@ export class TaskViewComponent implements OnInit {
     if (this.changeParentId.value && taskId) {
       this.taskService
         .changeParentId(taskId, this.changeParentId.value)
-        .subscribe((res) => {
-          this.isChangingParent = false;
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Updated',
-            detail: 'Updated Comment Successfully',
-          });
-          this.getTaskById();
+        .subscribe({
+          next: (res) => {
+            this.isChangingParent = false;
+            this.messageService.add({
+              severity: 'info',
+              summary: 'Updated',
+              detail: 'Updated Parent Successfully',
+            });
+            this.getTaskById();
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error Updating Parent',
+            });
+          },
         });
     }
   }
@@ -194,14 +232,23 @@ export class TaskViewComponent implements OnInit {
           this.taskReviewContent.value,
           this.taskReviewAboutToEdit
         )
-        .subscribe(() => {
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Updated',
-            detail: 'Updated Comment Successfully',
-          });
-          this.taskReviewAboutToEdit = null;
-          this.getTaskById();
+        .subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'info',
+              summary: 'Updated',
+              detail: 'Updated Comment Successfully',
+            });
+            this.taskReviewAboutToEdit = null;
+            this.getTaskById();
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error Updating Comment',
+            });
+          },
         });
   }
 }

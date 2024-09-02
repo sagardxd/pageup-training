@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-navbar',
@@ -8,6 +9,8 @@ import { Component, OnInit } from '@angular/core';
 export class NavbarComponent implements OnInit {
   public role: number | null = null;
   public isManager: boolean = false;
+
+  constructor(private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.getRole();
@@ -23,5 +26,9 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('role');
     localStorage.removeItem('isManager');
     localStorage.removeItem('id');
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Logged Out!',
+    });
   }
 }

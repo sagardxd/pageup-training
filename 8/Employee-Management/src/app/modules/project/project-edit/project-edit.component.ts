@@ -60,9 +60,8 @@ export class ProjectEditComponent {
     dialogRef.componentInstance.isAdding = true;
     dialogRef.componentInstance.paginationData.pagedItemsCount = 5;
 
-    dialogRef
-      .afterClosed()
-      .subscribe((result: { id: number; name: string }[]) => {
+    dialogRef.afterClosed().subscribe({
+      next: (result: { id: number; name: string }[]) => {
         if (result) {
           const membersFormArr = this.projectForm.controls.members;
           const newEmployees = result.filter(
@@ -96,9 +95,21 @@ export class ProjectEditComponent {
 
           // Update the projectEmployees array to reflect the current state
           this.projectEmployees = result;
-          console.log(this.projectEmployees);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Added',
+            detail: 'Addded Employees Successfully',
+          });
         }
-      });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Adding Employees',
+        });
+      },
+    });
   }
 
   public save() {
@@ -113,14 +124,23 @@ export class ProjectEditComponent {
       members: formattedMembers,
     };
 
-    this.projectService.postProject(projectData).subscribe((response) => {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Added',
-        detail: 'Project Added Successfully',
-      });
-      this.projectForm.reset();
-      this.projectEmployees = [];
+    this.projectService.postProject(projectData).subscribe({
+      next: (response) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Added',
+          detail: 'Project Added Successfully',
+        });
+        this.projectForm.reset();
+        this.projectEmployees = [];
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Saving Project',
+        });
+      },
     });
   }
 

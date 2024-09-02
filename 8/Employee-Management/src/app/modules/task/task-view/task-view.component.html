@@ -151,6 +151,12 @@
               >
                 Submit
               </button>
+              <button
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                (click)="taskReviewAboutToEdit = null"
+              >
+                Cancel
+              </button>
             </div>
 
             <p class="text-xs text-gray-500 mt-1">
@@ -266,7 +272,9 @@
                     <span *ngSwitchCase="4">Bug:</span>
                   </ng-container>
                 </p>
-                <div class="ml-2 text-lg font-medium">{{ subTask.name }}</div>
+                <div class="ml-2 text-wrap text-lg font-medium">
+                  {{ subTask.name }}
+                </div>
               </a>
             </li>
           </ul>

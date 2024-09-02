@@ -60,6 +60,10 @@ export class EmployeeService {
     return this.http.get<EmployeeById>(`${this.url}/Employee/${id}`);
   }
 
+  public getEmployeeByIdUpdate(id: number): Observable<EmployeeById> {
+    return this.http.get<EmployeeById>(`${this.url}/Employee/Update/${id}`);
+  }
+
   public deleteEmployee(id: number): Observable<any> {
     return this.http.delete(`${this.url}/Employee/${id}`);
   }

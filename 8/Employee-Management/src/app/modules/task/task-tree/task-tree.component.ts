@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TaskEditComponent } from '../task-edit/task-edit.component';
 import { projectByIdData, projectByIdResponse } from '../../../models/project';
 import { ProjectService } from '../../../services/project.service';
+import { MessageService } from 'primeng/api';
 
 export interface WorkItem extends taskpaginationData {
   parentId?: number;
@@ -37,15 +38,25 @@ export class TaskTreeComponent {
     private router: Router,
     private dialog: MatDialog,
     private projectService: ProjectService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private messageService: MessageService
   ) {
     this.getParamId();
   }
 
   public loadChildren(item: WorkItem) {
-    this.taskService.getChildren(item.id).subscribe((children) => {
-      item.children = children.data;
-      item.childrenLoaded = true;
+    this.taskService.getChildren(item.id).subscribe({
+      next: (children) => {
+        item.children = children.data;
+        item.childrenLoaded = true;
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error loading children',
+        });
+      },
     });
   }
 
@@ -66,40 +77,6 @@ export class TaskTreeComponent {
     return item.children ? item.children.length > 0 : false;
   }
 
-  public getTaskTypeLabel(type: TaskType): string {
-    switch (type) {
-      case TaskType.Epic:
-        return 'Epic';
-      case TaskType.Userstory:
-        return 'UserStory';
-      case TaskType.Feature:
-        return 'Feature';
-      case TaskType.Task:
-        return 'Task';
-      case TaskType.Bug:
-        return 'Bug';
-      default:
-        return '';
-    }
-  }
-
-  public getTypeClass(type: TaskType): string {
-    switch (type) {
-      case TaskType.Epic:
-        return 'Epic';
-      case TaskType.Feature:
-        return 'Feature';
-      case TaskType.Userstory:
-        return 'UserStory';
-      case TaskType.Task:
-        return 'Task';
-      case TaskType.Bug:
-        return 'Bug';
-      default:
-        return '';
-    }
-  }
-
   public addTask(id: number, taskType: TaskType, name: string) {
     const dialogRef = this.dialog.open(TaskEditComponent, {
       width: '500px',
@@ -111,16 +88,24 @@ export class TaskTreeComponent {
     dialogRef.componentInstance.projectName = name;
     dialogRef.componentInstance.projectId = Number(this.projectId);
     dialogRef.componentInstance.isEdit = true;
+    dialogRef.componentInstance.isAdding = true;
     console.log(dialogRef.componentInstance.paramId);
 
-    this.projectService
-      .getProjectById(Number(this.paramId))
-      .subscribe((response: projectByIdResponse) => {
+    this.projectService.getProjectById(Number(this.paramId)).subscribe({
+      next: (response: projectByIdResponse) => {
         if (response.success) {
           this.project = response.data;
           dialogRef.componentInstance.project = this.project;
         }
-      });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Fetching Project Details',
+        });
+      },
+    });
 
     dialogRef.componentInstance.taskForm.patchValue({
       taskType: taskType + 1,
@@ -146,6 +131,12 @@ export class TaskTreeComponent {
     dialogRef.componentInstance.projectId = Number(this.projectId);
     dialogRef.componentInstance.taskId = id;
     dialogRef.componentInstance.getTaskDetails(id);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.taskUpdated.emit();
+      }
+    });
   }
 
   public viewTask(id: number) {

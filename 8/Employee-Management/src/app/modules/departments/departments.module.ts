@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from '../shared/shared.module';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [DepartmentListComponent, DialogComponent],
@@ -33,6 +34,7 @@ import { SharedModule } from '../shared/shared.module';
     MatNativeDateModule,
     MatButtonModule,
     SharedModule,
+    MatSortModule,
   ],
 })
 export class DepartmentsModule {}

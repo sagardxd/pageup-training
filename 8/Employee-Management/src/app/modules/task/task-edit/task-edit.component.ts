@@ -47,6 +47,7 @@ export class TaskEditComponent implements OnInit {
   public sprints: Sprint[] = [];
   public isEdit = false;
   public taskId: number | null = null;
+  public isAdding = false;
 
   public taskTypeLabels: { [key: number]: string } = {
     0: 'Epic',
@@ -93,18 +94,20 @@ export class TaskEditComponent implements OnInit {
       remainingEstimatedHours: new FormControl<number | null>(null),
     },
     {
-      validators: this.remainingHoursValidator(),
+      validators: [this.remainingHoursValidator()],
     }
   );
 
-  remainingHoursValidator(): ValidatorFn {
-    return (formGroup: AbstractControl): ValidationErrors | null => {
-      const originalEstimate = formGroup.get('originalEstimateHours')?.value;
-      const remainingEstimate = formGroup.get('remainingEstimatedHours')?.value;
+  public remainingHoursValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const formGroup = control as FormGroup<TaskForm>;
+      const originalEstimate = formGroup.controls.originalEstimateHours.value;
+      const remainingEstimate =
+        formGroup.controls.remainingEstimatedHours.value;
 
       if (
-        originalEstimate &&
-        remainingEstimate &&
+        originalEstimate !== null &&
+        remainingEstimate !== null &&
         remainingEstimate > originalEstimate
       ) {
         return { remainingHoursExceedsOriginal: true };
@@ -112,13 +115,12 @@ export class TaskEditComponent implements OnInit {
       return null;
     };
   }
-
   public addTask(): void {
     if (this.taskForm.value.name && this.taskForm.value.description) {
       const TaskData = {
         name: this.taskForm.value.name,
         description: this.taskForm.value.description,
-        assignedTo: Number(this.taskForm.value.assignedTo),
+        assignedTo: Number(this.taskForm.value.assignedTo) || null,
         sprintId: Number(this.taskForm.value.sprintId),
         taskType: Number(this.taskForm.value.taskType),
         parentId: this.taskForm.value.parentId! || null,
@@ -126,22 +128,26 @@ export class TaskEditComponent implements OnInit {
         status: this.taskForm.value.status!,
         originalEstimateHours: this.taskForm.value.originalEstimateHours || 0,
       };
-      console.log('hi');
-      try {
-        this.taskService.postTask(TaskData).subscribe((response) => {
+      this.taskService.postTask(TaskData).subscribe({
+        next: (response) => {
           if (response) {
-            this.dialogRef.close(true);
             this.messageService.add({
               severity: 'success',
               summary: 'Added',
               detail: 'Added Task Successfully',
             });
+            this.dialogRef.close();
           }
-        });
-        console.log(TaskData);
-      } catch (error) {
-        console.log(error);
-      }
+        },
+        error: (error) => {
+          console.log(error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error Adding Task',
+          });
+        },
+      });
     }
   }
 
@@ -153,19 +159,24 @@ export class TaskEditComponent implements OnInit {
         }
 
         if (this.projectId) {
-          this.projectService
-            .getProjectById(this.projectId)
-            .subscribe((response: projectByIdResponse) => {
+          this.projectService.getProjectById(this.projectId).subscribe({
+            next: (response: projectByIdResponse) => {
               if (response.success) {
-                console.log('response', response);
                 this.project = response.data;
                 if (this.projectId) {
                   this.getSprints(this.projectId);
                 }
               }
-            });
+            },
+            error: (error) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error Fetching Project',
+              });
+            },
+          });
         }
-        console.log(response.data.task);
         if (response.data.task) {
           this.taskForm.patchValue({
             name: response.data.task.name,
@@ -184,11 +195,18 @@ export class TaskEditComponent implements OnInit {
   }
 
   private getSprints(id: number): void {
-    this.sprintService
-      .getSprintsByProjectId(id)
-      .subscribe((response: sprintGetBody) => {
+    this.sprintService.getSprintsByProjectId(id).subscribe({
+      next: (response: sprintGetBody) => {
         this.sprints = response.data;
-      });
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Fetching Sprint',
+        });
+      },
+    });
   }
 
   public updateTask(): void {
@@ -206,25 +224,32 @@ export class TaskEditComponent implements OnInit {
         remainingEstimateHours: this.taskForm.value.remainingEstimatedHours,
       };
 
-      try {
-        if (this.taskId)
-          this.taskService
-            .updateTask(TaskData, this.taskId)
-            .subscribe((response: any) => {
-              if (response) {
-                if (this.dialogRef) {
-                  this.dialogRef.close(true);
-                  this.messageService.add({
-                    severity: 'info',
-                    summary: 'Updated Task',
-                    detail: 'Updated Task Successfully',
-                  });
-                }
+      if (this.taskId)
+        this.taskService.updateTask(TaskData, this.taskId).subscribe({
+          next: (response: any) => {
+            if (response.success) {
+              if (this.dialogRef) {
+                this.dialogRef.close(true);
+                this.messageService.add({
+                  severity: 'info',
+                  summary: 'Updated Task',
+                  detail: 'Updated Task Successfully',
+                });
               }
+            }
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error Updating Task',
             });
-      } catch (error) {
-        console.log(error);
-      }
+          },
+        });
     }
+  }
+
+  public closeDialog(): void {
+    this.dialogRef.close();
   }
 }

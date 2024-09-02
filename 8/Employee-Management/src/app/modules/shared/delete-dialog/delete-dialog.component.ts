@@ -4,8 +4,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-delete-dialog',
   templateUrl: './delete-dialog.component.html',
-  styleUrl: './delete-dialog.component.scss'
+  styleUrl: './delete-dialog.component.scss',
 })
 export class DeleteDialogComponent {
-  constructor(private dialogRef: MatDialogRef<DeleteDialogComponent>) { }
+  constructor(private dialogRef: MatDialogRef<DeleteDialogComponent>) {}
 }

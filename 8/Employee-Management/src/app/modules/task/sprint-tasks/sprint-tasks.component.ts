@@ -99,19 +99,27 @@ export class SprintTasksComponent implements OnInit {
   }
 
   private changeTaskStatus(movedTo: number, taskId: number): void {
-    this.taskService.updateTaskStatus(movedTo, taskId).subscribe((response) => {
-      if (response) {
+    this.taskService.updateTaskStatus(movedTo, taskId).subscribe({
+      next: (response) => {
+        if (response) {
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Updated',
+            detail: 'Updated Status Successfully',
+          });
+        }
+      },
+      error: (err) => {
         this.messageService.add({
-          severity: 'info',
-          summary: 'Updated',
-          detail: 'Updated Status Successfully',
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Updating Task status',
         });
-      }
+      },
     });
   }
 
   public navigateToTaskView(taskId: number): void {
-    console.log('jey');
     this.router.navigate([`/task/view/${taskId}`]);
   }
 }

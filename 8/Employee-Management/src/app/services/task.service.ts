@@ -83,8 +83,8 @@ export class TaskService {
     return this.http.get<TaskLogResponse>(`${this.url}/api/TaskLog/${taskId}`);
   }
 
-  public getTaskCount(): Observable<TaskCount> {
-    return this.http.get<TaskCount>(`${this.url}/Tasks/Count`);
+  public getTaskCount(projectId: number): Observable<TaskCount> {
+    return this.http.get<TaskCount>(`${this.url}/Tasks/Count/${projectId}`);
   }
 
   public getTaskByProjectIdAndTasktype(

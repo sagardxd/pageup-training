@@ -5,18 +5,17 @@ import { Observable } from 'rxjs';
 import { LoginResponse } from '../models/login';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
-
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   url = environment.apiURL;
 
-  public login(body: { username: string, password: string }): Observable<LoginResponse> {
+  public login(body: {
+    username: string;
+    password: string;
+  }): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.url}/Login`, body);
   }
-
-
 }

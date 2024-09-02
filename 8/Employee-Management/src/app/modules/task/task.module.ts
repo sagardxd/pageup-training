@@ -1,24 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { TaskRoutingModule } from './task-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSortModule } from '@angular/material/sort';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
+
+import { TaskRoutingModule } from './task-routing.module';
+import { SharedModule } from '../shared/shared.module';
 import { TaskViewComponent } from './task-view/task-view.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
-import { SharedModule } from '../shared/shared.module';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SprintTasksComponent } from './sprint-tasks/sprint-tasks.component';
-import { RouterModule } from '@angular/router';
 import { TaskListComponent } from './task-list/task-list.component';
+import { AddSprintComponent } from './add-sprint/add-sprint.component';
 
 @NgModule({
   declarations: [
@@ -26,26 +30,27 @@ import { TaskListComponent } from './task-list/task-list.component';
     TaskEditComponent,
     SprintTasksComponent,
     TaskListComponent,
+    AddSprintComponent,
   ],
   imports: [
     CommonModule,
     TaskRoutingModule,
     SharedModule,
+    MatFormFieldModule,
     MatIconModule,
-    ToastModule,
-    ButtonModule,
-    RippleModule,
-    MatPaginatorModule,
-    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
     ReactiveFormsModule,
     FormsModule,
     MatSelectModule,
-    MatNativeDateModule,
     MatButtonModule,
     DragDropModule,
-    MatIconModule,
     RouterModule,
+    MatPaginatorModule,
+    MatSortModule,
+    ToastModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
-  exports: [],
 })
 export class TaskModule {}

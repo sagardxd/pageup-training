@@ -8,15 +8,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTreeModule } from '@angular/material/tree';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from './loader/loader.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -33,14 +28,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatButtonModule,
     MatPaginatorModule,
     FormsModule,
-    MatSortModule,
-    MatTreeModule,
-    MatSnackBarModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     RouterModule,
     MatProgressSpinnerModule,
+    ToastModule,
   ],
   exports: [
     NavbarComponent,

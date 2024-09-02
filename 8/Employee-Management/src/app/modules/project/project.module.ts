@@ -18,6 +18,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TaskTreeComponent } from '../task/task-tree/task-tree.component';
 import { RouterModule } from '@angular/router';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { RouterModule } from '@angular/router';
     MatNativeDateModule,
     MatButtonModule,
     RouterModule,
+    MatSortModule,
   ],
 })
 export class ProjectModule {}

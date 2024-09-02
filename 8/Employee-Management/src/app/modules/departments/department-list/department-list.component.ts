@@ -86,11 +86,22 @@ export class DepartmentListComponent implements OnInit {
       width: '250px',
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '0ms',
+      disableClose: true,
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.getPaginationList();
-      }
+    dialogRef.componentInstance.dialog = dialogRef;
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) {
+          this.getPaginationList();
+        }
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error Adding',
+        });
+      },
     });
   }
 
@@ -98,22 +109,33 @@ export class DepartmentListComponent implements OnInit {
     this.deleteDialogService
       .openDialog()
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.departmentService.deleteDepartment(id).subscribe((response) => {
-            if (response.success) {
-              this.departments = this.departments.filter(
-                (department) => department.id !== id
-              );
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Deleted',
-                detail: 'Department Deleted Successfully',
+      .subscribe({
+        next: (result) => {
+          if (result) {
+            this.departmentService
+              .deleteDepartment(id)
+              .subscribe((response) => {
+                if (response.success) {
+                  this.departments = this.departments.filter(
+                    (department) => department.id !== id
+                  );
+                  this.messageService.add({
+                    severity: 'success',
+                    summary: 'Deleted',
+                    detail: 'Department Deleted Successfully',
+                  });
+                  this.getPaginationList();
+                }
               });
-              this.getPaginationList();
-            }
+          }
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error Deleting',
           });
-        }
+        },
       });
   }
 
@@ -145,14 +167,5 @@ export class DepartmentListComponent implements OnInit {
       this.paginationData.sortedOrder = 2;
     }
     this.getPaginationList();
-  }
-
-  showWarn() {
-    console.log('clicked');
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Warn',
-      detail: 'Message Content',
-    });
   }
 }

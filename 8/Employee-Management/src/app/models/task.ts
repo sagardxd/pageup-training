@@ -33,7 +33,7 @@ export enum TaskStatus {
 export interface TaskPostBody {
   name: string;
   description: string;
-  assignedTo: number;
+  assignedTo: number | null;
   sprintId: number;
   taskType: TaskType;
   parentId: number | null;

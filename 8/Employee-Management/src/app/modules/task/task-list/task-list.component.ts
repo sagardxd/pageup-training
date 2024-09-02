@@ -8,6 +8,7 @@ import {
 } from '../../../models/task';
 import { DeletedialogService } from '../../../services/deletedialog.service';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-task-list',
@@ -18,6 +19,7 @@ export class TaskListComponent implements OnInit {
   public tasks: taskpaginationData[] = [];
   public projectId: number = 0;
   public dialogref: any = null;
+  public isViewTask = false;
 
   public paginationData: TaskPaginationBodyTask = {
     pageIndex: 1,
@@ -39,7 +41,8 @@ export class TaskListComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private deletedialogService: DeletedialogService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -87,17 +90,30 @@ export class TaskListComponent implements OnInit {
     this.deletedialogService
       .openDialog()
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.taskService.deleteTask(id).subscribe(() => {
-            this.getPaginatedTaskList();
+      .subscribe({
+        next: (result) => {
+          if (result) {
+            this.taskService.deleteTask(id).subscribe(() => {
+              this.getPaginatedTaskList();
+            });
+          }
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error Deleting Task',
           });
-        }
+        },
       });
   }
 
-  public redirectToTask(id: number) {
+  public redirectToTask(id: number): void {
     this.dialogref.close();
     this.router.navigate(['/task/view', id]);
+  }
+
+  public closeDialog(): void {
+    this.dialogref.close();
   }
 }

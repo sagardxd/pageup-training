@@ -14,6 +14,7 @@ import { RequestHandlerService } from '../../../services/request-handler.service
 })
 export class DialogComponent {
   public requesting = true;
+  public dialog: any = null;
 
   constructor(
     private departmentService: DepartmentService,
@@ -47,13 +48,25 @@ export class DialogComponent {
             console.error('HTTP Error Response:');
             this.requesting = true;
             if (error.error.status === 409) {
-              alert('Department already exists');
+              this.messageService.add({
+                severity: 'warn',
+                summary: 'Error',
+                detail: 'Department already exsists!',
+              });
             } else {
-              alert('Failed to add department');
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error Adding',
+              });
             }
           }
         );
       }
     }
+  }
+
+  public closeDialog(): void {
+    this.dialog.close();
   }
 }

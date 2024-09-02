@@ -11,8 +11,9 @@ export interface Employee {
   id: number;
   name: string;
   departmentName: string | null;
-  departmentId: number | null;
+  departmentID: number | null;
   managerName: string | null;
+  managerID: number | null;
   role: EmployeeRole;
   salary: number;
   email: string;
@@ -22,6 +23,7 @@ export interface Employee {
   createdBy: string;
   createdOn: Date;
 }
+
 export interface Employees {
   success: boolean;
   status: number;
@@ -37,20 +39,20 @@ export interface postEmployee {
   email: string;
   phone: string | null;
   address: string;
-  departmentId: number | null | undefined;
-  managerId: number | null | undefined;
-  role: EmployeeRole | null | undefined;
+  departmentID: number | null;
+  managerID: number | null;
+  role: EmployeeRole | null;
 }
 
 export interface updateEmployee {
-  name: string | null | undefined;
-  salary: number | null | undefined;
-  email: string | null | undefined;
-  phone: string | null | undefined;
-  address: string | null | undefined;
-  departmentId: number | null | undefined;
-  managerId: number | null | undefined;
-  role: EmployeeRole | null | undefined;
+  name: string | null;
+  salary: number | null;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  departmentID: number | null;
+  managerID: number | null;
+  role: EmployeeRole | null;
 }
 
 export interface postEmployeeResponse {
@@ -75,8 +77,8 @@ export interface EmployeeForm {
   phone: FormControl<string | null>;
   address: FormControl<string | null>;
   salary: FormControl<number | null>;
-  departmentId: FormControl<number | null>;
-  managerId: FormControl<number | null>;
+  departmentID: FormControl<number | null>;
+  managerID: FormControl<number | null>;
   role: FormControl<EmployeeRole | null>;
 }
 
