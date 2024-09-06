@@ -10,15 +10,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { MessageService } from 'primeng/api';
-
-import { LoginComponent } from './components/Auth/login/login.component';
 import { LoaderService } from './services/loader.service';
-import { SharedModule } from './modules/shared/shared.module';
+import { SharedModule } from './components/shared/shared.module';
 import { ToastModule } from 'primeng/toast';
-import { DisableButtonsOnLoadDirective } from './directive/disable-buttons-on-load.directive';
+import { EmployeeModule } from './components/employee/employee.module';
+import { MatIconModule } from '@angular/material/icon';
+import { ChartModule } from 'primeng/chart';
+import { LayoutComponent } from './components/Layout/layout.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, DisableButtonsOnLoadDirective],
+  declarations: [AppComponent, LayoutComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -29,7 +30,10 @@ import { DisableButtonsOnLoadDirective } from './directive/disable-buttons-on-lo
     MatPaginatorModule,
     FormsModule,
     SharedModule,
+    EmployeeModule,
     ToastModule,
+    MatIconModule,
+    ChartModule,
   ],
   providers: [
     provideAnimationsAsync(),

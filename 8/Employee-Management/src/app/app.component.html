@@ -1,3 +1,4 @@
-<app-loader></app-loader>
-<div appDisableButtonsOnLoad></div>
-<router-outlet />
+<fieldset [disabled]="this.loaderService.isLoading | async">
+  <app-loader></app-loader>
+  <router-outlet></router-outlet>
+</fieldset>

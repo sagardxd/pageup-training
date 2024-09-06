@@ -1,0 +1,234 @@
+<div class="px-8 py-6 bg-white shadow-md rounded-lg text-sm w-full">
+  <!-- Header Section -->
+  <div class="flex justify-between items-center pb-4">
+    <div class="flex justify-between w-full">
+      <h1 class="text-2xl font-semibold text-gray-800">Employees List</h1>
+      <div *ngIf="!isAdding">
+        <button
+          routerLink="/employee/add"
+          class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Add Employee
+        </button>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <div mat-dialog-actions *ngIf="isAdding">
+        <button
+          (click)="saveProjectEmployees()"
+          class="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          Save
+        </button>
+      </div>
+      <div mat-dialog-actions *ngIf="isAdding">
+        <button
+          (click)="closedialog()"
+          class="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-center gap-4">
+    <button
+      [ngClass]="{
+        'bg-gray-300': activeStatus === null,
+        'bg-gray-100': activeStatus !== null
+      }"
+      class="px-6 py-2 text-gray-800 rounded-md shadow-md"
+      (click)="changeStatus(null)"
+    >
+      Total {{ this.employeeCount?.total }}
+    </button>
+    <button
+      [ngClass]="{
+        'bg-blue-300': activeStatus === 2,
+        'bg-blue-100': activeStatus !== 2
+      }"
+      class="px-6 py-2 text-blue-800 rounded-md shadow-md"
+      (click)="changeStatus(2)"
+    >
+      Super Admin {{ this.employeeCount?.superAdmin }}
+    </button>
+    <button
+      [ngClass]="{
+        'bg-green-300': activeStatus === 1,
+        'bg-green-100': activeStatus !== 1
+      }"
+      class="px-6 py-2 text-green-800 rounded-md shadow-md"
+      (click)="changeStatus(1)"
+    >
+      Admin {{ this.employeeCount?.admin }}
+    </button>
+    <button
+      [ngClass]="{
+        'bg-yellow-300': activeStatus === 0,
+        'bg-yellow-100': activeStatus !== 0
+      }"
+      class="px-6 py-2 text-yellow-800 rounded-md shadow-md"
+      (click)="changeStatus(0)"
+    >
+      Employee {{ this.employeeCount?.employee }}
+    </button>
+  </div>
+
+  <div class="flex gap-3 justify-center">
+    <!-- Search Section -->
+    <div class="flex justify-center py-6 gap-4">
+      <input
+        type="text"
+        placeholder="Search employees..."
+        class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [(ngModel)]="paginationData.search"
+        (keyup.enter)="handleSearch()"
+      />
+      <button
+        class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+        (click)="handleSearch()"
+      >
+        Search
+      </button>
+    </div>
+
+    <div class="flex items-end">
+      <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input
+            matStartDate
+            formControlName="start"
+            placeholder="Start date"
+          />
+          <input matEndDate formControlName="end" placeholder="End date" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Employees Table -->
+  <div
+    class="overflow-x-auto bg-white border border-gray-300 rounded-md shadow-sm"
+  >
+    <table matSort (matSortChange)="sortData($event)" class="min-w-full">
+      <thead class="bg-gray-100 font-bold">
+        <tr>
+          <th
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Sno
+          </th>
+          <th
+            mat-sort-header="Name"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Name
+          </th>
+          <th
+            mat-sort-header="Role"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Role
+          </th>
+          <th
+            mat-sort-header="Email"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Email
+          </th>
+          <th
+            mat-sort-header="DepartmentI"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Department Name
+          </th>
+          <th
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of employees; let i = index"
+          class="hover:bg-gray-50"
+        >
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            {{
+              i +
+                1 +
+                (paginationData.pageIndex - 1) * paginationData.pagedItemsCount
+            }}
+          </td>
+          <td
+            class="px-6 py-4 border-b border-gray-200 text-gray-700 font-medium"
+          >
+            {{ item.name }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            <div *ngIf="item.role === 0">Employee</div>
+            <div *ngIf="item.role === 1">Admin</div>
+            <div *ngIf="item.role === 2">Super Admin</div>
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            {{ item.email || "N/A" }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            {{ item.departmentName || "none" }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 flex gap-3">
+            <div *ngIf="!isAdding" class="flex gap-2 items-center">
+              <div routerLink="/employee/view/{{ item.id }}">
+                <mat-icon>visibility</mat-icon>
+              </div>
+              <div routerLink="/employee/edit/{{ item.id }}">
+                <mat-icon>edit</mat-icon>
+              </div>
+              <div (click)="deleteEmployeeInvoke(item.id)">
+                <mat-icon>delete</mat-icon>
+              </div>
+            </div>
+            <div *ngIf="isAdding" class="flex gap-2">
+              <button
+                *ngIf="!exsistInArray(item.id)"
+                (click)="addEmployeeInProject(item.name, item.id)"
+                class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
+              >
+                +
+              </button>
+              <button
+                *ngIf="exsistInArray(item.id)"
+                (click)="removeEmployeeInProject(item.id)"
+                class="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700"
+              >
+                -
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginator -->
+  <div class="flex justify-end pt-6">
+    <mat-paginator
+      [length]="totalItems"
+      [pageSize]="paginationData.pagedItemsCount"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page"
+      (page)="onPageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>
+
+<p-toast />

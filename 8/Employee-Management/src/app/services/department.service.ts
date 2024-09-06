@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   deleteDepartmentResponse,
   department,
+  DepartmentCountResponse,
   departments,
   paginatedBody,
   paginatedDepartmentData,
@@ -19,11 +20,11 @@ export class DepartmentService {
 
   url = environment.apiURL;
 
-  getDepartment(): Observable<departments> {
+  public getDepartment(): Observable<departments> {
     return this.http.get<departments>(`${this.url}/Department`);
   }
 
-  getPaginatedDepartment(
+  public getPaginatedDepartment(
     paginatedData: paginatedBody
   ): Observable<paginatedDepartmentData> {
     const body = paginatedData;
@@ -33,14 +34,14 @@ export class DepartmentService {
     );
   }
 
-  getDepartmentPaginated(): Observable<departments> {
+  public getDepartmentPaginated(): Observable<departments> {
     return this.http.get<departments>(`${this.url}/Department`);
   }
-  getDepartmentById(id: number): Observable<department> {
+  public getDepartmentById(id: number): Observable<department> {
     return this.http.get<department>(`${this.url}/Department/${id}`);
   }
 
-  createDepartment(name: string): Observable<postDepartmentResponse> {
+  public createDepartment(name: string): Observable<postDepartmentResponse> {
     const body = { name };
     return this.http.post<postDepartmentResponse>(
       `${this.url}/Department`,
@@ -48,9 +49,15 @@ export class DepartmentService {
     );
   }
 
-  deleteDepartment(id: number): Observable<deleteDepartmentResponse> {
+  public deleteDepartment(id: number): Observable<deleteDepartmentResponse> {
     return this.http.delete<deleteDepartmentResponse>(
       `${this.url}/Department/${id}`
+    );
+  }
+
+  public getDepartmentCount(): Observable<DepartmentCountResponse> {
+    return this.http.get<DepartmentCountResponse>(
+      `${this.url}/Department/Count`
     );
   }
 }

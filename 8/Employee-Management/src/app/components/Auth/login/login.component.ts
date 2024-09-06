@@ -45,7 +45,7 @@ export class LoginComponent {
             if (res.data.employee.role === 0) {
               this.router.navigate(['/project']);
             } else {
-              this.router.navigate(['/department']);
+              this.router.navigate(['/dashboard']);
             }
             this.loginForm.reset();
           } else {

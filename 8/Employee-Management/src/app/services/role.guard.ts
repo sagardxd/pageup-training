@@ -15,8 +15,9 @@ export class RoleGuard implements CanActivate {
     const role: number | null = Number(localStorage.getItem('role')) ?? null;
 
     if (role === 0) {
+      console.log('first');
       // Navigate to login page if role is 0
-      this.router.navigate(['/']);
+      this.router.navigate(['/auth/login']);
       return false;
     } else {
       return true;

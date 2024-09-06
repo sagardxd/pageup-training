@@ -1,41 +1,61 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './components/Auth/login/login.component';
-import { EmployeeViewComponent } from './modules/employee/employee-view/employee-view.component';
+import { EmployeeViewComponent } from './components/employee/employee-view/employee-view.component';
 import { RoleGuard } from './services/role.guard';
 import { authGuard } from './services/auth.guard';
+import { LayoutComponent } from './components/Layout/layout.component';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
   {
-    path: 'department',
-    canActivate: [RoleGuard, authGuard],
+    path: 'auth',
     loadChildren: () =>
-      import('./modules/departments/departments.module').then(
-        (m) => m.DepartmentsModule
-      ),
+      import('./components/auth/auth.module').then((m) => m.AuthModule),
   },
   {
-    path: 'employee',
-    canActivate: [RoleGuard, authGuard],
-    loadChildren: () =>
-      import('./modules/employee/employee.module').then(
-        (m) => m.EmployeeModule
-      ),
-  },
-  {
-    path: 'project',
+    path: '',
+    component: LayoutComponent,
     canActivate: [authGuard],
-    loadChildren: () =>
-      import('./modules/project/project.module').then((m) => m.ProjectModule),
+    children: [
+      {
+        path: 'dashboard',
+        canActivate: [authGuard, RoleGuard],
+        loadChildren: () =>
+          import('./components/admin/admin.module').then((m) => m.AdminModule),
+      },
+
+      {
+        path: 'department',
+        canActivate: [RoleGuard, authGuard],
+        loadChildren: () =>
+          import('./components/departments/departments.module').then(
+            (m) => m.DepartmentsModule
+          ),
+      },
+      {
+        path: 'employee',
+        canActivate: [RoleGuard, authGuard],
+        loadChildren: () =>
+          import('./components/employee/employee.module').then(
+            (m) => m.EmployeeModule
+          ),
+      },
+      {
+        path: 'project',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./components/project/project.module').then(
+            (m) => m.ProjectModule
+          ),
+      },
+      {
+        path: 'task',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./components/task/task.module').then((m) => m.TaskModule),
+      },
+      { path: 'profile', component: EmployeeViewComponent },
+    ],
   },
-  {
-    path: 'task',
-    canActivate: [authGuard],
-    loadChildren: () =>
-      import('./modules/task/task.module').then((m) => m.TaskModule),
-  },
-  { path: 'profile', component: EmployeeViewComponent },
 ];
 
 @NgModule({

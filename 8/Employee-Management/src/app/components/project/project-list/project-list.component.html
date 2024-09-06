@@ -1,0 +1,145 @@
+<div class="container px-8 py-6 flex flex-col text-sm">
+  <!-- Header Section -->
+  <div class="flex justify-between items-center pb-4">
+    <h1 class="text-2xl font-semibold text-gray-800">Project List</h1>
+    <button
+      *ngIf="role === 1 || role === 2"
+      routerLink="/project/add"
+      class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
+    >
+      Add Project
+    </button>
+  </div>
+
+  <div class="flex justify-center gap-3">
+    <!-- Search Section -->
+    <div class="flex justify-center py-6 gap-4">
+      <input
+        type="text"
+        placeholder="Search projects..."
+        class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [(ngModel)]="paginationData.search"
+        (keyup.enter)="handleSearch()"
+      />
+      <button
+        class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+        (click)="handleSearch()"
+      >
+        Search
+      </button>
+    </div>
+
+    <div class="flex items-end">
+      <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input
+            matStartDate
+            formControlName="start"
+            placeholder="Start date"
+          />
+          <input matEndDate formControlName="end" placeholder="End date" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Projects Table -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+    <table
+      matSort
+      (matSortChange)="sortData($event)"
+      class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm"
+    >
+      <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <tr>
+          <th
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Sno.
+          </th>
+          <th
+            mat-sort-header="Name"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Name
+          </th>
+
+          <th
+            mat-sort-header="Description"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Description
+          </th>
+          <th
+            mat-sort-header="Status"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Status
+          </th>
+          <th
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-50">
+        <tr
+          *ngFor="let item of projects; let i = index"
+          class="hover:bg-gray-50"
+        >
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            {{
+              i +
+                1 +
+                (paginationData.pageIndex - 1) * paginationData.pagedItemsCount
+            }}
+          </td>
+          <td
+            class="px-6 py-4 border-b border-gray-200 text-gray-700 font-medium"
+          >
+            {{ item.name }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            {{ item.description }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            <ng-container *ngIf="item.status === 0">Pending</ng-container>
+            <ng-container *ngIf="item.status === 1">Active</ng-container>
+            <ng-container *ngIf="item.status === 2">Completed</ng-container>
+          </td>
+          <td class="px-6 py-4 border-b text-black flex gap-4">
+            <div routerLink="/project/view/{{ item.id }}">
+              <mat-icon>visibility</mat-icon>
+            </div>
+            <div
+              (click)="handleDelete(item.id)"
+              *ngIf="role === 1 || role === 2"
+            >
+              <mat-icon>delete</mat-icon>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginator -->
+  <div class="flex justify-end pt-6">
+    <mat-paginator
+      [length]="totalItems"
+      [pageSize]="paginationData.pagedItemsCount"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page"
+      (page)="onPageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>
+<p-toast />

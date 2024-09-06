@@ -6,6 +6,7 @@ import {
   EmployeesProject,
   paginatedProjectData,
   projectByIdResponse,
+  ProjectCountResponse,
   projectDeleteResponse,
   projectPostBody,
   projectRequestResponse,
@@ -57,5 +58,9 @@ export class ProjectService {
     return this.http.get<EmployeesProject>(
       `${this.url}/Project/employee/${id}`
     );
+  }
+
+  public getProjectCount(): Observable<ProjectCountResponse> {
+    return this.http.get<ProjectCountResponse>(`${this.url}/Project/Count`);
   }
 }

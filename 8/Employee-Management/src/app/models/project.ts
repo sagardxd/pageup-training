@@ -100,3 +100,17 @@ export interface Task {
   name: string;
   description: string;
 }
+
+export interface ProjectCountResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  data: ProjectCount;
+}
+
+export interface ProjectCount {
+  total: number;
+  active: number;
+  pending: number;
+  completed: number;
+}

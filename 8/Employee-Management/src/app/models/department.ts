@@ -62,3 +62,15 @@ export interface paginatedData {
 export interface paginatedDepartmentDataList {
   data: paginatedData;
 }
+
+export interface DepartmentCountResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  data: DepartmentCount[];
+}
+
+export interface DepartmentCount {
+  name: string;
+  count: number;
+}

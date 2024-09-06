@@ -1,0 +1,125 @@
+<div class="container px-8 py-6 flex flex-col min-h-full text-sm">
+  <!-- Header Section -->
+  <div class="flex justify-between items-center pb-4">
+    <h1 class="text-2xl font-semibold text-gray-800">Departments List</h1>
+    <button
+      (click)="invokeAddDepartmentDialog()"
+      class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
+    >
+      Add Department
+    </button>
+  </div>
+
+  <!-- Search Section -->
+  <div class="flex items-end justify-center gap-3">
+    <div class="flex justify-center py-6 gap-4">
+      <input
+        type="text"
+        placeholder="Search departments..."
+        class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [(ngModel)]="paginationData.search"
+        (keyup.enter)="handleSearch()"
+      />
+      <button
+        class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+        (click)="handleSearch()"
+      >
+        Search
+      </button>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input
+            matStartDate
+            formControlName="start"
+            placeholder="Start date"
+          />
+          <input matEndDate formControlName="end" placeholder="End date" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Departments Table -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+    <table
+      matSort
+      (matSortChange)="sortData($event)"
+      class="min-w-full bg-white border border-gray-300 rounded-md shadow-sm"
+    >
+      <thead class="bg-gray-200 text-gray-600 text-sm leading-normal">
+        <tr>
+          <th
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Sno
+          </th>
+          <th
+            mat-sort-header="Name"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Name
+          </th>
+          <th
+            mat-sort-header="Created At"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Created At
+          </th>
+          <th
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr
+          *ngFor="let item of departments; let i = index"
+          class="hover:bg-gray-50"
+        >
+          <td class="px-6 py-4 border-b border-gray-200">
+            {{
+              i +
+                1 +
+                (paginationData.pageIndex - 1) * paginationData.pagedItemsCount
+            }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 font-medium">
+            {{ item.name }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 font-medium">
+            {{ item.createdOn | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 flex gap-2">
+            <div (click)="deleteDepartmentDialog(item.id)">
+              <mat-icon>delete</mat-icon>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginator -->
+  <div class="flex justify-end pt-6">
+    <mat-paginator
+      [length]="totalItems"
+      [pageSize]="paginationData.pagedItemsCount"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page"
+      (page)="onPageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>
+
+<p-toast />
