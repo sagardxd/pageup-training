@@ -23,7 +23,7 @@
           "
           class="text-2xl text-gray-900 text-wrap"
         >
-          {{ task.name }}
+          {{ task.name }} <span>({{ task.id }})</span>
         </p>
       </div>
 
@@ -196,7 +196,9 @@
                       <span *ngSwitchCase="4">Bug:</span>
                     </ng-container>
                   </p>
-                  <div class="ml-2 text-lg font-medium">{{ parent.name }}</div>
+                  <div class="ml-2 text-lg font-medium">
+                    {{ parent.name }}({{ parent.id }})
+                  </div>
                 </div>
               </a>
             </div>
@@ -272,7 +274,7 @@
                   </ng-container>
                 </p>
                 <div class="ml-2 text-wrap text-lg font-medium">
-                  {{ subTask.name }}
+                  {{ subTask.name }} ({{ subTask.id }})
                 </div>
               </a>
             </li>

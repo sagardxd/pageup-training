@@ -16,6 +16,7 @@ export class AddSprintComponent implements OnDestroy {
   public updating = false;
   public sprintId: number = 0;
   public dialogRef!: MatDialogRef<AddSprintComponent>;
+  public isEdit: boolean = false;
   private subscriptions: Subscription = new Subscription();
 
   constructor(
@@ -117,5 +118,10 @@ export class AddSprintComponent implements OnDestroy {
 
   public closeDialog() {
     this.dialogRef.close();
+  }
+
+  public resetDate(): void {
+    this.sprintForm.controls.startDate.setValue(null);
+    this.sprintForm.controls.endDate.setValue(null);
   }
 }

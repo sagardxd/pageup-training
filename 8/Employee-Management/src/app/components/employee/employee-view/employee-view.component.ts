@@ -3,7 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../../../services/employee.service';
 import { Employee, EmployeeById } from '../../../models/emloyee';
 import { ProjectService } from '../../../services/project.service';
-import { EmployeesProject, project } from '../../../models/project';
+import {
+  EmployeesProject,
+  project,
+  projectEmployeeData,
+} from '../../../models/project';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskListComponent } from '../../task/task-list/task-list.component';
 import { MessageService } from 'primeng/api';
@@ -18,7 +22,7 @@ export class EmployeeViewComponent implements OnInit, OnDestroy {
   private paramId: string | null = null;
   public id: number | null = null;
   public employee: Employee | null = null;
-  public projects: project[] = [];
+  public projects: projectEmployeeData[] | null = null;
   private subscriptions: Subscription = new Subscription();
 
   constructor(

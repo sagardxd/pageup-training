@@ -1,8 +1,16 @@
 <!-- Sprint Form Section -->
 <div class="mt-10 p-5 flex flex-col gap-2" [formGroup]="sprintForm">
-  <h2 class="text-2xl font-semibold text-gray-800 mb-4">Add Sprint</h2>
+  <h2 *ngIf="!isEdit" class="text-2xl font-semibold text-gray-800 mb-4">
+    Add Sprint
+  </h2>
+  <h2 *ngIf="isEdit" class="text-2xl font-semibold text-gray-800 mb-4">
+    Update Sprint
+  </h2>
+
   <div class="flex flex-col space-y-4 max-w-72">
-    <label class="text-lg font-medium text-gray-700">Sprint Name</label>
+    <label *ngIf="isEdit" class="text-lg font-medium text-gray-700"
+      >Sprint Name <span class="text-red-500">*</span></label
+    >
     <input
       class="p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter sprint name"
@@ -10,7 +18,7 @@
     />
   </div>
 
-  <div>
+  <div class="flex justify-between">
     <mat-form-field>
       <mat-label>Enter a date range</mat-label>
       <mat-date-range-input [rangePicker]="picker">
@@ -27,8 +35,23 @@
       ></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
+
+    <div>
+      <button
+        class="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+        (click)="resetDate()"
+      >
+        Reset Date
+      </button>
+    </div>
   </div>
   <div class="flex gap-3">
+    <button
+      class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      (click)="closeDialog()"
+    >
+      Close
+    </button>
     <div>
       <div *ngIf="!updating">
         <button
@@ -58,11 +81,5 @@
         </button>
       </div>
     </div>
-    <button
-      class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-      (click)="closeDialog()"
-    >
-      Close
-    </button>
   </div>
 </div>

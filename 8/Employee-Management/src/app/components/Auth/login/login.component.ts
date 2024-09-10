@@ -44,6 +44,8 @@ export class LoginComponent {
 
             if (res.data.employee.role === 0) {
               this.router.navigate(['/project']);
+            } else if (res.data.employee.role === 1) {
+              this.router.navigate(['/employee']);
             } else {
               this.router.navigate(['/dashboard']);
             }

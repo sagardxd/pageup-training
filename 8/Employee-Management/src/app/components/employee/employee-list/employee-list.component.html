@@ -5,6 +5,7 @@
       <h1 class="text-2xl font-semibold text-gray-800">Employees List</h1>
       <div *ngIf="!isAdding">
         <button
+          *ngIf="!isAdmin"
           routerLink="/employee/add"
           class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
@@ -15,18 +16,18 @@
     <div class="flex gap-3">
       <div mat-dialog-actions *ngIf="isAdding">
         <button
-          (click)="saveProjectEmployees()"
-          class="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          Save
-        </button>
-      </div>
-      <div mat-dialog-actions *ngIf="isAdding">
-        <button
           (click)="closedialog()"
           class="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
         >
           Close
+        </button>
+      </div>
+      <div mat-dialog-actions *ngIf="isAdding">
+        <button
+          (click)="saveProjectEmployees()"
+          class="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          Save
         </button>
       </div>
     </div>
@@ -35,47 +36,54 @@
   <div class="flex justify-center gap-4">
     <button
       [ngClass]="{
-        'bg-gray-300': activeStatus === null,
-        'bg-gray-100': activeStatus !== null
+        'bg-gray-400': activeStatus === null,
+        'bg-gray-200': activeStatus !== null,
+        'ring-2 ring-gray-500': activeStatus === null
       }"
-      class="px-6 py-2 text-gray-800 rounded-md shadow-md"
+      class="px-6 py-2 text-gray-800 rounded-md shadow-md focus:outline-none"
       (click)="changeStatus(null)"
     >
       Total {{ this.employeeCount?.total }}
     </button>
-    <button
+
+    <!-- <button
       [ngClass]="{
-        'bg-blue-300': activeStatus === 2,
-        'bg-blue-100': activeStatus !== 2
+        'bg-blue-500 text-white': activeStatus === 2,
+        'bg-blue-200': activeStatus !== 2,
+        'ring-2 ring-blue-500': activeStatus === 2
       }"
-      class="px-6 py-2 text-blue-800 rounded-md shadow-md"
+      class="px-6 py-2 rounded-md shadow-md focus:outline-none"
       (click)="changeStatus(2)"
     >
       Super Admin {{ this.employeeCount?.superAdmin }}
-    </button>
+    </button> -->
+
     <button
       [ngClass]="{
-        'bg-green-300': activeStatus === 1,
-        'bg-green-100': activeStatus !== 1
+        'bg-green-500 text-white': activeStatus === 1,
+        'bg-green-200': activeStatus !== 1,
+        'ring-2 ring-green-500': activeStatus === 1
       }"
-      class="px-6 py-2 text-green-800 rounded-md shadow-md"
+      class="px-6 py-2 rounded-md shadow-md focus:outline-none"
       (click)="changeStatus(1)"
     >
       Admin {{ this.employeeCount?.admin }}
     </button>
+
     <button
       [ngClass]="{
-        'bg-yellow-300': activeStatus === 0,
-        'bg-yellow-100': activeStatus !== 0
+        'bg-blue-500 text-white': activeStatus === 0,
+        'bg-blue-200': activeStatus !== 0,
+        'ring-2 ring-blue-500': activeStatus === 0
       }"
-      class="px-6 py-2 text-yellow-800 rounded-md shadow-md"
+      class="px-6 py-2 rounded-md shadow-md focus:outline-none"
       (click)="changeStatus(0)"
     >
       Employee {{ this.employeeCount?.employee }}
     </button>
   </div>
 
-  <div class="flex gap-3 justify-center">
+  <div class="flex gap-3 justify-center items-center">
     <!-- Search Section -->
     <div class="flex justify-center py-6 gap-4">
       <input
@@ -111,6 +119,29 @@
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
     </div>
+    <div>
+      <button
+        class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+        (click)="resetDate()"
+      >
+        Reset Date
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isAdding" class="space-x-4 flex justify-end my-5">
+    <button
+      (click)="selectAll()"
+      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+    >
+      Select All
+    </button>
+    <button
+      (click)="unselectAll()"
+      class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+    >
+      Unselect All
+    </button>
   </div>
 
   <!-- Employees Table -->
@@ -142,6 +173,12 @@
             class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
           >
             Email
+          </th>
+          <th
+            mat-sort-header="CreatedOn"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Created At
           </th>
           <th
             mat-sort-header="DepartmentI"
@@ -182,6 +219,9 @@
             {{ item.email || "N/A" }}
           </td>
           <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            {{ item.createdOn | date }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
             {{ item.departmentName || "none" }}
           </td>
           <td class="px-6 py-4 border-b border-gray-200 flex gap-3">
@@ -189,10 +229,11 @@
               <div routerLink="/employee/view/{{ item.id }}">
                 <mat-icon>visibility</mat-icon>
               </div>
-              <div routerLink="/employee/edit/{{ item.id }}">
+
+              <div *ngIf="!isAdmin" routerLink="/employee/edit/{{ item.id }}">
                 <mat-icon>edit</mat-icon>
               </div>
-              <div (click)="deleteEmployeeInvoke(item.id)">
+              <div *ngIf="!isAdmin" (click)="deleteEmployeeInvoke(item.id)">
                 <mat-icon>delete</mat-icon>
               </div>
             </div>
@@ -231,4 +272,4 @@
   </div>
 </div>
 
-<p-toast />
+<!-- <p-toast /> -->

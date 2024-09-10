@@ -3,6 +3,7 @@ import {
   Employee,
   EmployeeCount,
   EmployeePaginatedBody,
+  paginatedEmployeeData,
 } from '../../../models/emloyee';
 import { EmployeeService } from '../../../services/employee.service';
 import { DeletedialogService } from '../../../services/deletedialog.service';
@@ -11,19 +12,20 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { Base } from './base';
 
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.scss',
 })
-export class EmployeeListComponent implements OnInit, OnDestroy {
+export class EmployeeListComponent extends Base implements OnInit, OnDestroy {
   public employees: Employee[] = [];
   public projectEmployees: { id: number; name: string }[] = [];
   public paginationData: EmployeePaginatedBody = {
     pageIndex: 1,
     pagedItemsCount: 10,
-    orderKey: '',
+    orderKey: 'id',
     sortedOrder: 0,
     search: '',
     dateRange: null,
@@ -37,12 +39,14 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   public dialogRef!: MatDialogRef<EmployeeListComponent>;
   public range: FormGroup;
   private subscriptions: Subscription = new Subscription();
+  public isAdmin = false;
 
   constructor(
     private employeeService: EmployeeService,
     private deleteDialogService: DeletedialogService,
-    private messageService: MessageService
+    public override messageService: MessageService
   ) {
+    super();
     this.getPaginationList();
     this.range = new FormGroup({
       start: new FormControl(null, [Validators.required]),
@@ -51,6 +55,10 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const role = Number(localStorage.getItem('role'));
+    if (role === 1) {
+      this.isAdmin = true;
+    }
     // Subscribe to value changes on the form group
     this.subscriptions.add(
       this.range.valueChanges.subscribe((value) => {
@@ -77,7 +85,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getPaginationList() {
+  private async getPaginationList() {
     this.subscriptions.add(
       this.employeeService
         .getPaginatedEmployees(this.paginationData)
@@ -96,6 +104,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
           },
         })
     );
+    const a = await this.getData<paginatedEmployeeData>({ url: 'Employee' });
   }
 
   private getCount(): void {
@@ -145,7 +154,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'success',
             summary: 'Deleted',
-            detail: 'Department Deleted Successfully',
+            detail: 'Employee Deleted Successfully',
           });
         }
       })
@@ -165,7 +174,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   public sortData(event: any): void {
     this.paginationData.orderKey = event.active;
 
-    if (event.direction === 'asc') {
+    if (event.direction === 'asacasdasd') {
       this.paginationData.sortedOrder = 1;
     } else if (event.direction === 'desc') {
       this.paginationData.sortedOrder = 0;
@@ -178,6 +187,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   public addEmployeeInProject(name: string, id: number) {
     const employee = { id, name };
     this.projectEmployees.push(employee);
+    console.log(this.projectEmployees);
   }
 
   public removeEmployeeInProject(id: number) {
@@ -202,5 +212,24 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
 
   public closedialog(): void {
     this.dialogRef.close();
+  }
+
+  public resetDate(): void {
+    this.paginationData.dateRange = null;
+    this.range.reset();
+    this.getPaginationList();
+  }
+
+  public selectAll(): void {
+    console.log(this.employees);
+    this.employees.forEach((employee) => {
+      if (!this.exsistInArray(employee.id)) {
+        this.projectEmployees.push({ id: employee.id, name: employee.name });
+      }
+    });
+  }
+
+  public unselectAll(): void {
+    this.projectEmployees = [];
   }
 }

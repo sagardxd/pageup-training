@@ -16,7 +16,11 @@ import { SprintService } from '../../../services/sprint.service';
 import { Sprint, sprintGetBody } from '../../../models/sprint';
 import { MatSelectChange } from '@angular/material/select';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TaskCount, TaskPaginationBodyTask } from '../../../models/task';
+import {
+  TaskCount,
+  TaskPaginationBodyTask,
+  TaskPaginationResponse,
+} from '../../../models/task';
 import { MessageService } from 'primeng/api';
 import { DeletedialogService } from '../../../services/deletedialog.service';
 import { AddSprintComponent } from '../../task/add-sprint/add-sprint.component';
@@ -33,6 +37,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   public project: projectByIdData | null = null;
   public epicList: WorkItem[] = [];
   public hasChanged: boolean = false;
+  public loginId: null | number = null;
   public paginationData: TaskPaginationBodyTask = {
     pageIndex: 1,
     pagedItemsCount: 10,
@@ -43,7 +48,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     types: null,
     status: null,
     assign: null,
-    assignedTo: null,
+    assignedTo: [],
     sprintId: null,
   };
   public updating = false;
@@ -68,6 +73,8 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   public range: FormGroup;
   public isEmployee = false;
   private subscriptions: Subscription = new Subscription();
+  public sprintToggle = false;
+  public taskToggle = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -95,24 +102,12 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
         this.updateDateRange(value);
       })
     );
-    this.getTaskCount();
-
     if (localStorage.getItem('role') === '0') this.isEmployee = true;
+    this.loginId = Number(localStorage.getItem('id'));
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-  }
-
-  private getTaskCount(): void {
-    this.subscriptions.add(
-      this.taskService
-        .getTaskCount(Number(this.paramId))
-        .subscribe((response: TaskCount) => {
-          this.taskCount = response;
-          this.setTaskCountVal();
-        })
-    );
   }
 
   private setTaskCountVal(): void {
@@ -138,6 +133,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
       startDate: start ? new Date(start) : null,
       endDate: end ? new Date(end) : null,
     };
+    this.getTasks();
   }
 
   private getParamId(): void {
@@ -146,8 +142,6 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
         this.paramId = paramMap.get('id') ?? '';
         if (this.paramId) {
           this.getProjectData();
-          this.getTasks();
-          this.getSprints();
         }
       })
     );
@@ -167,10 +161,12 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.taskService
         .getEpicTasks(Number(this.paramId), this.paginationData)
-        .subscribe((response) => {
+        .subscribe((response: TaskPaginationResponse) => {
           if (response.success) {
-            this.epicList = response.data.data;
+            this.epicList = response.data.data.tasks;
             this.totalItems = response.data.totalItems;
+            this.taskCount = response.data.data.count;
+            this.setTaskCountVal();
           }
         })
     );
@@ -252,6 +248,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(EmployeeListComponent, {
       width: '1000px',
       height: '600px',
+      disableClose: true,
     });
 
     dialogRef.componentInstance.dialogRef = dialogRef;
@@ -366,22 +363,27 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   // Handle select change events
   public onTaskTypeChange(event: MatSelectChange): void {
     this.paginationData.types = event.value;
+    this.getTasks();
   }
 
   public onStatusChange(event: MatSelectChange): void {
     this.paginationData.status = event.value;
+    this.getTasks();
   }
 
   public onSprintChange(event: MatSelectChange): void {
     this.paginationData.sprintId = event.value;
+    this.getTasks();
   }
 
   public onAssignChange(event: MatSelectChange): void {
     this.paginationData.assign = event.value;
+    this.getTasks();
   }
 
   public onAssignToChange(event: MatSelectChange): void {
     this.paginationData.assignedTo = event.value;
+    this.getTasks();
   }
 
   public sprintById(id: number): void {
@@ -393,19 +395,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   }
 
   public resetAllPaginationData(): void {
-    const paginationData = {
-      pageIndex: 1,
-      pagedItemsCount: 10,
-      orderKey: '',
-      sortedOrder: 0,
-      search: '',
-      dateRange: null,
-      types: null,
-      status: null,
-      assign: null,
-      assignedTo: null,
-      sprintId: null,
-    };
+    this.range.reset();
   }
 
   public deleteSprint(id: number): void {
@@ -441,14 +431,16 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
 
   public updateSprint(sprintId: number): void {
     const dialogRef = this.dialog.open(AddSprintComponent, {
-      width: '1000px',
-      height: '600px',
+      width: '450px',
+      height: '400px',
       disableClose: true,
     });
     dialogRef.componentInstance.projectId = this.paramId;
     dialogRef.componentInstance.updating = true;
     dialogRef.componentInstance.sprintId = sprintId;
     dialogRef.componentInstance.dialogRef = dialogRef;
+    dialogRef.componentInstance.isEdit = true;
+
     dialogRef.componentInstance.getSprintData(sprintId);
 
     this.subscriptions.add(
@@ -460,8 +452,8 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
 
   public addSprint(): void {
     const dialogRef = this.dialog.open(AddSprintComponent, {
-      width: '1000px',
-      height: '600px',
+      width: '450px',
+      height: '400px',
       disableClose: true,
     });
     dialogRef.componentInstance.projectId = this.paramId;
@@ -472,5 +464,36 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
         this.getSprints();
       })
     );
+  }
+
+  public sprintToggleFunc() {
+    if (this.sprintToggle) {
+      this.sprintToggle = false;
+    } else {
+      this.sprintToggle = true;
+      if (this.sprints.length === 0) {
+        console.log(this.sprints);
+        this.getSprints();
+      }
+    }
+  }
+
+  public taskToggleFunc() {
+    if (this.taskToggle) {
+      this.taskToggle = false;
+    } else {
+      this.taskToggle = true;
+      if (this.epicList.length === 0) {
+        this.getTasks();
+      }
+      if (this.sprints.length === 0) {
+        this.getSprints();
+      }
+    }
+  }
+
+  public resetDate(): void {
+    this.range.reset();
+    this.getTasks();
   }
 }

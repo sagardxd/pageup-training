@@ -59,7 +59,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
         .getEpicTasks(this.projectId, this.paginationData)
         .subscribe((response: TaskPaginationResponse) => {
           if (response.success) {
-            this.tasks = response.data.data;
+            this.tasks = response.data.data.tasks;
             this.totalItems = response.data.totalItems;
             this.totalPages = response.data.totalPages;
           }

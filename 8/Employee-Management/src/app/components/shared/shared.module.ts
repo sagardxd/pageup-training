@@ -13,6 +13,7 @@ import { LoaderComponent } from './loader/loader.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ToastModule } from 'primeng/toast';
 import { DisableIfBusyDirective } from './directives/disable-if-busy.directive';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { DisableIfBusyDirective } from './directives/disable-if-busy.directive';
     DeleteDialogComponent,
     LoaderComponent,
     DisableIfBusyDirective,
+    TruncatePipe,
   ],
   imports: [
     CommonModule,
@@ -39,6 +41,7 @@ import { DisableIfBusyDirective } from './directives/disable-if-busy.directive';
     CardComponent,
     DeleteDialogComponent,
     LoaderComponent,
+    TruncatePipe,
   ],
 })
 export class SharedModule {}

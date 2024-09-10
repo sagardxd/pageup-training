@@ -1,14 +1,15 @@
 <div
-  class="container mx-auto px-4 py-6 bg-white rounded-lg shadow-md max-w-lg h-[80vh] overflow-y-auto"
+  class="container mx-auto px-4 bg-white rounded-lg shadow-md max-w-lg h-[80vh] overflow-y-auto"
 >
-  <div class="flex justify-between items-center">
-    <h1 class="text-3xl font-semibold text-gray-800 mb-6">Add Task</h1>
-    <button
-      class="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-      (click)="closeDialog()"
-    >
-      Close
-    </button>
+  <div
+    class="sticky top-0 first-letter:flex justify-between items-center bg-white py-4"
+  >
+    <h1 *ngIf="!isEdit" class="text-3xl font-semibold text-gray-800 mb-6">
+      Add Task
+    </h1>
+    <h1 *ngIf="isEdit" class="text-3xl font-semibold text-gray-800 mb-6">
+      Update Task
+    </h1>
   </div>
   <form [formGroup]="taskForm">
     <div class="py-3 flex justify-between items-center">
@@ -22,14 +23,17 @@
       </div>
       <ng-container
         *ngIf="!isEdit; else showTaskTypeLabel"
-        class="flex flex-col"
+        class="flex flex-col space-y-4 border border-gray-950"
       >
         <div class="flex flex-col">
-          <label>Task type:</label>
+          <label class="mb-2 text-sm font-semibold text-gray-700">
+            Task Type: <span class="text-red-500">*</span>
+          </label>
           <select
             name="tasktype"
             formControlName="taskType"
-            class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="tasktype"
+            class="px-4 py-2 border border-gray-950 first:rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out hover:border-blue-400 hover:shadow-lg hover:ring-1"
           >
             <option value="0">Epic</option>
             <option value="1">Feature</option>
@@ -44,7 +48,7 @@
               (taskForm.controls.taskType.touched ||
                 taskForm.controls.taskType.dirty)
             "
-            class="text-red-500 mt-2"
+            class="text-red-500 mt-2 text-sm italic font-medium"
           >
             Task Type is required.
           </div>
@@ -82,7 +86,7 @@
     <!-- Name Input -->
     <div class="mb-4">
       <label for="name" class="block text-gray-700 font-medium mb-2"
-        >Task Name</label
+        >Name <span class="text-red-500">*</span></label
       >
       <input
         id="name"
@@ -106,7 +110,7 @@
     <!-- Description Input -->
     <div class="mb-4">
       <label for="description" class="block text-gray-700 font-medium mb-2"
-        >Description</label
+        >Description <span class="text-red-500">*</span></label
       >
       <textarea
         id="description"
@@ -263,36 +267,48 @@
       </div>
     </div>
 
-    <div *ngIf="!isEdit || isAdding" class="text-center mt-4">
-      <button
-        (click)="addTask()"
-        [ngClass]="{
-          'bg-green-500 hover:bg-green-600': !(
-            taskForm.pristine || taskForm.invalid
-          ),
-          'bg-gray-400 cursor-not-allowed':
-            taskForm.pristine || taskForm.invalid
-        }"
-        class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        Save Task
-      </button>
-    </div>
-    <div *ngIf="isEdit && !isAdding" class="text-center mt-4">
-      <button
-        (click)="updateTask()"
-        [disabled]="taskForm.pristine"
-        [ngClass]="{
-          'bg-blue-500 hover:bg-blue-600': !(
-            taskForm.pristine || taskForm.invalid
-          ),
-          'bg-gray-400 cursor-not-allowed':
-            taskForm.pristine || taskForm.invalid
-        }"
-        class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        Update Task
-      </button>
+    <div
+      class="flex gap-5 sticky bottom-0 bg-white p-4 border-t border-gray-200"
+    >
+      <div class="text-center mt-4">
+        <button
+          class="bg-gray-500 text-white px-6 py-2 rounded-lg shadow hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          (click)="closeDialog()"
+        >
+          Close
+        </button>
+      </div>
+      <div *ngIf="!isEdit || isAdding" class="text-center mt-4">
+        <button
+          (click)="addTask()"
+          [ngClass]="{
+            'bg-green-500 hover:bg-green-600': !(
+              taskForm.pristine || taskForm.invalid
+            ),
+            'bg-gray-400 cursor-not-allowed':
+              taskForm.pristine || taskForm.invalid
+          }"
+          class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Save Task
+        </button>
+      </div>
+      <div *ngIf="isEdit && !isAdding" class="text-center mt-4">
+        <button
+          (click)="updateTask()"
+          [disabled]="taskForm.pristine"
+          [ngClass]="{
+            'bg-blue-500 hover:bg-blue-600': !(
+              taskForm.pristine || taskForm.invalid
+            ),
+            'bg-gray-400 cursor-not-allowed':
+              taskForm.pristine || taskForm.invalid
+          }"
+          class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Update Task
+        </button>
+      </div>
     </div>
   </form>
 </div>

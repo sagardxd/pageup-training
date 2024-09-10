@@ -31,7 +31,12 @@ export interface EmployeesProject {
   success: boolean;
   status: number;
   message: string;
-  data: project[];
+  data: projectEmployeeData[];
+}
+
+export interface projectEmployeeData {
+  project: project;
+  tasks: number;
 }
 
 interface paginatedData {

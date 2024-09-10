@@ -40,15 +40,13 @@
           >
             Task Name
           </th>
-          <!-- <th mat-sort-header="Description" class="py-3 px-6 text-left">
-            Description
+          <th mat-sort-header="Description" class="py-3 px-6 text-left">
+            Tasktype
           </th>
-          <th mat-sort-header="Assigner" class="py-3 px-6 text-left">
-            Assigner
-          </th> -->
-          <th mat-sort-header="Assignee" class="py-3 px-6 text-left">
+          <th mat-sort-header="Assigner" class="py-3 px-6 text-left">Status</th>
+          <!-- <th mat-sort-header="Assignee" class="py-3 px-6 text-left">
             Assignee
-          </th>
+          </th> -->
           <th class="py-3 px-6 text-center">Actions</th>
         </tr>
       </thead>
@@ -63,9 +61,20 @@
           <td class="py-3 px-6 text-left">
             <span class="font-medium">{{ task.name }}</span>
           </td>
-          <!-- <td class="py-3 px-6 text-left">{{ task. }}</td>
+          <!-- <td class="py-3 px-6 text-left">{{ task.description }}</td>
           <td class="py-3 px-6 text-left">{{ task.assignerName }}</td> -->
-          <td class="py-3 px-6 text-left">{{ task.assigneeName }}</td>
+          <td class="py-3 px-6 text-left">
+            <div *ngIf="task.taskType === 0">Epic</div>
+            <div *ngIf="task.taskType === 1">Feature</div>
+            <div *ngIf="task.taskType === 2">Userstory</div>
+            <div *ngIf="task.taskType === 3">Task</div>
+            <div *ngIf="task.taskType === 4">bug</div>
+          </td>
+          <td class="py-3 px-6 text-left">
+            <div *ngIf="task.status === 0">Pending</div>
+            <div *ngIf="task.status === 1">Active</div>
+            <div *ngIf="task.status === 2">Completed</div>
+          </td>
           <td class="py-3 px-6 text-center">
             <div class="flex item-center justify-center space-x-2">
               <button

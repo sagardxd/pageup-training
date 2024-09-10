@@ -30,7 +30,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   public EmployeeForm = new FormGroup<EmployeeForm>({
     username: new FormControl('', [
       Validators.required,
-      Validators.minLength(3),
+      Validators.minLength(6),
     ]),
     password: new FormControl('', [
       Validators.required,
@@ -44,10 +44,12 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
       Validators.pattern(/^\d{10}$/),
     ]),
     salary: new FormControl(null, [Validators.required, Validators.min(0)]),
-    departmentID: new FormControl(null, [Validators.required]),
+    departmentID: new FormControl(null),
     managerID: new FormControl(),
     role: new FormControl(null, [Validators.required]),
   });
+
+  public passwordCoinfirmation: null | string = null;
 
   constructor(
     private departmentService: DepartmentService,
@@ -153,6 +155,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   }
 
   public onDepartmentChange(event: any): void {
+    if (event.target.value == 'null') return;
     this.departmentId = event.target.value;
     if (this.departmentId) {
       this.getEmployeeByDepartment(this.departmentId);
@@ -190,8 +193,10 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
         departmentID:
           Number(this.EmployeeForm.controls.departmentID.value) || null,
         managerID: Number(this.EmployeeForm.controls.managerID.value) || null,
-        role: Number(this.EmployeeForm.controls.role.value) || null,
+        role: Number(this.EmployeeForm.controls.role.value),
       };
+
+      this.passwordCoinfirmation = null;
 
       this.subscriptions.add(
         this.employeeService.addEmployee(body).subscribe({
@@ -217,7 +222,14 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   }
 
   public updateEmployee(): void {
-    if (this.EmployeeForm.valid) {
+    console.log(this.EmployeeForm.value);
+    if (
+      this.EmployeeForm.controls.name &&
+      this.EmployeeForm.controls.salary &&
+      this.EmployeeForm.controls.email &&
+      this.EmployeeForm.controls.address &&
+      this.EmployeeForm.controls.phone
+    ) {
       const body = {
         name: this.EmployeeForm.value.name || null,
         salary: this.EmployeeForm.value.salary || null,
@@ -226,7 +238,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
         phone: this.EmployeeForm.value.phone || null,
         departmentID: Number(this.EmployeeForm.value.departmentID) || null,
         managerID: Number(this.EmployeeForm.value.managerID) || null,
-        role: Number(this.EmployeeForm.value.role) || null,
+        role: Number(this.EmployeeForm.value.role),
       };
 
       this.subscriptions.add(

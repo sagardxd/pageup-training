@@ -3,7 +3,7 @@
   <div class="flex justify-between items-center pb-4">
     <h1 class="text-2xl font-semibold text-gray-800">Project List</h1>
     <button
-      *ngIf="role === 1 || role === 2"
+      *ngIf="role === 2 || role === 1"
       routerLink="/project/add"
       class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
     >
@@ -11,7 +11,7 @@
     </button>
   </div>
 
-  <div class="flex justify-center gap-3">
+  <div class="flex justify-center items-center gap-3">
     <!-- Search Section -->
     <div class="flex justify-center py-6 gap-4">
       <input
@@ -47,6 +47,14 @@
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
     </div>
+    <div>
+      <button
+        class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+        (click)="resetDate()"
+      >
+        Reset Date
+      </button>
+    </div>
   </div>
 
   <!-- Projects Table -->
@@ -75,6 +83,12 @@
             class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
           >
             Description
+          </th>
+          <th
+            mat-sort-header="createdOn"
+            class="px-6 py-3 border-b border-gray-200 text-left text-gray-600"
+          >
+            Created At
           </th>
           <th
             mat-sort-header="Status"
@@ -107,7 +121,10 @@
             {{ item.name }}
           </td>
           <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
-            {{ item.description }}
+            {{ item.description | truncate : 50 }}
+          </td>
+          <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
+            {{ item.createdOn | date }}
           </td>
           <td class="px-6 py-4 border-b border-gray-200 text-gray-700">
             <ng-container *ngIf="item.status === 0">Pending</ng-container>
@@ -118,12 +135,22 @@
             <div routerLink="/project/view/{{ item.id }}">
               <mat-icon>visibility</mat-icon>
             </div>
+            <div routerLink="/project/edit/{{ item.id }}">
+              <mat-icon>edit</mat-icon>
+            </div>
             <div
               (click)="handleDelete(item.id)"
               *ngIf="role === 1 || role === 2"
             >
               <mat-icon>delete</mat-icon>
             </div>
+          </td>
+        </tr>
+        <tr *ngIf="projects.length === 0">
+          <td
+            class="px-6 py-4 border-b flex justify-center items-center min-w-full border-gray-200 text-gray-700"
+          >
+            No projects assigned
           </td>
         </tr>
       </tbody>

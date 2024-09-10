@@ -5,7 +5,7 @@
       <!-- Project Name -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2"
-          >Project Name</label
+          >Project Name <span class="text-red-500">*</span></label
         >
         <input
           type="text"
@@ -33,7 +33,7 @@
       <!-- Project Description -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2"
-          >Project Description</label
+          >Project Description <span class="text-red-500">*</span></label
         >
         <textarea
           placeholder="Enter project description"
@@ -60,7 +60,7 @@
       <!-- Project Status -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2"
-          >Project Status</label
+          >Project Status <span class="text-red-500">*</span></label
         >
         <select
           formControlName="status"
@@ -80,6 +80,7 @@
     </div>
 
     <button
+      *ngIf="!isEdit"
       (click)="save()"
       [ngClass]="{
         'bg-green-500 hover:bg-green-600': !(
@@ -91,6 +92,24 @@
       class="mt-8 w-full px-4 py-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
     >
       Save Project
+    </button>
+    <button
+      *ngIf="isEdit"
+      (click)="updateProject()"
+      [ngClass]="{
+        'bg-green-500 hover:bg-green-600': !(
+          (projectForm.pristine || projectForm.invalid) &&
+          !isMembersChanged
+        ),
+        'bg-gray-400 cursor-not-allowed':
+          (projectForm.pristine || projectForm.invalid) && !isMembersChanged
+      }"
+      [disabled]="
+        (projectForm.pristine || projectForm.invalid) && !isMembersChanged
+      "
+      class="mt-8 w-full px-4 py-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+    >
+      Update Project
     </button>
   </div>
 
@@ -118,6 +137,7 @@
       >
         <div>{{ item.name }}</div>
         <button
+          *ngIf="!isEdit"
           (click)="removeEmployee(item.id)"
           class="bg-red-500 p-2 rounded-md"
         >
@@ -128,4 +148,4 @@
   </div>
 </div>
 
-<p-toast />
+<!-- <p-toast /> -->

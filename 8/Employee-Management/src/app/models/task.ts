@@ -10,6 +10,7 @@ export interface paginatedTaskData {
 
 export interface paginatedData {
   data: Tasks[];
+  count: TaskCount;
   totalPages: number;
   totalItems: number;
 }
@@ -164,7 +165,10 @@ export interface TaskPaginationResponse {
   status: number;
   message: string;
   data: {
-    data: taskpaginationData[];
+    data: {
+      tasks: taskpaginationData[];
+      count: TaskCount;
+    };
     totalPages: number;
     totalItems: number;
   };

@@ -31,6 +31,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   public range: FormGroup;
   public role: number | null = null;
   private subscriptions: Subscription = new Subscription();
+  public isAdmin = false;
 
   constructor(
     private projectService: ProjectService,
@@ -45,6 +46,11 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const role = Number(localStorage.getItem('role')) || null;
+    if (role && role === 1) {
+      this.isAdmin = true;
+    }
+
     this.getParamId();
     this.getPaginatedProjectData();
     this.getRole();
@@ -173,5 +179,11 @@ export class ProjectListComponent implements OnInit, OnDestroy {
         this.getPaginatedProjectData();
       })
     );
+  }
+
+  public resetDate(): void {
+    this.paginationData.dateRange = null;
+    this.range.reset();
+    this.getPaginatedProjectData();
   }
 }

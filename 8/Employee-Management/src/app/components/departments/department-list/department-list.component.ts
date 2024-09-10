@@ -180,4 +180,10 @@ export class DepartmentListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
+  public resetDate(): void {
+    this.range.reset();
+    this.paginationData.dateRange = null;
+    this.getPaginationList();
+  }
 }

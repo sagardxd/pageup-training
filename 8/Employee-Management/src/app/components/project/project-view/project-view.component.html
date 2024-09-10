@@ -5,7 +5,7 @@
     <!-- Main Project Details -->
     <div *ngIf="project" class="w-full px-8 py-6 bg-white rounded-lg">
       <div class="space-y-5">
-        <div class="flex items-center">
+        <div class="flex">
           <span class="font-medium text-gray-700">Description:</span>
           <p class="ml-3 text-gray-600">{{ project.description }}</p>
         </div>
@@ -51,8 +51,24 @@
     </div>
   </div>
 
+  <div class="flex gap-3">
+    <button
+      (click)="sprintToggleFunc()"
+      class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+    >
+      Show Sprint
+    </button>
+
+    <button
+      (click)="taskToggleFunc()"
+      class="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+    >
+      Show Tasks
+    </button>
+  </div>
+
   <!-- Sprint Section -->
-  <div class="flex gap-10 p-6">
+  <div *ngIf="sprintToggle" class="flex gap-10 p-6">
     <!-- Sprints Table Section -->
     <div
       class="flex-1 mt-10 p-6 bg-white border border-gray-200 rounded-lg shadow-lg"
@@ -106,7 +122,7 @@
                   <mat-icon>visibility</mat-icon>
                 </button>
                 <button (click)="updateSprint(sprint.id)">
-                  <mat-icon>update</mat-icon>
+                  <mat-icon>edit</mat-icon>
                 </button>
                 <button (click)="deleteSprint(sprint.id)">
                   <mat-icon>delete</mat-icon>
@@ -125,155 +141,173 @@
   </div>
 
   <div class="mb-10 mt-10">
-    <div class="flex justify-between items-center pb-5">
-      <div class="flex gap-3 items-center">
-        <h2 class="text-2xl font-semibold text-gray-800">Tasks</h2>
-      </div>
-    </div>
-
-    <div class="flex items-center justify-center">
-      <div class="flex flex-wrap gap-2 items-center justify-center">
-        <!-- First Row - Three items -->
-        <div>
-          <mat-form-field>
-            <mat-label>Task type</mat-label>
-            <mat-select multiple (selectionChange)="onTaskTypeChange($event)">
-              @for (type of taskTypeList; track type.id) {
-              <mat-option [value]="type.id"
-                >{{ type.name }}({{ type.countVal }})</mat-option
-              >
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div class="">
-          <mat-form-field>
-            <mat-label>Status</mat-label>
-            <mat-select multiple (selectionChange)="onStatusChange($event)">
-              @for (status of statusList; track status.id) {
-              <mat-option [value]="status.id"
-                >{{ status.name }}({{ status.countVal }})</mat-option
-              >
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div>
-          <mat-form-field>
-            <mat-label>Sprint</mat-label>
-            <mat-select (selectionChange)="onSprintChange($event)">
-              @for (item of sprints; track item) {
-              <mat-option [value]="item.id">{{ item.name }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <!-- Second Row - Three items -->
-        <div>
-          <mat-form-field>
-            <mat-label>Assign</mat-label>
-            <mat-select (selectionChange)="onAssignChange($event)">
-              @for (assign of assignList; track assign.value) {
-              <mat-option [value]="assign.value"
-                >{{ assign.name }}({{ assign.countVal }})</mat-option
-              >
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div>
-          <mat-form-field>
-            <mat-label>Assigned To</mat-label>
-            <mat-select (selectionChange)="onAssignToChange($event)" multiple>
-              @for (assignedTo of project.members; track assignedTo.employeeId)
-              {
-              <mat-option [value]="assignedTo.employeeId">{{
-                assignedTo.employeeName
-              }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div>
-          <mat-form-field>
-            <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-              <input
-                matStartDate
-                formControlName="start"
-                placeholder="Start date"
-              />
-              <input matEndDate formControlName="end" placeholder="End date" />
-            </mat-date-range-input>
-            <mat-datepicker-toggle
-              matIconSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
-          </mat-form-field>
+    <div *ngIf="taskToggle">
+      <div class="flex justify-between items-center pb-5">
+        <div class="flex gap-3 items-center">
+          <h2 class="text-2xl font-semibold text-gray-800">Tasks</h2>
         </div>
       </div>
-    </div>
 
-    <div class="flex gap-3 justify-end pt-4">
-      <div>
-        <button
-          class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          (click)="createTask()"
-        >
-          Add Task
-        </button>
+      <div class="flex items-center justify-center">
+        <div class="flex flex-wrap gap-2 items-center justify-center">
+          <!-- First Row - Three items -->
+          <div>
+            <mat-form-field>
+              <mat-label>Task type</mat-label>
+              <mat-select multiple (selectionChange)="onTaskTypeChange($event)">
+                @for (type of taskTypeList; track type.id) {
+                <mat-option [value]="type.id"
+                  >{{ type.name }}({{ type.countVal }})</mat-option
+                >
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="">
+            <mat-form-field>
+              <mat-label>Status</mat-label>
+              <mat-select multiple (selectionChange)="onStatusChange($event)">
+                @for (status of statusList; track status.id) {
+                <mat-option [value]="status.id"
+                  >{{ status.name }}({{ status.countVal }})</mat-option
+                >
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Sprint</mat-label>
+              <mat-select (selectionChange)="onSprintChange($event)">
+                <mat-option [value]="null">None</mat-option>
+                @for (item of sprints; track item) {
+                <mat-option [value]="item.id">{{ item.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Second Row - Three items -->
+          <div>
+            <mat-form-field>
+              <mat-label>Assign</mat-label>
+
+              <mat-select (selectionChange)="onAssignChange($event)">
+                <mat-option [value]="null">None</mat-option>
+                @for (assign of assignList; track assign.value) {
+                <mat-option [value]="assign.value"
+                  >{{ assign.name }}({{ assign.countVal }})</mat-option
+                >
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Assigned To</mat-label>
+              <mat-select (selectionChange)="onAssignToChange($event)" multiple>
+                <mat-option [value]="loginId">me</mat-option>
+                @for (assignedTo of project.members; track
+                assignedTo.employeeId) {
+                <mat-option [value]="assignedTo.employeeId">{{
+                  assignedTo.employeeName
+                }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                <input
+                  matStartDate
+                  formControlName="start"
+                  placeholder="Start date"
+                />
+                <input
+                  matEndDate
+                  formControlName="end"
+                  placeholder="End date"
+                />
+              </mat-date-range-input>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+        </div>
       </div>
-      <div>
+
+      <div class="flex gap-3 justify-end pt-4">
+        <div>
+          <button
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            (click)="createTask()"
+          >
+            Add Task
+          </button>
+        </div>
+        <div>
+          <button
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            (click)="resetDate()"
+          >
+            Reset Date
+          </button>
+        </div>
+        <!-- <div>
         <button
           class="bg-green-600 px-4 py-2 text-white rounded-md shadow hover:bg-green-700"
           (click)="fetchTasks()"
         >
           Submit
         </button>
+      </div> -->
       </div>
-    </div>
 
-    <!-- Search Section -->
-    <div class="flex justify-center py-6 gap-4">
-      <input
-        type="text"
-        placeholder="Search tasks..."
-        class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        [(ngModel)]="paginationData.search"
-        (keyup.enter)="handleSearch()"
-      />
-      <button
-        class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
-        (click)="handleSearch()"
-      >
-        Search
-      </button>
-    </div>
-
-    <app-task-tree
-      [items]="epicList"
-      [projectId]="paramId"
-      [pageIndex]="paginationData.pageIndex"
-      [pageItemsCount]="paginationData.pagedItemsCount"
-      (taskUpdated)="handleTaskUpdated()"
-    ></app-task-tree>
-
-    <div>
-      <div class="flex justify-end pt-6">
-        <mat-paginator
-          [length]="totalItems"
-          [pageSize]="paginationData.pagedItemsCount"
-          [pageSizeOptions]="[5, 10, 25, 100]"
-          aria-label="Select page"
-          (page)="onPageEvent($event)"
+      <!-- Search Section -->
+      <div class="flex justify-center py-6 gap-4">
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          class="p-3 w-[300px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [(ngModel)]="paginationData.search"
+          (keyup.enter)="handleSearch()"
+        />
+        <button
+          class="bg-blue-600 px-4 py-2 text-white rounded-md shadow hover:bg-blue-700"
+          (click)="handleSearch()"
         >
-        </mat-paginator>
+          Search
+        </button>
+      </div>
+
+      <app-task-tree
+        [items]="epicList"
+        [projectId]="paramId"
+        [pageIndex]="paginationData.pageIndex"
+        [pageItemsCount]="paginationData.pagedItemsCount"
+        (taskUpdated)="handleTaskUpdated()"
+      ></app-task-tree>
+
+      <div>
+        <div class="flex justify-end pt-6">
+          <mat-paginator
+            [length]="totalItems"
+            [pageSize]="paginationData.pagedItemsCount"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            aria-label="Select page"
+            (page)="onPageEvent($event)"
+          >
+          </mat-paginator>
+        </div>
       </div>
     </div>
 
@@ -325,5 +359,3 @@
     <p>Loading project details...</p>
   </div>
 </div>
-
-<p-toast />
