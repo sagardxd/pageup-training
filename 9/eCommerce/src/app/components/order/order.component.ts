@@ -14,6 +14,11 @@ import { TruckDataForm } from '../../models/truck';
 import { cityStationCode } from '../../utils/cityData';
 import { productsData } from '../../utils/productData';
 
+interface RouteGraph {
+  [city: string]: {
+    [destination: string]: number;
+  };
+}
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
@@ -123,9 +128,68 @@ export class OrderComponent {
   private truckShipmentValidator(): ValidatorFn {
     return (form: AbstractControl): ValidationErrors | null => {
       const truckArray = form as FormArray;
-      const origin = [];
-      const destination = [];
-      return null;
+      const graph: RouteGraph = {};
+      let totalProducts = 0;
+      let errors: Record<string, number> = {};
+
+      truckArray.controls.forEach((truckGroup) => {
+        const truckControls = truckGroup as FormGroup<TruckDataForm>;
+        const origin = truckControls.controls.origin.value?.toUpperCase();
+        const destination =
+          truckControls.controls.destination.value?.toUpperCase();
+        const quantity = parseInt(
+          truckControls.controls.product.value || '0',
+          10
+        );
+
+        if (origin && destination) {
+          if (!graph[origin]) graph[origin] = {};
+          graph[origin][destination] = quantity;
+          totalProducts += quantity;
+        }
+      });
+
+      const visited: Set<string> = new Set<string>();
+
+      const dfs = (node: string, currentQuantity: number): boolean => {
+        visited.add(node);
+        let remaining = currentQuantity;
+
+        if (!graph[node]) return false;
+
+        for (const neighbor in graph[node]) {
+          const quantity = graph[node][neighbor];
+          remaining -= quantity;
+          if (!visited.has(neighbor)) {
+            if (!dfs(neighbor, quantity)) return false;
+          }
+        }
+
+        if (remaining > 0 && !isDestinationVisited()) {
+          errors[node] = remaining;
+        }
+
+        return true;
+      };
+
+      const isDestinationVisited = (): boolean => {
+        const destination =
+          this.orderForm.controls.destination.value?.toUpperCase();
+        return destination ? visited.has(destination) : false;
+      };
+
+      let allProductsReachedDestination = true;
+      for (const origin in graph) {
+        if (!visited.has(origin)) {
+          allProductsReachedDestination &&= dfs(origin, totalProducts);
+        }
+      }
+
+      if (allProductsReachedDestination && Object.keys(errors).length === 0) {
+        return null; // No errors
+      } else {
+        return { invalidRoutes: errors };
+      }
     };
   }
 
@@ -169,7 +233,7 @@ export class OrderComponent {
     const trucks = this.orderForm.controls.trucks;
     const newTruck = new FormGroup<TruckDataForm>({
       truckId: new FormControl(null),
-      capacity: new FormControl(null),
+      quantity: new FormControl(null),
       origin: new FormControl(null),
       destination: new FormControl(null),
       startDate: new FormControl(null),

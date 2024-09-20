@@ -5,6 +5,6 @@ export interface TruckDataForm {
   startDate: FormControl<Date | null>;
   origin: FormControl<string | null>;
   destination: FormControl<string | null>;
-  capacity: FormControl<number | null>;
+  quantity: FormControl<number | null>;
   product: FormControl<string | null>;
 }
