@@ -12,7 +12,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { Base } from './base';
+import { Base } from '../../base';
 
 @Component({
   selector: 'app-employee-list',

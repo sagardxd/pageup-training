@@ -24,6 +24,7 @@ export class EmployeeViewComponent implements OnInit, OnDestroy {
   public employee: Employee | null = null;
   public projects: projectEmployeeData[] | null = null;
   private subscriptions: Subscription = new Subscription();
+  public showProjectTogggle = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -84,6 +85,8 @@ export class EmployeeViewComponent implements OnInit, OnDestroy {
   }
 
   getEmployeeProjects(id: number | undefined): void {
+    this.showProjectTogggle = !this.showProjectTogggle;
+    if (this.projects && this.projects?.length > 0) return;
     if (id) {
       this.subscriptions.add(
         this.projectService.getProjectOfEmployee(id).subscribe({

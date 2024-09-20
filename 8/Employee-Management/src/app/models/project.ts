@@ -1,4 +1,5 @@
 import { FormArray, FormControl } from '@angular/forms';
+import { ApiResponse } from './commonModels';
 
 export interface projectData {
   name: string;
@@ -73,10 +74,7 @@ export interface projectDeleteResponse {
   data: boolean;
 }
 
-export interface projectByIdResponse {
-  success: boolean;
-  status: number;
-  message: string;
+export interface projectByIdResponse extends ApiResponse {
   data: projectByIdData;
 }
 
@@ -106,10 +104,7 @@ export interface Task {
   description: string;
 }
 
-export interface ProjectCountResponse {
-  success: boolean;
-  status: number;
-  message: string;
+export interface ProjectCountResponse extends ApiResponse {
   data: ProjectCount;
 }
 

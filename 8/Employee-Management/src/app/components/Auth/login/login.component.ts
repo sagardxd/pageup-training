@@ -12,8 +12,14 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent {
   public loginForm = new FormGroup({
-    username: new FormControl<string | null>(null, [Validators.required]),
-    password: new FormControl<string | null>(null, [Validators.required]),
+    username: new FormControl<string | null>(null, [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
+    password: new FormControl<string | null>(null, [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
   });
 
   constructor(

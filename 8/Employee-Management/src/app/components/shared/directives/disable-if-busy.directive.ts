@@ -1,4 +1,9 @@
-import { Directive, ElementRef, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Renderer2,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { LoaderService } from '../../../services/loader.service';
 
 @Directive({
@@ -8,7 +13,8 @@ export class DisableIfBusyDirective {
   constructor(
     private loadingService: LoaderService,
     private el: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private cdr: ChangeDetectorRef
   ) {
     this.loadingService.isLoading.subscribe((ifTrue: boolean) => {
       if (ifTrue) {

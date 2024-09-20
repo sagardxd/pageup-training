@@ -494,6 +494,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
 
   public resetDate(): void {
     this.range.reset();
+    this.paginationData.dateRange = null;
     this.getTasks();
   }
 }

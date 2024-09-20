@@ -14,6 +14,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ToastModule } from 'primeng/toast';
 import { DisableIfBusyDirective } from './directives/disable-if-busy.directive';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { FormErrorDirective } from './directives/form-error.directive';
+import { PaginatorComponent } from './paginator/paginator.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     LoaderComponent,
     DisableIfBusyDirective,
     TruncatePipe,
+    FormErrorDirective,
+    PaginatorComponent,
   ],
   imports: [
     CommonModule,
@@ -42,6 +46,9 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     DeleteDialogComponent,
     LoaderComponent,
     TruncatePipe,
+    DisableIfBusyDirective,
+    FormErrorDirective,
+    PaginatorComponent,
   ],
 })
 export class SharedModule {}

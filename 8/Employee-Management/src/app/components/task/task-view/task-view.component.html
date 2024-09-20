@@ -29,7 +29,9 @@
 
       <div class="mb-8">
         <h3 class="text-xl font-semibold text-gray-700 mb-2">Description</h3>
-        <p class="text-gray-800">{{ task.description }}</p>
+        <p class="text-gray-800" style="white-space: pre-wrap">
+          {{ task.description }}
+        </p>
       </div>
 
       <div *ngIf="task?.status !== undefined" class="mb-8">
@@ -123,7 +125,7 @@
                 *ngIf="userId === review.employeeId"
                 (click)="editTaskReview(review.id, review.content)"
               >
-                <mat-icon>update</mat-icon>
+                <mat-icon>edit</mat-icon>
               </div>
             </div>
             <p
@@ -321,6 +323,13 @@
             <p class="text-gray-900">{{ log.message }}</p>
           </div>
         </div>
+        <button
+          *ngIf="showMoreToggle"
+          (click)="getTaskLogs()"
+          class="mt-2 font-bold text-green-700 mb-4"
+        >
+          Show more
+        </button>
         <div
           *ngIf="!taskLogs || taskLogs.length === 0"
           class="text-gray-600 text-center italic"

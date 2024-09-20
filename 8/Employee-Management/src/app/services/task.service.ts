@@ -79,8 +79,13 @@ export class TaskService {
     return this.http.put(`${this.url}/Tasks/${taskId}`, body);
   }
 
-  public getTaskLog(taskId: number): Observable<TaskLogResponse> {
-    return this.http.get<TaskLogResponse>(`${this.url}/api/TaskLog/${taskId}`);
+  public getTaskLog(
+    taskId: number,
+    taskLogLength: number
+  ): Observable<TaskLogResponse> {
+    return this.http.get<TaskLogResponse>(
+      `${this.url}/api/TaskLog/${taskId}/${taskLogLength}`
+    );
   }
 
   public getTaskCount(projectId: number): Observable<TaskCount> {

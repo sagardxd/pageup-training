@@ -12,24 +12,10 @@
         id="username"
         type="text"
         placeholder="Enter employee username"
+        [appFormError]="EmployeeForm.controls.username"
         formControlName="username"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <div
-        *ngIf="
-          EmployeeForm.controls.username.invalid &&
-          (EmployeeForm.controls.username.touched ||
-            EmployeeForm.controls.username.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.username.errors?.['required']">
-          Username is required.
-        </div>
-        <div *ngIf="EmployeeForm.controls.username.errors?.['minlength']">
-          Username must be at least 3 characters long.
-        </div>
-      </div>
     </div>
 
     <!-- Password -->
@@ -42,23 +28,9 @@
         type="password"
         placeholder="Enter employee password"
         formControlName="password"
+        [appFormError]="EmployeeForm.controls.password"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <div
-        *ngIf="
-          EmployeeForm.controls.password?.invalid &&
-          (EmployeeForm.controls.password?.touched ||
-            EmployeeForm.controls.password?.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.password?.errors?.['required']">
-          Password is required.
-        </div>
-        <div *ngIf="EmployeeForm.controls.password?.errors?.['minlength']">
-          Password must be at least 6 characters long.
-        </div>
-      </div>
     </div>
 
     <form *ngIf="!isEdit">
@@ -102,23 +74,9 @@
         type="text"
         placeholder="Enter employee name"
         formControlName="name"
+        [appFormError]="EmployeeForm.controls.name"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <div
-        *ngIf="
-          EmployeeForm.controls.name.invalid &&
-          (EmployeeForm.controls.name.touched ||
-            EmployeeForm.controls.name.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.name.errors?.['required']">
-          Name is required.
-        </div>
-        <div *ngIf="EmployeeForm.controls.name.errors?.['minlength']">
-          Name must be at least 2 characters long.
-        </div>
-      </div>
     </div>
 
     <!-- Salary -->
@@ -131,23 +89,9 @@
         type="number"
         placeholder="Enter salary"
         formControlName="salary"
+        [appFormError]="EmployeeForm.controls.salary"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <div
-        *ngIf="
-          EmployeeForm.controls.salary.invalid &&
-          (EmployeeForm.controls.salary.touched ||
-            EmployeeForm.controls.salary.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.salary.errors?.['required']">
-          Salary is required.
-        </div>
-        <div *ngIf="EmployeeForm.controls.salary.errors?.['min']">
-          Salary must be a positive number.
-        </div>
-      </div>
     </div>
 
     <!-- Email -->
@@ -160,23 +104,9 @@
         type="email"
         placeholder="Enter email"
         formControlName="email"
+        [appFormError]="EmployeeForm.controls.email"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <div
-        *ngIf="
-          EmployeeForm.controls.email.invalid &&
-          (EmployeeForm.controls.salary.touched ||
-            EmployeeForm.controls.salary.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.salary.errors?.['required']">
-          Email is required.
-        </div>
-        <div *ngIf="EmployeeForm.controls.salary.errors?.['email']">
-          Invalid email format.
-        </div>
-      </div>
     </div>
 
     <!-- Address -->
@@ -189,20 +119,9 @@
         type="text"
         placeholder="Enter address"
         formControlName="address"
+        [appFormError]="EmployeeForm.controls.address"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <div
-        *ngIf="
-          EmployeeForm.controls.address.invalid &&
-          (EmployeeForm.controls.address.touched ||
-            EmployeeForm.controls.address.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.address.errors?.['required']">
-          Address is required.
-        </div>
-      </div>
     </div>
 
     <!-- Phone -->
@@ -215,23 +134,9 @@
         type="text"
         placeholder="Enter phone"
         formControlName="phone"
+        [appFormError]="EmployeeForm.controls.phone"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <div
-        *ngIf="
-          EmployeeForm.controls.phone.invalid &&
-          (EmployeeForm.controls.phone.touched ||
-            EmployeeForm.controls.phone.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.phone.errors?.['required']">
-          Phone number is required.
-        </div>
-        <div *ngIf="EmployeeForm.controls.phone.errors?.['pattern']">
-          Phone number must be 10 digits long.
-        </div>
-      </div>
     </div>
 
     <!-- Department -->
@@ -242,6 +147,7 @@
       <select
         id="department"
         formControlName="departmentID"
+        [appFormError]="EmployeeForm.controls.departmentID"
         (change)="onDepartmentChange($event)"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
@@ -258,11 +164,7 @@
             EmployeeForm.controls.departmentID.dirty)
         "
         class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.departmentID.errors?.['required']">
-          Department is required.
-        </div>
-      </div>
+      ></div>
     </div>
 
     <!-- Manager Employees -->
@@ -275,6 +177,7 @@
       <select
         id="departmentEmployees"
         formControlName="managerID"
+        [appFormError]="EmployeeForm.controls.managerID"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option [value]="null">None</option>
@@ -292,23 +195,12 @@
       <select
         id="role"
         formControlName="role"
+        [appFormError]="EmployeeForm.controls.role"
         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="0">Employee</option>
         <option value="1">Admin</option>
       </select>
-      <div
-        *ngIf="
-          EmployeeForm.controls.role.invalid &&
-          (EmployeeForm.controls.role.touched ||
-            EmployeeForm.controls.role.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        <div *ngIf="EmployeeForm.controls.role.errors?.['required']">
-          Role is required.
-        </div>
-      </div>
     </div>
   </div>
 
@@ -322,10 +214,11 @@
     >
       Save
     </button>
+
     <button
       *ngIf="isEdit"
       (click)="updateEmployee()"
-      [disabled]="EmployeeForm.pristine"
+      [disabled]="EmployeeForm.invalid || EmployeeForm.pristine"
       class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
     >
       Update

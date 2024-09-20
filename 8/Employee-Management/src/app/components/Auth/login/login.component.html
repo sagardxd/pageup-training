@@ -1,5 +1,12 @@
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
-  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+<div
+  class="flex items-center justify-center min-h-screen bg-black-100"
+  style="
+    background-image: url('/assets/medium-shot-colleagues-working-together.jpg');
+    background-size: cover;
+    background-position: center;
+  "
+>
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
     <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Login</h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -12,7 +19,8 @@
           id="username"
           formControlName="username"
           name="username"
-          class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [appFormError]="loginForm.controls.username"
+          class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
           required
         />
       </div>
@@ -26,7 +34,8 @@
           id="password"
           formControlName="password"
           name="password"
-          class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [appFormError]="loginForm.controls.password"
+          class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
           required
         />
       </div>
@@ -41,4 +50,5 @@
     </form>
   </div>
 </div>
+
 <p-toast></p-toast>

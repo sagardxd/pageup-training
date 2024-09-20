@@ -1,10 +1,7 @@
 import { FormControl } from '@angular/forms';
-import { project } from './project';
+import { ApiResponse } from './commonModels';
 
-export interface paginatedTaskData {
-  success: boolean;
-  status: number;
-  message: string;
+export interface paginatedTaskData extends ApiResponse {
   data: paginatedData;
 }
 
@@ -56,10 +53,7 @@ export interface TasUpdatetBody {
   remainingEstimateHours: number | null | undefined;
 }
 
-export interface TaskPostResponse {
-  sucess: boolean;
-  status: number;
-  message: string;
+export interface TaskPostResponse extends ApiResponse {
   data: number;
 }
 
@@ -76,10 +70,7 @@ export interface TaskForm {
   remainingEstimatedHours: FormControl<number | null>;
 }
 
-export interface TaskByIdResponse {
-  success: boolean;
-  status: number;
-  message: string;
+export interface TaskByIdResponse extends ApiResponse {
   data: {
     task: TaskById;
     reviews: TaskReview[] | null;
@@ -126,10 +117,7 @@ export interface TaskReview {
   employeeId: number;
 }
 
-export interface TaskReviewResponse {
-  success: boolean;
-  status: number;
-  message: string;
+export interface TaskReviewResponse extends ApiResponse {
   data: number;
 }
 
@@ -160,10 +148,7 @@ export interface dateRangeObject {
   endDate: Date | null;
 }
 
-export interface TaskPaginationResponse {
-  success: boolean;
-  status: number;
-  message: string;
+export interface TaskPaginationResponse extends ApiResponse {
   data: {
     data: {
       tasks: taskpaginationData[];
@@ -183,11 +168,11 @@ export interface taskpaginationData {
   createdOn: Date;
 }
 
-export interface TaskLogResponse {
-  success: boolean;
-  status: number;
-  message: string;
-  data: TaskMessage[];
+export interface TaskLogResponse extends ApiResponse {
+  data: {
+    remaining: number;
+    logs: TaskMessage[];
+  };
 }
 
 export interface TaskMessage {
@@ -214,10 +199,7 @@ export interface TaskCount {
   };
 }
 
-export interface TaskByProjectIdAndTasktypeResponse {
-  success: boolean;
-  status: number;
-  message: string;
+export interface TaskByProjectIdAndTasktypeResponse extends ApiResponse {
   data: parentTaskList[];
 }
 

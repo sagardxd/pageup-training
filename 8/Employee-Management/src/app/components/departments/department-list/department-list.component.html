@@ -117,17 +117,13 @@
     </table>
   </div>
 
-  <!-- Paginator -->
-  <div class="flex justify-end pt-6">
-    <mat-paginator
-      [length]="totalItems"
-      [pageSize]="paginationData.pagedItemsCount"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Select page"
-      (page)="onPageEvent($event)"
-    >
-    </mat-paginator>
-  </div>
+  <app-paginator
+    [totalItems]="totalItems"
+    [pageSize]="paginationData.pagedItemsCount"
+    [pageIndex]="paginationData.pageIndex - 1"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (pageChange)="onPageEvent($event)"
+  ></app-paginator>
 </div>
 
 <!-- <p-toast /> -->

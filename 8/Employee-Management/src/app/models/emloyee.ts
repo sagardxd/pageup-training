@@ -1,12 +1,13 @@
 import { FormControl } from '@angular/forms';
-import { department } from './department';
-import { dateRangeObject, TaskStatus } from './task';
+import { dateRangeObject } from './task';
+import { ApiResponse } from './commonModels';
 
 export enum EmployeeRole {
   Employee = 0,
   Admin = 1,
   SuperAdmin = 2,
 }
+
 export interface Employee {
   id: number;
   name: string;
@@ -55,17 +56,11 @@ export interface updateEmployee {
   role: EmployeeRole | null;
 }
 
-export interface postEmployeeResponse {
-  success: boolean;
-  status: number;
-  message: string;
+export interface postEmployeeResponse extends ApiResponse {
   data: number;
 }
 
-export interface EmployeeById {
-  success: boolean;
-  status: number;
-  message: string;
+export interface EmployeeById extends ApiResponse {
   data: Employee;
 }
 
@@ -82,10 +77,7 @@ export interface EmployeeForm {
   role: FormControl<EmployeeRole | null>;
 }
 
-export interface paginatedEmployeeData {
-  success: boolean;
-  status: number;
-  message: string;
+export interface paginatedEmployeeData extends ApiResponse {
   data: paginatedData;
 }
 

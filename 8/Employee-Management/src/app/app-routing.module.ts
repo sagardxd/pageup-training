@@ -18,14 +18,14 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        canActivate: [authGuard, RoleGuard],
+        canActivate: [RoleGuard],
         loadChildren: () =>
           import('./components/admin/admin.module').then((m) => m.AdminModule),
       },
 
       {
         path: 'department',
-        canActivate: [RoleGuard, authGuard],
+        canActivate: [RoleGuard],
         loadChildren: () =>
           import('./components/departments/departments.module').then(
             (m) => m.DepartmentsModule
@@ -33,7 +33,7 @@ const routes: Routes = [
       },
       {
         path: 'employee',
-        canActivate: [RoleGuard, authGuard],
+        canActivate: [RoleGuard],
         loadChildren: () =>
           import('./components/employee/employee.module').then(
             (m) => m.EmployeeModule
@@ -41,7 +41,6 @@ const routes: Routes = [
       },
       {
         path: 'project',
-        canActivate: [authGuard],
         loadChildren: () =>
           import('./components/project/project.module').then(
             (m) => m.ProjectModule
@@ -49,7 +48,6 @@ const routes: Routes = [
       },
       {
         path: 'task',
-        canActivate: [authGuard],
         loadChildren: () =>
           import('./components/task/task.module').then((m) => m.TaskModule),
       },

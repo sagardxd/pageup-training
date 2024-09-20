@@ -83,18 +83,6 @@
               >
                 <mat-icon>visibility</mat-icon>
               </button>
-              <!-- <button
-                class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
-                routerLink="/task-edit/{{ task.id }}"
-              >
-                Edit
-              </button>
-              <button
-                class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                (click)="deleteTask(task.id)"
-              >
-                Delete
-              </button> -->
             </div>
           </td>
         </tr>
@@ -107,16 +95,13 @@
         </tr>
       </tbody>
     </table>
-    <div class="flex justify-end pt-6">
-      <mat-paginator
-        [length]="totalItems"
-        [pageSize]="paginationData.pagedItemsCount"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        aria-label="Select page"
-        (page)="onPageEvent($event)"
-      >
-      </mat-paginator>
-    </div>
+    <app-paginator
+      [totalItems]="totalItems"
+      [pageSize]="paginationData.pagedItemsCount"
+      [pageIndex]="paginationData.pageIndex - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (pageChange)="onPageEvent($event)"
+    ></app-paginator>
   </div>
 </div>
 

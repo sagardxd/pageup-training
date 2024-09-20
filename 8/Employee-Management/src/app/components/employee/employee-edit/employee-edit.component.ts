@@ -63,10 +63,19 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getParamId();
     this.getDepartments();
+    console.log('Form invalid:', this.EmployeeForm.invalid);
+    console.log('Form pristine:', this.EmployeeForm.pristine);
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  canDeactivate(): boolean {
+    if (this.EmployeeForm.dirty) {
+      return confirm('You have unsaved changes! Do you really want to leave?');
+    }
+    return true;
   }
 
   private getParamId(): void {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import {
   ParentTask,
   parentTaskList,
@@ -39,6 +39,8 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   public userId: number | null = null;
   public showTasklogs = false;
   public taskReviewAboutToEdit: number | null = null;
+  public showMoreToggle = true;
+  public hasChanged: boolean | null = null;
   public taskReviewContent = new FormControl<string | null>(null, [
     Validators.required,
   ]);
@@ -82,13 +84,19 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: BeforeUnloadEvent) {
+    if (this.hasChanged) {
+      $event.preventDefault();
+    }
+  }
+
   private getTaskById(): void {
     if (this.paramId) {
       this.subscriptions.add(
         this.taskService.getTaskById(Number(this.paramId)).subscribe({
           next: (result: TaskByIdResponse) => {
             if (result.success) {
-              console.log(result);
               this.task = result.data.task;
               this.taskReviews = result.data.reviews || [];
               this.subTasks = result.data.subTasks || [];
@@ -97,7 +105,6 @@ export class TaskViewComponent implements OnInit, OnDestroy {
               } else {
                 this.parent = null;
               }
-              console.log(result);
             } else {
               console.error('Failed to fetch task:', result.message);
             }
@@ -142,6 +149,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
       width: '500px',
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '0ms',
+      disableClose: true,
     });
 
     dialogRef.componentInstance.isEdit = true;
@@ -150,26 +158,46 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.taskId = Number(this.paramId);
     dialogRef.componentInstance.getTaskDetails(Number(this.paramId));
     this.subscriptions.add(
+      dialogRef.componentInstance.hasUnsavedChanges.subscribe(
+        (hasChanged: boolean) => {
+          this.hasChanged = hasChanged;
+          console.log(hasChanged);
+        }
+      )
+    );
+
+    this.subscriptions.add(
       dialogRef.afterClosed().subscribe(() => {
+        this.hasChanged = false;
         this.ngOnInit();
       })
     );
   }
 
-  private getTaskLogs(): void {
+  public getTaskLogs(): void {
     this.subscriptions.add(
-      this.taskService.getTaskLog(Number(this.paramId)).subscribe({
-        next: (response: TaskLogResponse) => {
-          this.taskLogs = response.data;
-        },
-        error: (err) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error Fetching TaskLogs',
-          });
-        },
-      })
+      this.taskService
+        .getTaskLog(Number(this.paramId), this.taskLogs.length)
+        .subscribe({
+          next: (response: TaskLogResponse) => {
+            if (response.data.remaining === 0) {
+              console.log(this.showMoreToggle);
+              this.showMoreToggle = false;
+            }
+            if (this.taskLogs.length === 0) {
+              this.taskLogs = response.data.logs;
+            } else {
+              this.taskLogs = [...this.taskLogs, ...response.data.logs];
+            }
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error Fetching TaskLogs',
+            });
+          },
+        })
     );
   }
 

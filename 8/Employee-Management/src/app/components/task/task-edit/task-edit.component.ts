@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -34,6 +40,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './task-edit.component.scss',
 })
 export class TaskEditComponent implements OnInit, OnDestroy {
+  public hasUnsavedChanges = new EventEmitter<boolean>();
   public Task: Tasks | null = null;
   public parentId: number | null = null;
   public TaskStatus = TaskStatus;
@@ -74,6 +81,13 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: BeforeUnloadEvent) {
+    if (this.hasUnsavedChanges) {
+      $event.preventDefault();
+    }
+  }
+
   public getTaskTypeLabel(taskTypeValue: number | null): string {
     return this.taskTypeLabels[taskTypeValue ?? 0];
   }
@@ -101,6 +115,10 @@ export class TaskEditComponent implements OnInit, OnDestroy {
       validators: [this.remainingHoursValidator()],
     }
   );
+
+  public triggerUnsavedChanges(value: boolean) {
+    this.hasUnsavedChanges.emit(value);
+  }
 
   public remainingHoursValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -145,7 +163,6 @@ export class TaskEditComponent implements OnInit, OnDestroy {
             }
           },
           error: (error) => {
-            console.log(error);
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
@@ -210,6 +227,9 @@ export class TaskEditComponent implements OnInit, OnDestroy {
       this.sprintService.getSprintsByProjectId(id).subscribe({
         next: (response: sprintGetBody) => {
           this.sprints = response.data;
+          this.taskForm.valueChanges.subscribe(() => {
+            this.triggerUnsavedChanges(true);
+          });
         },
         error: (error) => {
           this.messageService.add({
@@ -244,6 +264,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
               if (response.success) {
                 if (this.dialogRef) {
                   this.dialogRef.close(true);
+                  this.triggerUnsavedChanges(false);
                   this.messageService.add({
                     severity: 'info',
                     summary: 'Updated Task',

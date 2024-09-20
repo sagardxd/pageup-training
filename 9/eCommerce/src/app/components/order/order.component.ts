@@ -15,9 +15,7 @@ import { cityStationCode } from '../../utils/cityData';
 import { productsData } from '../../utils/productData';
 
 interface RouteGraph {
-  [city: string]: {
-    [destination: string]: number;
-  };
+  [city: string]: { [destination: string]: number };
 }
 @Component({
   selector: 'app-order',
@@ -58,10 +56,7 @@ export class OrderComponent {
       [],
       [this.productArrayValidator()]
     ),
-    trucks: new FormArray<FormGroup<TruckDataForm>>(
-      [],
-      [this.truckShipmentValidator]
-    ),
+    trucks: new FormArray<FormGroup<TruckDataForm>>([]),
   });
 
   private bindValueChangeHandler(
@@ -124,90 +119,6 @@ export class OrderComponent {
       return null;
     };
   }
-
-  private truckShipmentValidator(): ValidatorFn {
-    return (form: AbstractControl): ValidationErrors | null => {
-      const truckArray = form as FormArray;
-      const graph: RouteGraph = {};
-      let totalProducts = 0;
-      let errors: Record<string, number> = {};
-
-      truckArray.controls.forEach((truckGroup) => {
-        const truckControls = truckGroup as FormGroup<TruckDataForm>;
-        const origin = truckControls.controls.origin.value?.toUpperCase();
-        const destination =
-          truckControls.controls.destination.value?.toUpperCase();
-        const quantity = parseInt(
-          truckControls.controls.product.value || '0',
-          10
-        );
-
-        if (origin && destination) {
-          if (!graph[origin]) graph[origin] = {};
-          graph[origin][destination] = quantity;
-          totalProducts += quantity;
-        }
-      });
-
-      const visited: Set<string> = new Set<string>();
-
-      const dfs = (node: string, currentQuantity: number): boolean => {
-        visited.add(node);
-        let remaining = currentQuantity;
-
-        if (!graph[node]) return false;
-
-        for (const neighbor in graph[node]) {
-          const quantity = graph[node][neighbor];
-          remaining -= quantity;
-          if (!visited.has(neighbor)) {
-            if (!dfs(neighbor, quantity)) return false;
-          }
-        }
-
-        if (remaining > 0 && !isDestinationVisited()) {
-          errors[node] = remaining;
-        }
-
-        return true;
-      };
-
-      const isDestinationVisited = (): boolean => {
-        const destination =
-          this.orderForm.controls.destination.value?.toUpperCase();
-        return destination ? visited.has(destination) : false;
-      };
-
-      let allProductsReachedDestination = true;
-      for (const origin in graph) {
-        if (!visited.has(origin)) {
-          allProductsReachedDestination &&= dfs(origin, totalProducts);
-        }
-      }
-
-      if (allProductsReachedDestination && Object.keys(errors).length === 0) {
-        return null; // No errors
-      } else {
-        return { invalidRoutes: errors };
-      }
-    };
-  }
-
-  // private shippingValidator() {
-  //   const origin = this.orderForm.controls.origin.value;
-  //   const destination = this.orderForm.controls.destination.value;
-
-  //   if (origin && destination) {
-  //     const filteredTruck = this.truckList.trucks.filter(
-  //       (truck) =>
-  //         truck.origin === origin.toUpperCase() &&
-  //         truck.destination === destination.toUpperCase()
-  //     );
-  //     if (filteredTruck) {
-  //       this.addTruckData(filteredTruck);
-  //     }
-  //   }
-  // }
 
   public addProductInForm(): void {
     const newProductGroup = new FormGroup<ProductFormGroup>({

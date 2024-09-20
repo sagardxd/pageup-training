@@ -204,7 +204,6 @@
               </mat-select>
             </mat-form-field>
           </div>
-
           <div>
             <mat-form-field>
               <mat-label>Assigned To</mat-label>
@@ -212,9 +211,11 @@
                 <mat-option [value]="loginId">me</mat-option>
                 @for (assignedTo of project.members; track
                 assignedTo.employeeId) {
-                <mat-option [value]="assignedTo.employeeId">{{
-                  assignedTo.employeeName
-                }}</mat-option>
+                <mat-option
+                  *ngIf="assignedTo.employeeId !== loginId"
+                  [value]="assignedTo.employeeId"
+                  >{{ assignedTo.employeeName }}</mat-option
+                >
                 }
               </mat-select>
             </mat-form-field>

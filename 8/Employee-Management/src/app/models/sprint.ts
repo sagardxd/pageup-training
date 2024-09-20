@@ -1,9 +1,7 @@
+import { ApiResponse } from './commonModels';
 import { TaskStatus, TaskType } from './task';
 
-export interface sprintGetBody {
-  success: boolean;
-  status: number;
-  message: string;
+export interface sprintGetBody extends ApiResponse {
   data: Sprint[];
 }
 
@@ -40,9 +38,6 @@ export interface sprintPostBody {
   projectId: number;
 }
 
-export interface sprintByIdResponse {
-  success: boolean;
-  status: number;
-  message: string;
+export interface sprintByIdResponse extends ApiResponse {
   data: Sprint;
 }

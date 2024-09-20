@@ -32,6 +32,8 @@
           <select
             name="tasktype"
             formControlName="taskType"
+            ]
+            [appFormError]="taskForm.controls.taskType"
             id="tasktype"
             class="px-4 py-2 border border-gray-950 first:rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out hover:border-blue-400 hover:shadow-lg hover:ring-1"
           >
@@ -41,17 +43,6 @@
             <option value="3">Task</option>
             <option value="4">Bug</option>
           </select>
-          <!-- Validation message for taskType -->
-          <div
-            *ngIf="
-              taskForm.controls.taskType.invalid &&
-              (taskForm.controls.taskType.touched ||
-                taskForm.controls.taskType.dirty)
-            "
-            class="text-red-500 mt-2 text-sm italic font-medium"
-          >
-            Task Type is required.
-          </div>
         </div>
       </ng-container>
 
@@ -63,22 +54,12 @@
           <select
             name="tasktype"
             formControlName="taskType"
+            [appFormError]="taskForm.controls.taskType"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="3">Task</option>
             <option value="4">Bug</option>
           </select>
-          <!-- Validation message for taskType -->
-          <div
-            *ngIf="
-              taskForm.controls.taskType.invalid &&
-              (taskForm.controls.taskType.touched ||
-                taskForm.controls.taskType.dirty)
-            "
-            class="text-red-500 mt-2"
-          >
-            Task Type is required.
-          </div>
         </div>
       </ng-template>
     </div>
@@ -93,18 +74,9 @@
         type="text"
         placeholder="Enter task name"
         formControlName="name"
+        [appFormError]="taskForm.controls.name"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <!-- Validation message for name -->
-      <div
-        *ngIf="
-          taskForm.controls.name.invalid &&
-          (taskForm.controls.name.touched || taskForm.controls.name.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        Task Name is required.
-      </div>
     </div>
 
     <!-- Description Input -->
@@ -115,21 +87,11 @@
       <textarea
         id="description"
         placeholder="Enter task description"
+        [appFormError]="taskForm.controls.description"
         formControlName="description"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         rows="4"
       ></textarea>
-      <!-- Validation message for description -->
-      <div
-        *ngIf="
-          taskForm.controls.description.invalid &&
-          (taskForm.controls.description.touched ||
-            taskForm.controls.description.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        Description is required atleast 10 characters.
-      </div>
     </div>
 
     <!-- Assigned To Select -->
@@ -137,46 +99,26 @@
       <label class="block text-gray-700 font-medium mb-4">Assign To</label>
       <select
         formControlName="assignedTo"
+        [appFormError]="taskForm.controls.assignedTo"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option *ngFor="let item of assignedTo" [value]="item.employeeId">
           {{ item.employeeName }}
         </option>
       </select>
-      <!-- Validation message for assignedTo -->
-      <div
-        *ngIf="
-          taskForm.controls.assignedTo.invalid &&
-          (taskForm.controls.assignedTo.touched ||
-            taskForm.controls.assignedTo.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        Please select an employee to assign the task.
-      </div>
     </div>
 
     <div *ngIf="isEdit && project?.members?.length" class="mb-4">
       <label class="block text-gray-700 font-medium mb-2">Assign To</label>
       <select
         formControlName="assignedTo"
+        [appFormError]="taskForm.controls.assignedTo"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option *ngFor="let item of project?.members" [value]="item.employeeId">
           {{ item.employeeName }}
         </option>
       </select>
-      <!-- Validation message for assignedTo -->
-      <div
-        *ngIf="
-          taskForm.controls.assignedTo.invalid &&
-          (taskForm.controls.assignedTo.touched ||
-            taskForm.controls.assignedTo.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        Please select an employee to assign the task.
-      </div>
     </div>
 
     <!-- sprint-->
@@ -199,21 +141,12 @@
       <select
         id="status"
         formControlName="status"
+        [appFormError]="taskForm.controls.status"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option [ngValue]="TaskStatus.Pending">Pending</option>
         <option [ngValue]="TaskStatus.Active">In Progress</option>
       </select>
-      <!-- Validation message for status -->
-      <div
-        *ngIf="
-          taskForm.controls.status.invalid &&
-          (taskForm.controls.status.touched || taskForm.controls.status.dirty)
-        "
-        class="text-red-500 mt-2"
-      >
-        Status is required.
-      </div>
     </div>
 
     <!-- Task Estimated Hours - Show only if taskType is 3 or 4 -->
