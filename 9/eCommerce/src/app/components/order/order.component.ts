@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TRANSLATIONS } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -14,9 +14,6 @@ import { TruckDataForm } from '../../models/truck';
 import { cityStationCode } from '../../utils/cityData';
 import { productsData } from '../../utils/productData';
 
-interface RouteGraph {
-  [city: string]: { [destination: string]: number };
-}
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
@@ -40,6 +37,10 @@ export class OrderComponent {
     });
     this.orderForm.controls.bookedRentalDays.valueChanges.subscribe(() => {
       this.updateLeaveEndDate();
+    });
+
+    this.orderForm.controls.trucks.valueChanges.subscribe(() => {
+      this.checkTruckForm();
     });
   }
 
@@ -94,6 +95,13 @@ export class OrderComponent {
     }
   }
 
+  private checkTruckForm(): void {
+    if (this.orderForm.controls.trucks.valid) {
+      console.log(this.orderForm.controls.trucks.valid);
+      this.truckArrayValidator();
+    }
+  }
+
   private productArrayValidator(): ValidatorFn {
     return (form: AbstractControl): ValidationErrors | null => {
       const array = form as FormArray;
@@ -120,6 +128,121 @@ export class OrderComponent {
     };
   }
 
+  public truckArrayValidator() {
+    const orderOrigin = this.orderForm.controls.origin.value;
+    const orderDestination = this.orderForm.controls.destination.value;
+
+    const trucksArray = this.orderForm.controls.trucks as FormArray;
+    const productsArray = this.orderForm.controls.products as FormArray;
+    const originArray: string[] = [];
+    const destinationArray: string[] = [];
+
+    let hasError = false;
+
+    const availableProducts: {
+      [key: string]: { productType: string; productQuantity: number }[];
+    } = {};
+
+    productsArray.controls.forEach((productsControl: AbstractControl) => {
+      const product = productsControl as FormGroup<ProductFormGroup>;
+      const productType = product.controls.productType.value;
+      const productQuantity = product.controls.productQuantity.value || 0;
+
+      if (productType && orderOrigin) {
+        // Initialize the array if it doesn't exist
+        if (!availableProducts[orderOrigin]) {
+          availableProducts[orderOrigin] = [];
+        }
+
+        // Push the product information into the array
+        availableProducts[orderOrigin].push({
+          productType: productType,
+          productQuantity: productQuantity,
+        });
+      }
+    });
+
+    //   // Validate origin and destination for each truck
+    trucksArray.controls.forEach((control: AbstractControl) => {
+      const truckControl = control as FormGroup<TruckDataForm>;
+
+      const truckOrigin = truckControl.controls.origin.value;
+      const truckDestination = truckControl.controls.destination.value;
+      const truckProduct = truckControl.controls.product.value;
+      const truckQuantity = truckControl.controls.quantity.value;
+
+      if (
+        truckOrigin &&
+        truckDestination &&
+        orderOrigin &&
+        orderDestination &&
+        truckProduct &&
+        truckQuantity
+      ) {
+        if (truckOrigin.length < 2 || truckDestination.length < 2) {
+          return null;
+        }
+        originArray.push(truckOrigin);
+        destinationArray.push(truckDestination);
+
+        // checking if origin exsists in originArray
+        if (originArray.includes(orderOrigin)) {
+          console.log('valid origin');
+        } else {
+          console.log('invalid origin');
+        }
+
+        // checking if destination exsists in destinationArray
+        if (destinationArray.includes(orderDestination)) {
+          console.log('valid destination');
+        } else {
+          console.log('invalid destination');
+        }
+        console.log(originArray);
+        console.log(destinationArray);
+
+        // ADDING THE PRODUCTS FROM ORIGIN TO DESTINATION\
+        const productQuantityUpdate = availableProducts[truckOrigin].find(
+          (p) => p.productType === truckProduct
+        );
+        if (
+          productQuantityUpdate &&
+          productQuantityUpdate.productQuantity >= truckQuantity
+        ) {
+          // Update the product quantity
+          productQuantityUpdate.productQuantity -= truckQuantity;
+          // Add product to the destination
+          if (!availableProducts[truckDestination]) {
+            availableProducts[truckDestination] = [];
+          }
+
+          // Push the product information into the array
+          availableProducts[truckDestination].push({
+            productType: truckProduct,
+            productQuantity: truckQuantity,
+          });
+        }
+      } else {
+        console.log(
+          'Not enough quantity in current truck origin:',
+          truckOrigin
+        );
+      }
+      console.log(availableProducts);
+
+      for (let i = 0; i < destinationArray.length; i++) {
+        if (destinationArray[i] != orderDestination) {
+          if (originArray.includes(destinationArray[i])) {
+            console.log('right');
+          } else {
+            console.log('wrong');
+          }
+        }
+      }
+      return null;
+    });
+  }
+
   public addProductInForm(): void {
     const newProductGroup = new FormGroup<ProductFormGroup>({
       productType: new FormControl(null),
@@ -127,7 +250,6 @@ export class OrderComponent {
     });
 
     this.orderForm.controls.products.push(newProductGroup);
-    console.log(this.orderForm.value);
   }
 
   public removeProduct(index: number): void {
@@ -144,11 +266,17 @@ export class OrderComponent {
     const trucks = this.orderForm.controls.trucks;
     const newTruck = new FormGroup<TruckDataForm>({
       truckId: new FormControl(null),
-      quantity: new FormControl(null),
-      origin: new FormControl(null),
-      destination: new FormControl(null),
       startDate: new FormControl(null),
-      product: new FormControl(null),
+      origin: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(2),
+      ]),
+      destination: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(2),
+      ]),
+      quantity: new FormControl(null, [Validators.required, Validators.min(1)]),
+      product: new FormControl(null, [Validators.required]),
     });
     trucks.push(newTruck);
   }

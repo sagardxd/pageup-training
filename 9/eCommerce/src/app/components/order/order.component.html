@@ -1,21 +1,23 @@
-<div class="flex flex-col my-10">
+<div class="flex flex-col h-screen py-10 bg-gray-800">
   <form [formGroup]="orderForm">
-    <div class="flex gap-5 mx-6">
-      <div class="space-y-3 max-w-sm bg-white p-10 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Order Details</h2>
+    <div class="flex gap-5 px-6 bg-gray-800">
+      <div
+        class="space-y-3 max-w-sm bg-gray-900 p-10 rounded-lg shadow-lg border border-white"
+      >
+        <h2 class="text-2xl font-semibold text-white mb-6">Order Details</h2>
         <!-- Order Number -->
         <div class="flex gap-5 items-center">
           <label
             for="orderNumber"
-            class="text-sm font-medium text-gray-700 w-32"
+            class="text-sm font-medium text-gray-300 w-32"
           >
             Order Number
           </label>
           <div
-            class="flex items-center w-full border border-gray-300 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 transition duration-200 ease-in-out"
+            class="flex items-center w-full border border-gray-600 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 transition duration-200 ease-in-out"
           >
             <span
-              class="px-3 text-gray-500 bg-gray-100 rounded-l-lg h-12 flex items-center"
+              class="px-3 text-gray-400 bg-gray-800 rounded-l-lg h-12 flex items-center"
             >
               X12
             </span>
@@ -23,7 +25,7 @@
               id="orderNumber"
               type="number"
               formControlName="orderNumber"
-              class="w-full h-12 px-4 rounded-r-lg focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-900 bg-white outline-none"
+              class="w-full h-12 px-4 rounded-r-lg focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-white bg-gray-800 outline-none"
               placeholder="Enter order number"
             />
           </div>
@@ -31,27 +33,24 @@
 
         <!-- Origin -->
         <div>
-          <label for="origin" class="block text-sm font-medium text-gray-700"
-            >Origin</label
-          >
+          <label for="origin" class="block text-sm font-medium text-gray-300">
+            Origin
+          </label>
           <div
-            class="relative flex items-center w-full border border-gray-300 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 transition duration-200 ease-in-out"
+            class="relative flex items-center w-full border border-gray-600 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 transition duration-200 ease-in-out"
           >
             <input
               id="origin"
               type="text"
               formControlName="origin"
-              class="w-full h-12 px-4 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-900 bg-white outline-none"
+              class="w-full h-12 px-4 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-white bg-gray-800 outline-none"
               placeholder="Enter origin"
             />
             <span
-              class="absolute right-0 px-3 gap-1 text-gray-500 bg-gray-100 rounded-r-lg h-full flex items-center"
+              class="absolute right-0 px-3 gap-1 text-gray-400 bg-gray-800 rounded-r-lg h-full flex items-center"
             >
               {{ orderForm.controls.originValue.value | lowercase }}
-              <span
-                *ngIf="orderForm.controls.originValue.value != 'none'"
-                class=""
-              >
+              <span *ngIf="orderForm.controls.originValue.value != 'none'">
                 <mat-icon class="text-green-500">task_alt</mat-icon>
               </span>
             </span>
@@ -62,27 +61,25 @@
         <div>
           <label
             for="destination"
-            class="block text-sm font-medium text-gray-700"
-            >Destination</label
+            class="block text-sm font-medium text-gray-300"
           >
+            Destination
+          </label>
           <div
-            class="relative flex items-center w-full border border-gray-300 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 transition duration-200 ease-in-out"
+            class="relative flex items-center w-full border border-gray-600 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 transition duration-200 ease-in-out"
           >
             <input
               id="destination"
               type="text"
               formControlName="destination"
-              class="w-full h-12 px-4 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-900 bg-white outline-none"
+              class="w-full h-12 px-4 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-white bg-gray-800 outline-none"
               placeholder="Enter destination location"
             />
             <span
-              class="absolute right-0 px-3 gap-1 text-gray-500 bg-gray-100 rounded-r-lg h-full flex items-center"
+              class="absolute right-0 px-3 gap-1 text-gray-400 bg-gray-800 rounded-r-lg h-full flex items-center"
             >
               {{ orderForm.controls.destinationValue.value | lowercase }}
-              <span
-                *ngIf="orderForm.controls.destinationValue.value != 'none'"
-                class=""
-              >
+              <span *ngIf="orderForm.controls.destinationValue.value != 'none'">
                 <mat-icon class="text-green-500">task_alt</mat-icon>
               </span>
             </span>
@@ -93,14 +90,15 @@
         <div>
           <label
             for="leaveStartDate"
-            class="block text-sm font-medium text-gray-700"
-            >Leave Start Date</label
+            class="block text-sm font-medium text-gray-300"
           >
+            Leave Start Date
+          </label>
           <input
             id="leaveStartDate"
             type="date"
             formControlName="leaveStartDate"
-            class="mt-1 block w-full h-12 px-4 rounded-lg border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition duration-200 ease-in-out"
+            class="mt-1 block w-full h-12 px-4 rounded-lg border border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-800 text-white transition duration-200 ease-in-out"
           />
         </div>
 
@@ -108,14 +106,15 @@
         <div>
           <label
             for="bookedRentalDays"
-            class="block text-sm font-medium text-gray-700"
-            >Booked Rental Days</label
+            class="block text-sm font-medium text-gray-300"
           >
+            Booked Rental Days
+          </label>
           <input
             id="bookedRentalDays"
             type="number"
             formControlName="bookedRentalDays"
-            class="mt-1 block w-full h-12 px-4 rounded-lg border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition duration-200 ease-in-out"
+            class="mt-1 block w-full h-12 px-4 rounded-lg border border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-800 text-white transition duration-200 ease-in-out"
             placeholder="Enter rental days"
           />
         </div>
@@ -124,13 +123,14 @@
         <div>
           <label
             for="leaveEndDate"
-            class="block text-sm font-medium text-gray-700"
-            >Leave End Date</label
+            class="block text-sm font-medium text-gray-300"
           >
+            Leave End Date
+          </label>
           <input
             id="leaveEndDate"
             formControlName="leaveEndDate"
-            class="mt-1 block w-full h-12 px-4 rounded-lg border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition duration-200 ease-in-out"
+            class="mt-1 block w-full h-12 px-4 rounded-lg border border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-800 text-white transition duration-200 ease-in-out"
             placeholder="Leave End Date"
           />
         </div>
@@ -143,19 +143,19 @@
               let i = index
             "
             [formGroupName]="i"
-            class="bg-white p-4 rounded-lg shadow-sm border border-gray-300 mb-4"
+            class="bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-600 mb-4"
           >
             <div class="mb-4">
               <label
                 for="productType-{{ i }}"
-                class="block text-sm font-medium text-gray-800 mb-1"
+                class="block text-sm font-medium text-gray-300 mb-1"
               >
                 Select Product:
               </label>
               <select
                 id="productType-{{ i }}"
                 formControlName="productType"
-                class="block w-full h-12 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                class="block w-full h-12 px-4 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-800 text-white"
               >
                 <option *ngFor="let item of productsList" [value]="item.key">
                   {{ item.name }}
@@ -174,7 +174,7 @@
             <div class="mb-4">
               <label
                 for="productQuantity-{{ i }}"
-                class="block text-sm font-medium text-gray-800 mb-1"
+                class="block text-sm font-medium text-gray-300 mb-1"
               >
                 Product Quantity:
               </label>
@@ -182,7 +182,7 @@
                 id="productQuantity-{{ i }}"
                 type="number"
                 formControlName="productQuantity"
-                class="block w-full h-12 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                class="block w-full h-12 px-4 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-800 text-white"
                 placeholder="Enter quantity"
               />
             </div>
@@ -208,11 +208,11 @@
       </div>
 
       <!-- Truck part -->
-      <div class="bg-white p-10 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Truck Details</h2>
+      <div class="bg-gray-900 p-10 rounded-lg shadow-lg border border-white">
+        <h2 class="text-2xl font-semibold text-white mb-6">Truck Details</h2>
         <div
           *ngIf="orderForm.controls.trucks.length === 0"
-          class="text-gray-500 text-center mt-4"
+          class="text-gray-400 text-center mt-4"
         >
           No trucks added. Please click "Add New Truck" to get started.
         </div>
@@ -226,72 +226,90 @@
           >
             <div
               [formGroupName]="i"
-              class="border border-gray-300 rounded-lg p-4 mb-6"
+              class="border border-gray-600 rounded-lg p-4 mb-6"
             >
               <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-6 gap-4">
                 <!-- Truck ID -->
                 <div class="flex flex-col">
-                  <label class="text-gray-800 font-medium mb-2">Truck ID</label>
+                  <label class="text-gray-300 font-medium mb-2">Truck ID</label>
                   <input
                     type="text"
                     formControlName="truckId"
-                    class="border border-gray-300 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="border border-gray-600 rounded-lg py-2 px-3 bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter Truck ID"
                   />
                 </div>
 
                 <!-- Start Date -->
                 <div class="flex flex-col">
-                  <label class="text-gray-800 font-medium mb-2"
+                  <label class="text-gray-300 font-medium mb-2"
                     >Start Date</label
                   >
                   <input
                     type="date"
                     formControlName="startDate"
-                    class="border border-gray-300 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="border border-gray-600 rounded-lg py-2 px-3 bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
+
                 <!-- Quantity -->
                 <div class="flex flex-col">
-                  <label class="text-gray-800 font-medium mb-2">Quantity</label>
+                  <label class="text-gray-300 font-medium mb-2">Quantity</label>
                   <input
                     formControlName="quantity"
                     type="number"
-                    class="border border-gray-300 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="border border-gray-600 rounded-lg py-2 px-3 bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter quantity"
                   />
                 </div>
 
                 <!-- Origin -->
                 <div class="flex flex-col">
-                  <label class="text-gray-800 font-medium mb-2">Origin</label>
+                  <label class="text-gray-300 font-medium mb-2">Origin</label>
                   <input
                     formControlName="origin"
                     type="text"
-                    class="border border-gray-300 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="border border-gray-600 rounded-lg py-2 px-3 bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter Origin"
                   />
+                  <!-- Error Message for Origin -->
+                  <div *ngIf="truck.errors" class="text-red-500 text-sm mt-1">
+                    Invalid origin. Must be a valid origin.
+                  </div>
+                  <div
+                    *ngIf="truck.errors?.['destinationNotInOrigin']"
+                    class="text-red-500 text-sm mt-1"
+                  >
+                    The destination must also be in the origin array.
+                  </div>
                 </div>
 
                 <!-- Destination -->
                 <div class="flex flex-col">
-                  <label class="text-gray-800 font-medium mb-2"
+                  <label class="text-gray-300 font-medium mb-2"
                     >Destination</label
                   >
                   <input
                     formControlName="destination"
                     type="text"
-                    class="border border-gray-300 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="border border-gray-600 rounded-lg py-2 px-3 bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter Destination"
                   />
+                  <!-- Error Message for Destination -->
+                  <div
+                    *ngIf="truck.errors?.['invalidDestination']"
+                    class="text-red-500 text-sm mt-1"
+                  >
+                    Invalid destination. Must be a valid destination.
+                  </div>
                 </div>
 
                 <!-- Product -->
                 <div class="flex flex-col">
-                  <label class="text-gray-800 font-medium mb-2">Product</label>
+                  <label class="text-gray-300 font-medium mb-2">Product</label>
                   <select
                     formControlName="product"
-                    class="block w-full h-12 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    class="block w-full h-12 px-4 py-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option
                       *ngFor="let item of productsList"
