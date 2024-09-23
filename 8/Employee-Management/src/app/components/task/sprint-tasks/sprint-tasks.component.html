@@ -1,0 +1,75 @@
+<div class="flex min-h-full">
+  <!-- <app-navbar></app-navbar> -->
+  <div class="flex justify-between w-full">
+    <div class="example-container w-full px-5">
+      <div class="flex justify-center p-2 bg-slate-300">
+        <h2>New Tasks</h2>
+      </div>
+
+      <div
+        cdkDropList
+        #pendingTaskList="cdkDropList"
+        [cdkDropListData]="pendingTasks"
+        [cdkDropListConnectedTo]="[activeTaskList, completedTaskList]"
+        class="example-list bg-slate-100 h-full"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (item of pendingTasks; track item) {
+        <div class="example-box pt-8 flex flex-col items-center" cdkDrag>
+          <div (click)="navigateToTaskView(item.id)">
+            <app-card [cardDetails]="item" class=""></app-card>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="example-container w-full px-5">
+      <div class="flex justify-center p-2 bg-slate-300">
+        <h2>Active Tasks</h2>
+      </div>
+
+      <div
+        cdkDropList
+        #activeTaskList="cdkDropList"
+        [cdkDropListData]="activeTasks"
+        [cdkDropListConnectedTo]="[pendingTaskList, completedTaskList]"
+        class="example-list bg-slate-100 h-screen"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (item of activeTasks; track item) {
+        <div class="example-box pt-8 flex flex-col items-center" cdkDrag>
+          <div (click)="navigateToTaskView(item.id)">
+            <app-card [cardDetails]="item" class=""></app-card>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="example-container w-full px-5">
+      <div class="flex justify-center p-2 bg-slate-300">
+        <h2>Completed Tasks</h2>
+      </div>
+
+      <div
+        cdkDropList
+        #completedTaskList="cdkDropList"
+        [cdkDropListData]="completedTasks"
+        [cdkDropListConnectedTo]="[pendingTaskList, activeTaskList]"
+        class="example-list bg-slate-100 h-screen"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (item of completedTasks; track item) {
+        <div class="example-box pt-8 flex flex-col items-center" cdkDrag>
+          <div (click)="navigateToTaskView(item.id)">
+            <app-card [cardDetails]="item" class=""></app-card>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-toast />

@@ -1,0 +1,124 @@
+<div [formGroup]="projectForm" class="flex flex-col lg:flex-row gap-12">
+  <!-- Project Form -->
+  <div class="bg-white shadow-xl rounded-lg p-8 lg:p-12 lg:w-2/3">
+    <div class="space-y-6">
+      <!-- Project Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Project Name <span class="text-red-500">*</span></label
+        >
+        <input
+          type="text"
+          placeholder="Enter project name"
+          formControlName="name"
+          [appFormError]="projectForm.controls.name"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+        />
+      </div>
+
+      <!-- Project Description -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Project Description <span class="text-red-500">*</span></label
+        >
+        <textarea
+          placeholder="Enter project description"
+          [appFormError]="projectForm.controls.description"
+          formControlName="description"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 h-28 resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Project Status -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Project Status <span class="text-red-500">*</span></label
+        >
+        <select
+          formControlName="status"
+          [appFormError]="projectForm.controls.status"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+        >
+          <option value="0">Pending</option>
+          <option value="1">Active</option>
+        </select>
+      </div>
+
+      <button
+        (click)="addEmployeeDialog()"
+        class="w-full px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+      >
+        Add Employees
+      </button>
+    </div>
+
+    <button
+      *ngIf="!isEdit"
+      (click)="save()"
+      [ngClass]="{
+        'bg-green-500 hover:bg-green-600': !(
+          projectForm.pristine || projectForm.invalid
+        ),
+        'bg-gray-400 cursor-not-allowed':
+          projectForm.pristine || projectForm.invalid
+      }"
+      class="mt-8 w-full px-4 py-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+    >
+      Save Project
+    </button>
+    <button
+      *ngIf="isEdit"
+      (click)="updateProject()"
+      [ngClass]="{
+        'bg-green-500 hover:bg-green-600': !(
+          (projectForm.pristine || projectForm.invalid) &&
+          !isMembersChanged
+        ),
+        'bg-gray-400 cursor-not-allowed':
+          (projectForm.pristine || projectForm.invalid) && !isMembersChanged
+      }"
+      [disabled]="
+        (projectForm.pristine || projectForm.invalid) && !isMembersChanged
+      "
+      class="mt-8 w-full px-4 py-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+    >
+      Update Project
+    </button>
+  </div>
+
+  <!-- Employee List -->
+  <div
+    formArrayName="members"
+    class="bg-gray-50 shadow-lg rounded-lg p-6 lg:p-8 lg:w-1/3"
+  >
+    <div class="text-xl font-semibold text-gray-700 mb-4">Employees Added</div>
+    <div
+      *ngIf="
+        projectForm.controls.members.invalid &&
+        (projectForm.controls.members.touched ||
+          projectForm.controls.members.dirty)
+      "
+      class="text-red-500 mb-4"
+    >
+      <div *ngIf="projectForm.controls.members.errors?.['minArrayLength']">
+        You must have at least 3 members.
+      </div>
+    </div>
+    <div *ngFor="let item of projectEmployees; let i = index" class="mb-2">
+      <div
+        class="text-gray-800 bg-white p-3 rounded-lg shadow-sm flex justify-between items-center"
+      >
+        <div>{{ item.name }}</div>
+        <button
+          *ngIf="!isEdit"
+          (click)="removeEmployee(item.id)"
+          class="bg-red-500 p-2 rounded-md"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <p-toast /> -->

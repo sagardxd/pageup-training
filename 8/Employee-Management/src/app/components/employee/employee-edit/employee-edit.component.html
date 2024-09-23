@@ -1,0 +1,229 @@
+<div
+  [formGroup]="EmployeeForm"
+  class="p-6 max-w-4xl mt-5 mx-auto bg-white rounded-lg shadow-md"
+>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Username -->
+    <div *ngIf="!isEdit">
+      <label for="username" class="block text-gray-700 font-semibold mb-2"
+        >Username <span class="text-red-500">*</span></label
+      >
+      <input
+        id="username"
+        type="text"
+        placeholder="Enter employee username"
+        [appFormError]="EmployeeForm.controls.username"
+        formControlName="username"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Password -->
+    <div *ngIf="!isEdit">
+      <label for="password" class="block text-gray-700 font-semibold mb-2"
+        >Password <span class="text-red-500">*</span></label
+      >
+      <input
+        id="password"
+        type="password"
+        placeholder="Enter employee password"
+        formControlName="password"
+        [appFormError]="EmployeeForm.controls.password"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <form *ngIf="!isEdit">
+      <div>
+        <label
+          for="passwordConfirm"
+          class="block text-gray-700 font-semibold mb-2"
+        >
+          Confirm Password <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="password"
+          placeholder="Confirmation password"
+          [(ngModel)]="passwordCoinfirmation"
+          name="passwordCoinfirmation"
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <!-- Error message for password mismatch -->
+        <div
+          *ngIf="
+            EmployeeForm.controls.password.value &&
+            passwordCoinfirmation &&
+            EmployeeForm.controls.password.value !== passwordCoinfirmation
+          "
+          class="text-red-500 mt-2"
+        >
+          Passwords do not match
+        </div>
+      </div>
+    </form>
+
+    <!-- Name -->
+    <div>
+      <label for="name" class="block text-gray-700 font-semibold mb-2"
+        >Name <span class="text-red-500">*</span></label
+      >
+      <input
+        id="name"
+        type="text"
+        placeholder="Enter employee name"
+        formControlName="name"
+        [appFormError]="EmployeeForm.controls.name"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Salary -->
+    <div>
+      <label for="salary" class="block text-gray-700 font-semibold mb-2"
+        >Salary <span class="text-red-500">*</span></label
+      >
+      <input
+        id="salary"
+        type="number"
+        placeholder="Enter salary"
+        formControlName="salary"
+        [appFormError]="EmployeeForm.controls.salary"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="email" class="block text-gray-700 font-semibold mb-2"
+        >Email <span class="text-red-500">*</span></label
+      >
+      <input
+        id="email"
+        type="email"
+        placeholder="Enter email"
+        formControlName="email"
+        [appFormError]="EmployeeForm.controls.email"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Address -->
+    <div>
+      <label for="address" class="block text-gray-700 font-semibold mb-2"
+        >Address <span class="text-red-500">*</span></label
+      >
+      <input
+        id="address"
+        type="text"
+        placeholder="Enter address"
+        formControlName="address"
+        [appFormError]="EmployeeForm.controls.address"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Phone -->
+    <div>
+      <label for="phone" class="block text-gray-700 font-semibold mb-2"
+        >Phone <span class="text-red-500">*</span></label
+      >
+      <input
+        id="phone"
+        type="text"
+        placeholder="Enter phone"
+        formControlName="phone"
+        [appFormError]="EmployeeForm.controls.phone"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Department -->
+    <div>
+      <label for="department" class="block text-gray-700 font-semibold mb-2"
+        >Department
+      </label>
+      <select
+        id="department"
+        formControlName="departmentID"
+        [appFormError]="EmployeeForm.controls.departmentID"
+        (change)="onDepartmentChange($event)"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="" disabled selected>Select a department</option>
+        <option [value]="null">None</option>
+        <option *ngFor="let item of departments" [value]="item.id">
+          {{ item.name }}
+        </option>
+      </select>
+      <div
+        *ngIf="
+          EmployeeForm.controls.departmentID.invalid &&
+          (EmployeeForm.controls.departmentID.touched ||
+            EmployeeForm.controls.departmentID.dirty)
+        "
+        class="text-red-500 mt-2"
+      ></div>
+    </div>
+
+    <!-- Manager Employees -->
+    <div>
+      <label
+        for="departmentEmployees"
+        class="block text-gray-700 font-semibold mb-2"
+        >Manager Employees</label
+      >
+      <select
+        id="departmentEmployees"
+        formControlName="managerID"
+        [appFormError]="EmployeeForm.controls.managerID"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option [value]="null">None</option>
+        <option *ngFor="let item of departmentEmployees" [value]="item.id">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Role -->
+    <div>
+      <label for="role" class="block text-gray-700 font-semibold mb-2"
+        >Role <span class="text-red-500">*</span></label
+      >
+      <select
+        id="role"
+        formControlName="role"
+        [appFormError]="EmployeeForm.controls.role"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="0">Employee</option>
+        <option value="1">Admin</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="text-center mt-6 flex justify-center space-x-4">
+    <button
+      *ngIf="!isEdit"
+      (click)="addEmployee()"
+      [disabled]="EmployeeForm.invalid"
+      class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+    >
+      Save
+    </button>
+
+    <button
+      *ngIf="isEdit"
+      (click)="updateEmployee()"
+      [disabled]="EmployeeForm.invalid || EmployeeForm.pristine"
+      class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+    >
+      Update
+    </button>
+  </div>
+
+  <p-toast />
+</div>

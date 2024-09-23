@@ -1,59 +1,60 @@
+import { ApiResponse } from './commonModels';
+
 export interface departmentData {
-    id: number,
-    name: string,
-    createdBy: number
-    updatedBy: number | null
-    createdOn: Date
-    updatedOn: Date | null
+  id: number;
+  name: string;
+  createdBy: number;
+  updatedBy: number | null;
+  createdOn: Date;
+  updatedOn: Date | null;
 }
 
-export interface departments {
-    success: boolean,
-    status: number,
-    message: string,
-    data: departmentData[]
+export interface departments extends ApiResponse {
+  data: departmentData[];
 }
 
-export interface department {
-    success: boolean,
-    status: number,
-    message: string,
-    data: departmentData
+export interface department extends ApiResponse {
+  data: departmentData;
 }
-export interface postDepartmentResponse {
-    success: boolean,
-    status: number,
-    message: string,
-    data: number
+export interface postDepartmentResponse extends ApiResponse {
+  data: number;
 }
-export interface deleteDepartmentResponse {
-    success: boolean,
-    status: number,
-    message: string,
-    data: boolean
+export interface deleteDepartmentResponse extends ApiResponse {
+  data: boolean;
 }
 
 export interface paginatedBody {
-    pageIndex: number,
-    pagedItemsCount: number,
-    orderKey: string,
-    sortedOrder: number,
-    search: string
+  pageIndex: number;
+  pagedItemsCount: number;
+  orderKey: string;
+  sortedOrder: number;
+  search: string;
+  dateRange: dateRangeObject | null;
 }
 
-export interface paginatedDepartmentData {
-    success: boolean,
-    status: number,
-    message: string,
-    data: paginatedData
+interface dateRangeObject {
+  startDate: Date | null;
+  endDate: Date | null;
+}
+
+export interface paginatedDepartmentData extends ApiResponse {
+  data: paginatedData;
 }
 
 export interface paginatedData {
-    data: departmentData[]
-    totalPages: number,
-    totalItems: number
+  data: departmentData[];
+  totalPages: number;
+  totalItems: number;
 }
 export interface paginatedDepartmentDataList {
-    data: paginatedData
+  data: paginatedData;
+}
 
+export interface DepartmentCountResponse extends ApiResponse {
+  data: DepartmentCount[];
+}
+
+export interface DepartmentCount {
+  name: string;
+  count: number;
 }

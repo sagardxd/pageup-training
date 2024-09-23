@@ -1,0 +1,6 @@
+<div
+  *ngIf="this.loaderService.isLoading | async"
+  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+>
+  <mat-spinner></mat-spinner>
+</div>

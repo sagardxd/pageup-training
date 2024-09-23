@@ -2,23 +2,37 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { paginatedBody } from '../models/department';
-import { paginatedProjectData, projectByIdResponse, projectDeleteResponse, projectPostBody, projectRequestResponse } from '../models/project';
+import {
+  EmployeesProject,
+  paginatedProjectData,
+  projectByIdResponse,
+  ProjectCountResponse,
+  projectDeleteResponse,
+  projectPostBody,
+  projectRequestResponse,
+} from '../models/project';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProjectService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   url = environment.apiURL;
 
-  public getPaginatedProjects(body: paginatedBody): Observable<paginatedProjectData> {
-    return this.http.post<paginatedProjectData>(`${this.url}/Paginated/projects`, body);
+  public getPaginatedProjects(
+    body: paginatedBody
+  ): Observable<paginatedProjectData> {
+    return this.http.post<paginatedProjectData>(
+      `${this.url}/Project/pagination`,
+      body
+    );
   }
 
-  public postProject(body: projectPostBody): Observable<projectRequestResponse> {
+  public postProject(
+    body: projectPostBody
+  ): Observable<projectRequestResponse> {
     return this.http.post<projectRequestResponse>(`${this.url}/Project`, body);
   }
 
@@ -30,8 +44,23 @@ export class ProjectService {
     return this.http.delete<projectDeleteResponse>(`${this.url}/Project/${id}`);
   }
 
-  public updateProject(id: number, body: projectPostBody): Observable<projectRequestResponse> {
-    return this.http.put<projectRequestResponse>(`${this.url}/Project/${id}`, body);
+  public updateProject(
+    id: number,
+    body: projectPostBody
+  ): Observable<projectRequestResponse> {
+    return this.http.put<projectRequestResponse>(
+      `${this.url}/Project/${id}`,
+      body
+    );
   }
 
+  public getProjectOfEmployee(id: number): Observable<EmployeesProject> {
+    return this.http.get<EmployeesProject>(
+      `${this.url}/Project/employee/${id}`
+    );
+  }
+
+  public getProjectCount(): Observable<ProjectCountResponse> {
+    return this.http.get<ProjectCountResponse>(`${this.url}/Project/Count`);
+  }
 }
