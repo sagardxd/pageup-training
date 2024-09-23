@@ -128,7 +128,7 @@ export class OrderComponent {
     };
   }
 
-  public truckArrayValidator() {
+  public truckArrayValidator(): ValidationErrors | null {
     const orderOrigin = this.orderForm.controls.origin.value;
     const orderDestination = this.orderForm.controls.destination.value;
 
@@ -143,18 +143,16 @@ export class OrderComponent {
       [key: string]: { productType: string; productQuantity: number }[];
     } = {};
 
+    // Build available products mapping
     productsArray.controls.forEach((productsControl: AbstractControl) => {
       const product = productsControl as FormGroup<ProductFormGroup>;
       const productType = product.controls.productType.value;
       const productQuantity = product.controls.productQuantity.value || 0;
 
       if (productType && orderOrigin) {
-        // Initialize the array if it doesn't exist
         if (!availableProducts[orderOrigin]) {
           availableProducts[orderOrigin] = [];
         }
-
-        // Push the product information into the array
         availableProducts[orderOrigin].push({
           productType: productType,
           productQuantity: productQuantity,
@@ -162,7 +160,15 @@ export class OrderComponent {
       }
     });
 
-    //   // Validate origin and destination for each truck
+    console.log('Products at Origin:', availableProducts);
+
+    // Reset errors for all trucks before revalidation
+    trucksArray.controls.forEach((control: AbstractControl) => {
+      const truckControl = control as FormGroup<TruckDataForm>;
+      truckControl.setErrors(null); // Clear existing errors
+    });
+
+    // Validate each truck
     trucksArray.controls.forEach((control: AbstractControl) => {
       const truckControl = control as FormGroup<TruckDataForm>;
 
@@ -179,69 +185,65 @@ export class OrderComponent {
         truckProduct &&
         truckQuantity
       ) {
-        if (truckOrigin.length < 2 || truckDestination.length < 2) {
-          return null;
-        }
         originArray.push(truckOrigin);
         destinationArray.push(truckDestination);
 
-        // checking if origin exsists in originArray
-        if (originArray.includes(orderOrigin)) {
-          console.log('valid origin');
-        } else {
-          console.log('invalid origin');
+        // Validate truck origin and destination
+        if (!originArray.includes(orderOrigin)) {
+          truckControl.setErrors({ invalidOrigin: 'Invalid origin' });
+          hasError = true;
         }
 
-        // checking if destination exsists in destinationArray
         if (destinationArray.includes(orderDestination)) {
-          console.log('valid destination');
-        } else {
-          console.log('invalid destination');
+          truckControl.setErrors({ invalidDestination: 'Invalid destination' });
+          hasError = true;
         }
-        console.log(originArray);
-        console.log(destinationArray);
 
-        // ADDING THE PRODUCTS FROM ORIGIN TO DESTINATION\
-        const productQuantityUpdate = availableProducts[truckOrigin].find(
-          (p) => p.productType === truckProduct
-        );
-        if (
-          productQuantityUpdate &&
-          productQuantityUpdate.productQuantity >= truckQuantity
-        ) {
-          // Update the product quantity
-          productQuantityUpdate.productQuantity -= truckQuantity;
-          // Add product to the destination
-          if (!availableProducts[truckDestination]) {
-            availableProducts[truckDestination] = [];
-          }
-
-          // Push the product information into the array
-          availableProducts[truckDestination].push({
-            productType: truckProduct,
-            productQuantity: truckQuantity,
-          });
-        }
-      } else {
-        console.log(
-          'Not enough quantity in current truck origin:',
-          truckOrigin
-        );
-      }
-      console.log(availableProducts);
-
-      for (let i = 0; i < destinationArray.length; i++) {
-        if (destinationArray[i] != orderDestination) {
-          if (originArray.includes(destinationArray[i])) {
-            console.log('right');
+        // Validate product quantity at origin
+        if (availableProducts[truckOrigin]) {
+          const productQuantityUpdate = availableProducts[truckOrigin].find(
+            (p) => p.productType === truckProduct
+          );
+          if (
+            productQuantityUpdate &&
+            productQuantityUpdate.productQuantity >= truckQuantity
+          ) {
+            // Update product quantity and transfer to destination
+            productQuantityUpdate.productQuantity -= truckQuantity;
+            if (!availableProducts[truckDestination]) {
+              availableProducts[truckDestination] = [];
+            }
+            availableProducts[truckDestination].push({
+              productType: truckProduct,
+              productQuantity: truckQuantity,
+            });
           } else {
-            console.log('wrong');
+            truckControl.setErrors({
+              insufficientQuantity: `Not enough quantity for product ${truckProduct} at origin ${truckOrigin}`,
+            });
+            hasError = true;
+          }
+        }
+
+        // Validate routes
+        for (let i = 0; i < destinationArray.length; i++) {
+          if (destinationArray[i] !== orderDestination) {
+            if (!originArray.includes(destinationArray[i])) {
+              // truckControl.setErrors({ notValid: 'Invalid routes' });
+              // hasError = true;
+            }
           }
         }
       }
-      return null;
     });
+
+
+    // Only return errors at the end
+    return hasError ? { truckArrayInvalid: true } : null;
   }
+
+
+
 
   public addProductInForm(): void {
     const newProductGroup = new FormGroup<ProductFormGroup>({
