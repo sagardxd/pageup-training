@@ -1,0 +1,105 @@
+<div class="w-full p-6 bg-gray-900 text-white min-h-screen">
+  <div
+    *ngIf="orderValue; else noOrder"
+    class="bg-gray-800 p-6 rounded-lg shadow-lg"
+  >
+    <h2 class="text-3xl font-bold mb-4">Order Details</h2>
+
+    <!-- Order Number -->
+    <div class="mb-4">
+      <span class="text-lg font-semibold">Order Number:</span>
+      <span class="text-xl">{{ orderValue.orderNumber }}</span>
+    </div>
+
+    <!-- Origin and Destination -->
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <span class="text-lg font-semibold">Origin:</span>
+        <span class="block text-xl"
+          >{{ orderValue.origin }} ({{ orderValue.originValue }})</span
+        >
+      </div>
+      <div>
+        <span class="text-lg font-semibold">Destination:</span>
+        <span class="block text-xl"
+          >{{ orderValue.destination }} ({{
+            orderValue.destinationValue
+          }})</span
+        >
+      </div>
+    </div>
+
+    <!-- Start Date and End Date -->
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <span class="text-lg font-semibold">Start Date:</span>
+        <span class="block text-xl">{{
+          orderValue.leaveStartDate | date : "shortDate"
+        }}</span>
+      </div>
+      <div>
+        <span class="text-lg font-semibold">End Date:</span>
+        <span class="block text-xl">{{
+          orderValue.leaveEndDate | date : "shortDate"
+        }}</span>
+      </div>
+    </div>
+
+    <!-- Booked Rental Days -->
+    <div class="mb-4">
+      <span class="text-lg font-semibold">Booked Rental Days:</span>
+      <span class="text-xl">{{ orderValue.bookedRentalDays }}</span>
+    </div>
+
+    <!-- Products Section -->
+    <div class="mb-4">
+      <h3 class="text-2xl font-semibold mb-2">Products</h3>
+      <ul class="list-disc pl-5">
+        <li *ngFor="let product of orderValue.products">
+          <span class="text-lg"
+            >{{ product.productType }} (Qty:
+            {{ product.productQuantity }})</span
+          >
+        </li>
+      </ul>
+    </div>
+
+    <!-- Trucks Section -->
+    <div class="mb-4">
+      <h3 class="text-2xl font-semibold mb-2">Trucks</h3>
+      <ul class="list-disc pl-5">
+        <li *ngFor="let truck of orderValue.trucks">
+          <span class="text-lg"
+            >{{ truck.truckId }} (Capacity: {{ truck.quantity }})</span
+          >
+        </li>
+      </ul>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-6">
+      <button
+        routerLink="/dashboard"
+        class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
+      >
+        Back to Orders
+      </button>
+    </div>
+  </div>
+
+  <!-- Fallback for No Order Found -->
+  <ng-template #noOrder>
+    <div class="text-center">
+      <h2 class="text-3xl font-bold">Order Not Found</h2>
+      <p class="text-lg mt-4">
+        The requested order does not exist or cannot be found.
+      </p>
+      <button
+        routerLink="/orders"
+        class="bg-blue-600 text-white py-2 px-4 rounded mt-6 hover:bg-blue-700 transition duration-200"
+      >
+        Back to Orders
+      </button>
+    </div>
+  </ng-template>
+</div>

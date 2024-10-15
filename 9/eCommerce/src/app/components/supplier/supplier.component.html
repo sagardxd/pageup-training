@@ -1,0 +1,161 @@
+<div class="container mx-auto p-4 bg-gray-700 rounded-md">
+  <h1 class="text-2xl font-bold mb-4 text-white">Supplier Form</h1>
+
+  <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+    <div
+      formArrayName="suppliers"
+      class="space-y-4 overflow-auto max-h-[500px] border border-gray-600 rounded-md p-4"
+    >
+      <div
+        *ngFor="
+          let supplier of supplierForm.controls.suppliers.controls;
+          let i = index
+        "
+        [formGroupName]="i"
+        class="bg-gray-800 p-4 rounded-lg shadow-md"
+      >
+        <h2 class="text-lg text-white mb-2">Supplier {{ i + 1 }}</h2>
+        <div class="grid grid-cols-5 gap-4">
+          <div>
+            <label class="text-gray-300">Supplier Reference</label>
+            <input
+              formControlName="supplierRef"
+              type="text"
+              class="mt-1 block w-full p-2 rounded border border-gray-600 bg-gray-700 text-white"
+              placeholder="Enter supplier reference"
+            />
+          </div>
+
+          <div>
+            <label class="text-gray-300">Product</label>
+            <select
+              id="product{{ i }}"
+              formControlName="product"
+              class="block w-full h-12 px-4 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-800 text-white"
+            >
+              <ng-container *ngIf="productList.length !== 1">
+                <option *ngFor="let item of productList" [ngValue]="item.key">
+                  {{ item.name }}
+                </option>
+              </ng-container>
+              <ng-container *ngIf="productList.length === 1">
+                <option
+                  [ngValue]="productList[0].key"
+                  [selected]="productList[0].key"
+                >
+                  {{ productList[0].name }}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-300">Quantity</label>
+            <input
+              formControlName="quantity"
+              type="number"
+              class="mt-1 block w-full p-2 rounded border border-gray-600 bg-gray-700 text-white"
+              placeholder="Enter quantity"
+            />
+          </div>
+
+          <div>
+            <label class="text-gray-300">Transport Leave Start Date</label>
+            <mat-form-field class="example-full-width">
+              <mat-label>Choose a date</mat-label>
+              <input
+                matInput
+                [matDatepickerFilter]="myFilter"
+                [matDatepicker]="startPicker"
+                formControlName="transportLeaveStartDate"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="startPicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <label class="text-gray-300">Transport Leave End Date</label>
+            <mat-form-field class="example-full-width">
+              <mat-label>Choose a date</mat-label>
+              <input
+                matInput
+                [matDatepickerFilter]="myFilter"
+                [matDatepicker]="endPicker"
+                formControlName="transportLeaveEndDate"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="endPicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="flex items-end">
+            <button
+              *ngIf="!(i === 0)"
+              type="button"
+              (click)="removeSupplier(i)"
+              class="mt-2 bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700 transition duration-200"
+            >
+              Remove Supplier
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between">
+      <div class="flex gap-3">
+        <button
+          type="button"
+          (click)="addSupplier()"
+          class="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
+        >
+          Add Supplier
+        </button>
+
+        <button
+          type="submit"
+          class="mt-4 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          [disabled]="supplierForm.invalid"
+        >
+          Submit
+        </button>
+      </div>
+      <!-- Error Messages -->
+      <div class="flex justify-center items-center">
+        <div
+          *ngIf="supplierForm.errors?.['NoProductReached']"
+          class="text-red-500"
+        >
+          {{ supplierForm.errors?.["NoProductReached"] }}
+        </div>
+
+        <div
+          *ngIf="supplierForm.errors?.['EveryProductNotAvailable']"
+          class="text-red-500"
+        >
+          {{ supplierForm.errors?.["EveryProductNotAvailable"] }}
+        </div>
+
+        <div
+          *ngIf="supplierForm.errors?.['QuantityMismatch']"
+          class="text-red-500"
+        >
+          {{ supplierForm.errors?.["QuantityMismatch"] }}
+        </div>
+      </div>
+      <button
+        class="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
+        (click)="closeDialog()"
+      >
+        Close
+      </button>
+    </div>
+  </form>
+</div>
