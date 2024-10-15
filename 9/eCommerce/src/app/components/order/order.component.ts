@@ -1,4 +1,4 @@
-import { Component, TRANSLATIONS } from '@angular/core';
+import { Component, inject, TRANSLATIONS } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -13,6 +13,8 @@ import { ProductFormGroup } from '../../models/product';
 import { TruckDataForm } from '../../models/truck';
 import { cityStationCode } from '../../utils/cityData';
 import { productsData } from '../../utils/productData';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-order',
@@ -21,8 +23,27 @@ import { productsData } from '../../utils/productData';
 })
 export class OrderComponent {
   public productsList = productsData;
+  public hasError = false;
+  public myFilter = (d: Date | null): boolean => {
+    // Get the start and end dates from the form
+    const leaveStartDate = this.orderForm.controls.leaveStartDate.value;
+    const leaveEndDate = this.orderForm.controls.leaveEndDate.value;
 
-  constructor() {
+    if (!leaveStartDate) {
+      return true;
+    }
+
+    const date = d || new Date();
+
+    // Check if the date is within the range of leaveStartDate and leaveEndDate
+    const startDate = new Date(leaveStartDate);
+    const endDate = leaveEndDate ? new Date(leaveEndDate) : null;
+
+    return (!endDate || date <= endDate) && date >= startDate;
+  };
+  private _snackBar = inject(MatSnackBar);
+
+  constructor(private dbService: NgxIndexedDBService) {
     this.bindValueChangeHandler(
       this.orderForm.controls.origin,
       this.orderForm.controls.originValue
@@ -39,19 +60,19 @@ export class OrderComponent {
       this.updateLeaveEndDate();
     });
 
-    this.orderForm.controls.trucks.valueChanges.subscribe(() => {
-      this.checkTruckForm();
+    this.orderForm.valueChanges.subscribe(() => {
+      this.truckArrayValidator();
     });
   }
 
   public orderForm = new FormGroup<OrderDetailsForm>({
-    orderNumber: new FormControl(null),
+    orderNumber: new FormControl(null, [Validators.required]),
     origin: new FormControl(null, [Validators.minLength(2)]),
     originValue: new FormControl('none'),
     destination: new FormControl(null, [Validators.minLength(2)]),
     destinationValue: new FormControl('none'),
-    leaveStartDate: new FormControl(null),
-    bookedRentalDays: new FormControl(null),
+    leaveStartDate: new FormControl(null, [Validators.required]),
+    bookedRentalDays: new FormControl(null, [Validators.required]),
     leaveEndDate: new FormControl({ value: null, disabled: true }),
     products: new FormArray<FormGroup<ProductFormGroup>>(
       [],
@@ -59,6 +80,10 @@ export class OrderComponent {
     ),
     trucks: new FormArray<FormGroup<TruckDataForm>>([]),
   });
+
+  private openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
+  }
 
   private bindValueChangeHandler(
     controlName: FormControl,
@@ -91,14 +116,9 @@ export class OrderComponent {
       const year = expectedEndDate.getFullYear();
       const formattedDate = `${month}/${day}/${year}`;
 
-      this.orderForm.controls.leaveEndDate.setValue(formattedDate);
-    }
-  }
-
-  private checkTruckForm(): void {
-    if (this.orderForm.controls.trucks.valid) {
-      console.log(this.orderForm.controls.trucks.valid);
-      this.truckArrayValidator();
+      this.orderForm.controls.leaveEndDate.setValue(
+        formattedDate as unknown as Date
+      );
     }
   }
 
@@ -129,6 +149,17 @@ export class OrderComponent {
   }
 
   public truckArrayValidator(): ValidationErrors | null {
+    // returning null if the value of orderform is not filled
+    if (
+      this.orderForm.controls.bookedRentalDays.value === null ||
+      this.orderForm.controls.destination.value === null ||
+      this.orderForm.controls.origin.value === null ||
+      this.orderForm.controls.leaveStartDate.value === null ||
+      this.orderForm.controls.products.value === null
+    ) {
+      return null;
+    }
+    this.hasError = false;
     const orderOrigin = this.orderForm.controls.origin.value;
     const orderDestination = this.orderForm.controls.destination.value;
 
@@ -136,8 +167,7 @@ export class OrderComponent {
     const productsArray = this.orderForm.controls.products as FormArray;
     const originArray: string[] = [];
     const destinationArray: string[] = [];
-
-    let hasError = false;
+    let totalProductsQuantity = 0;
 
     const availableProducts: {
       [key: string]: { productType: string; productQuantity: number }[];
@@ -148,6 +178,7 @@ export class OrderComponent {
       const product = productsControl as FormGroup<ProductFormGroup>;
       const productType = product.controls.productType.value;
       const productQuantity = product.controls.productQuantity.value || 0;
+      totalProductsQuantity += productQuantity;
 
       if (productType && orderOrigin) {
         if (!availableProducts[orderOrigin]) {
@@ -159,13 +190,12 @@ export class OrderComponent {
         });
       }
     });
+    console.log(availableProducts);
 
-    console.log('Products at Origin:', availableProducts);
-
-    // Reset errors for all trucks before revalidation
+    // Reset errors for all trucks before validation
     trucksArray.controls.forEach((control: AbstractControl) => {
       const truckControl = control as FormGroup<TruckDataForm>;
-      truckControl.setErrors(null); // Clear existing errors
+      truckControl.setErrors(null);
     });
 
     // Validate each truck
@@ -176,6 +206,14 @@ export class OrderComponent {
       const truckDestination = truckControl.controls.destination.value;
       const truckProduct = truckControl.controls.product.value;
       const truckQuantity = truckControl.controls.quantity.value;
+
+      // transport origin and destination are the same
+      if (truckOrigin && truckDestination && truckOrigin == truckDestination) {
+        truckControl.setErrors({
+          sameOriginAndDestination: `Transport origin and destination cant be same`,
+        });
+        this.hasError = true;
+      }
 
       if (
         truckOrigin &&
@@ -189,14 +227,12 @@ export class OrderComponent {
         destinationArray.push(truckDestination);
 
         // Validate truck origin and destination
-        if (!originArray.includes(orderOrigin)) {
+        // origin can be orderOrigin or any destination
+        if (
+          truckOrigin != orderOrigin &&
+          !destinationArray.includes(truckOrigin)
+        ) {
           truckControl.setErrors({ invalidOrigin: 'Invalid origin' });
-          hasError = true;
-        }
-
-        if (destinationArray.includes(orderDestination)) {
-          truckControl.setErrors({ invalidDestination: 'Invalid destination' });
-          hasError = true;
         }
 
         // Validate product quantity at origin
@@ -221,34 +257,60 @@ export class OrderComponent {
             truckControl.setErrors({
               insufficientQuantity: `Not enough quantity for product ${truckProduct} at origin ${truckOrigin}`,
             });
-            hasError = true;
-          }
-        }
-
-        // Validate routes
-        for (let i = 0; i < destinationArray.length; i++) {
-          if (destinationArray[i] !== orderDestination) {
-            if (!originArray.includes(destinationArray[i])) {
-              // truckControl.setErrors({ notValid: 'Invalid routes' });
-              // hasError = true;
-            }
+            this.hasError = true;
           }
         }
       }
     });
 
+    // Validate routes
+    // for (let i = 0; i < destinationArray.length; i++) {
+    //   if (destinationArray[i] !== orderDestination) {
+    //     if (!originArray.includes(destinationArray[i])) {
+    //       trucksArray.setErrors({ notValid: 'Invalid routes ' });
+    //       this.hasError = true;
+    //     }
+    //   }
+    // }
 
-    // Only return errors at the end
-    return hasError ? { truckArrayInvalid: true } : null;
+    // validating that every other pincode has 0 products and all the prouducts are in the orderdestination
+    for (let i = 0; i < originArray.length; i++) {
+      availableProducts[originArray[i]].forEach((product) => {
+        if (product.productQuantity !== 0) {
+          this.hasError = true;
+          trucksArray.setErrors({
+            originHasProductsLeft: 'All products are not deported from origin',
+          });
+        }
+      });
+    }
+
+    // checking if the all the procduct are reached at the destination
+    if (orderDestination) {
+      let destinationProductQuantity = 0;
+
+      if (availableProducts[orderDestination]) {
+        availableProducts[orderDestination].forEach((product) => {
+          destinationProductQuantity += product.productQuantity;
+        });
+      }
+
+      if (destinationProductQuantity !== totalProductsQuantity) {
+        this.hasError = true;
+        trucksArray.setErrors({
+          notAllProductReachedDestination:
+            'All products are not received at the destination',
+        });
+      }
+    }
+
+    return null;
   }
-
-
-
 
   public addProductInForm(): void {
     const newProductGroup = new FormGroup<ProductFormGroup>({
-      productType: new FormControl(null),
-      productQuantity: new FormControl(null),
+      productType: new FormControl(null, [Validators.required]),
+      productQuantity: new FormControl(null, [Validators.required]),
     });
 
     this.orderForm.controls.products.push(newProductGroup);
@@ -291,5 +353,20 @@ export class OrderComponent {
         truckArray.removeAt(index);
       }
     }
+  }
+
+  public saveOrder(): void {
+    const data = this.orderForm.value;
+    this.dbService.add('orders', data).subscribe({
+      next: (key) => {
+        this.openSnackBar('Added Order', 'Close');
+        this.orderForm.reset();
+        this.orderForm.controls.products.controls = [];
+        this.orderForm.controls.trucks.controls = [];
+      },
+      error: (error) => {
+        console.error('Error adding order:', error);
+      },
+    });
   }
 }
